@@ -276,20 +276,17 @@ function Badge({children,color=T.gold,bg}){
 }
 function Lbl({children}){return<label style={{fontSize:11,fontWeight:700,color:T.text2,letterSpacing:"0.07em",textTransform:"uppercase",display:"block",marginBottom:7}}>{children}</label>;}
 
-// Fixed input — uses uncontrolled ref-less approach with defaultValue to prevent reset bug
+// NumberInput used in filters
 function NumberInput({value,onChange,placeholder}){
   return(
     <input
       type="text"
       inputMode="numeric"
       value={value}
-      onChange={e=>{
-        const v=e.target.value.replace(/[^0-9]/g,"");
-        onChange(v);
-      }}
+      onChange={e=>onChange(e.target.value.replace(/[^0-9.]/g,""))}
       placeholder={placeholder||"0"}
-      style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:8,color:T.gold,fontSize:17,fontWeight:700,padding:"8px 12px",width:"100%",outline:"none",fontFamily:"inherit",transition:"border-color 0.2s"}}
-      onFocus={e=>{e.target.style.borderColor=T.blue;e.target.select();}}
+      style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:8,color:T.gold,fontSize:15,fontWeight:700,padding:"8px 12px",width:"100%",outline:"none",fontFamily:"inherit"}}
+      onFocus={e=>e.target.style.borderColor=T.blue}
       onBlur={e=>e.target.style.borderColor=T.border}
     />
   );
@@ -332,6 +329,86 @@ function LiveBanner({mode,origin,dest}){
   );
 }
 
+// ─── PROGRAM ROW — must be top-level so React never remounts it on re-render ──
+function ProgramRow({programKey,label,short,icon,rate,color,wallet,setWallet,openPrograms,toggleProgram}){
+  const val=parseFloat(wallet[programKey])||0;
+  const isOpen=openPrograms[programKey]||val>0;
+  return(
+    <div style={{background:T.surface2,borderRadius:10,border:`1px solid ${val>0?T.goldBorder:T.border}`,overflow:"hidden"}}>
+      <button onClick={()=>toggleProgram(programKey)} style={{width:"100%",padding:"10px 14px",background:"transparent",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:10,fontFamily:"inherit"}}>
+        <div style={{width:30,height:30,borderRadius:8,background:color+"18",border:`1px solid ${color}33`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{icon}</div>
+        <div style={{flex:1,textAlign:"left"}}>
+          <div style={{fontSize:13,fontWeight:600,color:T.text}}>{label}</div>
+          {PROGRAM_SITES[programKey]&&<a href={PROGRAM_SITES[programKey]} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{fontSize:10,color:T.blue,textDecoration:"none"}}>Visit site →</a>}
+        </div>
+        {val>0&&<div style={{textAlign:"right",marginRight:4}}><div style={{fontSize:13,fontWeight:800,color:T.gold}}>{fmt(val)}</div><div style={{fontSize:10,color:T.green}}>${(val*rate).toFixed(0)}</div></div>}
+        <span style={{color:T.text3,fontSize:12}}>{isOpen?"▲":"▼"}</span>
+      </button>
+      {isOpen&&(
+        <div style={{padding:"0 14px 12px"}}>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={wallet[programKey]||""}
+            onChange={e=>{
+              const v=e.target.value.replace(/[^0-9]/g,"");
+              setWallet(p=>({...p,[programKey]:v}));
+            }}
+            placeholder={`Enter ${short} balance`}
+            autoComplete="off"
+            style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:8,color:T.gold,fontSize:17,fontWeight:700,padding:"8px 12px",width:"100%",outline:"none",fontFamily:"inherit",transition:"border-color 0.2s"}}
+            onFocus={e=>{e.target.style.borderColor=T.blue;}}
+            onBlur={e=>{e.target.style.borderColor=T.border;}}
+          />
+          {val>0&&<div style={{fontSize:12,color:T.text3,marginTop:5}}>Est. value: <strong style={{color:T.green}}>${(val*rate).toFixed(0)}</strong> at {(rate*100).toFixed(1)}¢/pt</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── PROGRAM SECTION — also top-level ─────────────────────────────────────────
+function ProgramSection({title,emoji,sectionKey,programs,wallet,setWallet,openSections,toggleSection,openPrograms,toggleProgram}){
+  const isOpen=openSections[sectionKey];
+  const sectionActive=programs.filter(p=>parseFloat(wallet[p.key])>0).length;
+  return(
+    <Card style={{marginBottom:10,padding:0,overflow:"hidden"}}>
+      <button onClick={()=>toggleSection(sectionKey)} style={{width:"100%",padding:"14px 18px",background:"transparent",border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",fontFamily:"inherit"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          <span style={{fontSize:20}}>{emoji}</span>
+          <div style={{textAlign:"left"}}>
+            <div style={{fontSize:14,fontWeight:700,color:T.text}}>{title}</div>
+            <div style={{fontSize:11,color:T.text3}}>{sectionActive>0?`${sectionActive} active · click to ${isOpen?"collapse":"expand"}`:`${programs.length} programs · click to expand`}</div>
+          </div>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          {sectionActive>0&&<Badge color={T.green} bg={T.greenLight}>{sectionActive} active</Badge>}
+          <span style={{color:T.text3,fontSize:14,display:"inline-block",transform:isOpen?"rotate(180deg)":"rotate(0deg)",transition:"transform 0.2s"}}>▼</span>
+        </div>
+      </button>
+      {isOpen&&(
+        <div style={{padding:"0 14px 14px",display:"flex",flexDirection:"column",gap:7}}>
+          {programs.map(({key,label,short,icon,rate,color})=>(
+            <ProgramRow
+              key={key}
+              programKey={key}
+              label={label}
+              short={short}
+              icon={icon}
+              rate={rate}
+              color={color}
+              wallet={wallet}
+              setWallet={setWallet}
+              openPrograms={openPrograms}
+              toggleProgram={toggleProgram}
+            />
+          ))}
+        </div>
+      )}
+    </Card>
+  );
+}
+
 // ─── STEP 1: WALLET ────────────────────────────────────────────────────────────
 function WalletStep({wallet,setWallet,onNext}){
   const [openSections,setOpenSections]=useState({bank:true,airline:false,hotel:false});
@@ -345,68 +422,15 @@ function WalletStep({wallet,setWallet,onNext}){
   const hasPoints=Object.values(wallet).some(v=>parseFloat(v)>0);
   const activeCount=Object.values(wallet).filter(v=>parseFloat(v)>0).length;
 
-  function ProgramSection({title,emoji,sectionKey,programs}){
-    const isOpen=openSections[sectionKey];
-    const sectionActive=programs.filter(p=>parseFloat(wallet[p.key])>0).length;
-    return(
-      <Card style={{marginBottom:10,padding:0,overflow:"hidden"}}>
-        <button onClick={()=>toggleSection(sectionKey)} style={{width:"100%",padding:"14px 18px",background:"transparent",border:"none",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"space-between",fontFamily:"inherit"}}>
-          <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <span style={{fontSize:20}}>{emoji}</span>
-            <div style={{textAlign:"left"}}>
-              <div style={{fontSize:14,fontWeight:700,color:T.text}}>{title}</div>
-              <div style={{fontSize:11,color:T.text3}}>{sectionActive>0?`${sectionActive} active · click to ${isOpen?"collapse":"expand"}`:`${programs.length} programs · click to expand`}</div>
-            </div>
-          </div>
-          <div style={{display:"flex",alignItems:"center",gap:8}}>
-            {sectionActive>0&&<Badge color={T.green} bg={T.greenLight}>{sectionActive} active</Badge>}
-            <span style={{color:T.text3,fontSize:14,display:"inline-block",transform:isOpen?"rotate(180deg)":"rotate(0deg)",transition:"transform 0.2s"}}>▼</span>
-          </div>
-        </button>
-        {isOpen&&(
-          <div style={{padding:"0 14px 14px",display:"flex",flexDirection:"column",gap:7}}>
-            {programs.map(({key,label,short,icon,rate,color})=>{
-              const val=parseFloat(wallet[key])||0;
-              const isOpen2=openPrograms[key]||val>0;
-              return(
-                <div key={key} style={{background:T.surface2,borderRadius:10,border:`1px solid ${val>0?T.goldBorder:T.border}`,overflow:"hidden"}}>
-                  <button onClick={()=>toggleProgram(key)} style={{width:"100%",padding:"10px 14px",background:"transparent",border:"none",cursor:"pointer",display:"flex",alignItems:"center",gap:10,fontFamily:"inherit"}}>
-                    <div style={{width:30,height:30,borderRadius:8,background:color+"18",border:`1px solid ${color}33`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{icon}</div>
-                    <div style={{flex:1,textAlign:"left"}}>
-                      <div style={{fontSize:13,fontWeight:600,color:T.text}}>{label}</div>
-                      {PROGRAM_SITES[key]&&<a href={PROGRAM_SITES[key]} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()} style={{fontSize:10,color:T.blue,textDecoration:"none"}}>Visit site →</a>}
-                    </div>
-                    {val>0&&<div style={{textAlign:"right",marginRight:4}}><div style={{fontSize:13,fontWeight:800,color:T.gold}}>{fmt(val)}</div><div style={{fontSize:10,color:T.green}}>${(val*rate).toFixed(0)}</div></div>}
-                    <span style={{color:T.text3,fontSize:12}}>{isOpen2?"▲":"▼"}</span>
-                  </button>
-                  {isOpen2&&(
-                    <div style={{padding:"0 14px 12px"}}>
-                      <NumberInput
-                        value={wallet[key]||""}
-                        onChange={v=>setWallet(p=>({...p,[key]:v}))}
-                        placeholder={`Enter ${short} balance`}
-                      />
-                      {val>0&&<div style={{fontSize:12,color:T.text3,marginTop:5}}>Est. value: <strong style={{color:T.green}}>${(val*rate).toFixed(0)}</strong> at {(rate*100).toFixed(1)}¢/pt</div>}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </Card>
-    );
-  }
-
   return(
     <div>
       <div style={{marginBottom:20}}>
         <h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Your Points Wallet</h2>
         <p style={{color:T.text2,marginTop:5,fontSize:14}}>Click a section → click a program → type your full balance</p>
       </div>
-      <ProgramSection title="Bank & Credit Card Points" emoji="💳" sectionKey="bank" programs={BANK_PROGRAMS}/>
-      <ProgramSection title="Airline Miles" emoji="✈️" sectionKey="airline" programs={AIRLINE_PROGRAMS}/>
-      <ProgramSection title="Hotel Points" emoji="🏨" sectionKey="hotel" programs={HOTEL_PROGRAMS}/>
+      <ProgramSection title="Bank & Credit Card Points" emoji="💳" sectionKey="bank" programs={BANK_PROGRAMS} wallet={wallet} setWallet={setWallet} openSections={openSections} toggleSection={toggleSection} openPrograms={openPrograms} toggleProgram={toggleProgram}/>
+      <ProgramSection title="Airline Miles" emoji="✈️" sectionKey="airline" programs={AIRLINE_PROGRAMS} wallet={wallet} setWallet={setWallet} openSections={openSections} toggleSection={toggleSection} openPrograms={openPrograms} toggleProgram={toggleProgram}/>
+      <ProgramSection title="Hotel Points" emoji="🏨" sectionKey="hotel" programs={HOTEL_PROGRAMS} wallet={wallet} setWallet={setWallet} openSections={openSections} toggleSection={toggleSection} openPrograms={openPrograms} toggleProgram={toggleProgram}/>
       {hasPoints&&(
         <Card accent style={{marginBottom:16,marginTop:4}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
