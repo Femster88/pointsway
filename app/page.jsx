@@ -341,6 +341,173 @@ function QuizStep({onDone}){
   );
 }
 
+
+// --- TRANSFER PARTNER MATRIX ---
+function TransferMatrix(){
+  const [activeCard,setActiveCard]=useState(null);
+  const [activePartner,setActivePartner]=useState(null);
+  const [filterType,setFilterType]=useState("all");
+  const CARDS=[
+    {key:"amex",  label:"Amex MR",    abbr:"Am", color:"#185FA5"},
+    {key:"chase", label:"Chase UR",   abbr:"Ch", color:"#0C447C"},
+    {key:"citi",  label:"Citi TYP",   abbr:"Ci", color:"#BA7517"},
+    {key:"cap1",  label:"Cap One",    abbr:"C1", color:"#A32D2D"},
+    {key:"bilt",  label:"Bilt",       abbr:"Bi", color:"#0F6E56"},
+    {key:"wells", label:"Wells Fargo",abbr:"WF", color:"#993C1D"},
+    {key:"usbank",label:"US Bank",    abbr:"US", color:"#3C3489"},
+  ];
+  const ALL_PARTNERS=[
+    {key:"aeroplan",  label:"Air Canada Aeroplan",       type:"airline", cards:["amex","chase","citi","cap1","bilt","wells","usbank"]},
+    {key:"virginatl", label:"Virgin Atlantic",           type:"airline", cards:["amex","chase","citi","cap1","bilt"]},
+    {key:"flyingblue",label:"Flying Blue (AF/KLM)",      type:"airline", cards:["amex","chase","citi","cap1","bilt","wells"]},
+    {key:"british",   label:"British Airways Avios",     type:"airline", cards:["amex","chase","citi","cap1","bilt","wells"]},
+    {key:"singapore", label:"Singapore KrisFlyer",       type:"airline", cards:["amex","chase","citi","cap1","wells","usbank"]},
+    {key:"united",    label:"United MileagePlus",        type:"airline", cards:["chase","bilt"]},
+    {key:"delta",     label:"Delta SkyMiles",            type:"airline", cards:["amex"]},
+    {key:"turkish",   label:"Turkish Miles&Smiles",      type:"airline", cards:["citi","cap1"]},
+    {key:"ana",       label:"ANA Mileage Club",          type:"airline", cards:["amex"]},
+    {key:"etihad",    label:"Etihad Guest",              type:"airline", cards:["amex","citi","cap1"]},
+    {key:"cathay",    label:"Cathay Pacific Asia Miles", type:"airline", cards:["citi"]},
+    {key:"avianca",   label:"Avianca LifeMiles",         type:"airline", cards:["amex","citi","cap1"]},
+    {key:"korean",    label:"Korean Air SkyPass",        type:"airline", cards:["usbank"]},
+    {key:"american",  label:"American AAdvantage",       type:"airline", cards:["bilt"]},
+    {key:"alaska",    label:"Alaska Mileage Plan",       type:"airline", cards:["bilt"]},
+    {key:"southwest", label:"Southwest Rapid Rewards",   type:"airline", cards:["chase"]},
+    {key:"hyatt",     label:"World of Hyatt",            type:"hotel",   cards:["amex","chase","bilt"]},
+    {key:"marriott",  label:"Marriott Bonvoy",           type:"hotel",   cards:["amex","chase","bilt"]},
+    {key:"hilton",    label:"Hilton Honors",             type:"hotel",   cards:["amex"]},
+    {key:"ihg",       label:"IHG One Rewards",           type:"hotel",   cards:["chase","bilt"]},
+    {key:"wyndham",   label:"Wyndham Rewards",           type:"hotel",   cards:["citi","cap1"]},
+    {key:"choice",    label:"Choice Privileges",         type:"hotel",   cards:["citi","cap1"]},
+  ];
+  const partners=ALL_PARTNERS.filter(p=>filterType==="all"||p.type===filterType);
+  function pickCard(k){setActiveCard(c=>c===k?null:k);setActivePartner(null);}
+  function pickPartner(k){setActivePartner(p=>p===k?null:k);setActiveCard(null);}
+  let bannerTitle="",bannerSub="";
+  if(activeCard){
+    const card=CARDS.find(c=>c.key===activeCard);
+    const matched=ALL_PARTNERS.filter(p=>p.cards.includes(activeCard));
+    const shared=matched.filter(p=>p.cards.length>1);
+    bannerTitle=card.label+" transfers to "+matched.length+" loyalty programs";
+    bannerSub=shared.length+" of these are shared with other cards — you can combine balances from multiple cards into the same program for one big booking.";
+  } else if(activePartner){
+    const partner=ALL_PARTNERS.find(p=>p.key===activePartner);
+    const matched=CARDS.filter(c=>partner.cards.includes(c.key));
+    if(matched.length>1){
+      bannerTitle=partner.label+" accepts points from "+matched.length+" different cards";
+      bannerSub=matched.map(c=>c.label).join(", ")+" all transfer here — combine all of them for one booking.";
+    } else if(matched.length===1){
+      bannerTitle=partner.label+" only accepts transfers from "+matched[0].label;
+      bannerSub="This program is exclusive to one card.";
+    }
+  }
+  const fBtn=(v,l)=>(
+    <button key={v} onClick={()=>setFilterType(v)} style={{padding:"6px 12px",borderRadius:20,border:"1px solid "+(filterType===v?T.blue:T.border),background:filterType===v?T.blueLight:T.surface2,color:filterType===v?T.blue:T.text2,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:filterType===v?700:500}}>{l}</button>
+  );
+  return(
+    <div>
+      <div style={{padding:"12px 14px",background:T.blueLight,border:"1px solid "+T.blue+"33",borderRadius:12,marginBottom:14,fontSize:13,color:T.text2,lineHeight:1.6}}>
+        <strong style={{color:T.blue}}>How to read this:</strong> A green checkmark means that card transfers to that program. Rows with multiple checkmarks = cards that can pool points together. Tap any card or program row to highlight connections.
+      </div>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:14,alignItems:"center"}}>
+        <span style={{fontSize:12,color:T.text3}}>Show:</span>
+        {fBtn("all","All partners")}
+        {fBtn("airline","Airlines only")}
+        {fBtn("hotel","Hotels only")}
+        {(activeCard||activePartner)&&(
+          <button onClick={()=>{setActiveCard(null);setActivePartner(null);}} style={{marginLeft:"auto",padding:"6px 12px",borderRadius:20,border:"1px solid "+T.red+"44",background:T.redLight,color:T.red,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:700}}>Clear</button>
+        )}
+      </div>
+      {(activeCard||activePartner)&&(
+        <div style={{marginBottom:14,padding:"12px 14px",background:T.blueLight,border:"1px solid "+T.blue+"44",borderRadius:12}}>
+          <div style={{fontSize:13,fontWeight:700,color:T.blue,marginBottom:4}}>{bannerTitle}</div>
+          <div style={{fontSize:12,color:T.text2,lineHeight:1.5}}>{bannerSub}</div>
+        </div>
+      )}
+      <div style={{overflowX:"auto",WebkitOverflowScrolling:"touch",marginBottom:14}}>
+        <table style={{borderCollapse:"collapse",width:"100%",minWidth:520}}>
+          <thead>
+            <tr>
+              <th style={{minWidth:155,padding:"0 8px 10px 0",textAlign:"left",fontSize:11,fontWeight:700,color:T.text3,textTransform:"uppercase",letterSpacing:"0.06em",verticalAlign:"bottom"}}>Program</th>
+              {CARDS.map(c=>{
+                const isActive=activeCard===c.key;
+                const mc=ALL_PARTNERS.filter(p=>p.cards.includes(c.key)).length;
+                return(
+                  <th key={c.key} onClick={()=>pickCard(c.key)} style={{minWidth:58,padding:"0 3px 10px",textAlign:"center",cursor:"pointer",verticalAlign:"bottom"}}>
+                    <div style={{borderRadius:10,padding:"5px 3px",background:isActive?T.blueLight:"transparent",border:"1px solid "+(isActive?T.blue:"transparent"),transition:"all 0.15s"}}>
+                      <div style={{width:30,height:30,borderRadius:"50%",margin:"0 auto 4px",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,color:"#fff",background:isActive?T.blue:c.color}}>{c.abbr}</div>
+                      <div style={{fontSize:10,fontWeight:isActive?700:500,color:isActive?T.blue:T.text2,lineHeight:1.3}}>{c.label}</div>
+                      <div style={{fontSize:9,color:T.text3,marginTop:1}}>{mc} programs</div>
+                    </div>
+                  </th>
+                );
+              })}
+            </tr>
+          </thead>
+          <tbody>
+            {(()=>{
+              const rows=[];
+              let lastType=null;
+              partners.forEach((p,ri)=>{
+                if(p.type!==lastType){
+                  lastType=p.type;
+                  const sc=p.type==="airline"?T.blue:T.green;
+                  const sl=p.type==="airline"?"Airline programs":"Hotel programs";
+                  rows.push(<tr key={"sec-"+p.type}><td colSpan={CARDS.length+1} style={{padding:"10px 0 4px"}}><span style={{fontSize:11,fontWeight:700,color:sc,textTransform:"uppercase",letterSpacing:"0.06em"}}>{sl}</span></td></tr>);
+                }
+                const isAP=activePartner===p.key;
+                const cc=CARDS.filter(c=>p.cards.includes(c.key)).length;
+                rows.push(
+                  <tr key={p.key} style={{background:isAP?T.blueLight:ri%2===0?"transparent":T.surface2}}>
+                    <td onClick={()=>pickPartner(p.key)} style={{padding:"3px 8px 3px 0",cursor:"pointer"}}>
+                      <div style={{borderRadius:8,padding:"5px 8px",background:isAP?T.blueLight:"transparent",border:"1px solid "+(isAP?T.blue:"transparent"),transition:"all 0.15s"}}>
+                        <div style={{fontSize:12,fontWeight:isAP?700:400,color:isAP?T.blue:T.text}}>{p.label}</div>
+                        <div style={{fontSize:10,color:cc>1?T.green:T.text3,marginTop:1,fontWeight:cc>1?700:400}}>{cc>1?"Pool here: "+cc+" cards":"1 card only"}</div>
+                      </div>
+                    </td>
+                    {CARDS.map(c=>{
+                      const has=p.cards.includes(c.key);
+                      const colA=activeCard===c.key;
+                      const rowA=activePartner===p.key;
+                      const hi=(colA||rowA)&&has;
+                      const both=colA&&rowA&&has;
+                      const bg=has?(both?"#185FA5":hi?T.blue:"#1D9E75"):"transparent";
+                      return(
+                        <td key={c.key} style={{padding:"3px",textAlign:"center"}}>
+                          <div style={{width:34,height:34,borderRadius:8,margin:"0 auto",background:bg,border:has?"none":"1px solid "+T.border,display:"flex",alignItems:"center",justifyContent:"center",transition:"background 0.15s"}}>
+                            {has&&<svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 7l3.5 3.5L12 3.5" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+                          </div>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              });
+              return rows;
+            })()}
+          </tbody>
+        </table>
+      </div>
+      <div style={{display:"flex",flexWrap:"wrap",gap:14,fontSize:12,color:T.text3,paddingTop:10,borderTop:"1px solid "+T.border,marginBottom:14}}>
+        <span style={{display:"flex",alignItems:"center",gap:6}}><span style={{width:16,height:16,borderRadius:4,background:"#1D9E75",display:"inline-block"}}/> Can transfer here</span>
+        <span style={{display:"flex",alignItems:"center",gap:6}}><span style={{width:16,height:16,borderRadius:4,background:T.blue,display:"inline-block"}}/> Highlighted</span>
+        <span style={{display:"flex",alignItems:"center",gap:6}}><span style={{width:16,height:16,borderRadius:4,background:T.surface2,border:"1px solid "+T.border,display:"inline-block"}}/> No transfer</span>
+        <span style={{display:"flex",alignItems:"center",gap:6,color:T.green,fontWeight:700}}>Pool here = multiple cards share this</span>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
+        <div style={{padding:"12px 14px",background:T.greenLight,border:"1px solid "+T.green+"44",borderRadius:10}}>
+          <div style={{fontSize:12,fontWeight:700,color:T.green,marginBottom:5}}>Best pooling target</div>
+          <div style={{fontSize:12,color:T.text2,lineHeight:1.5}}>Aeroplan has 7 checkmarks — the most of any program. All 7 bank cards transfer there, making it the easiest place to pool.</div>
+        </div>
+        <div style={{padding:"12px 14px",background:T.amberLight,border:"1px solid "+T.amber+"44",borderRadius:10}}>
+          <div style={{fontSize:12,fontWeight:700,color:T.amber,marginBottom:5}}>One-way transfers</div>
+          <div style={{fontSize:12,color:T.text2,lineHeight:1.5}}>Once you move points from your card to a loyalty program, it cannot be undone. Always confirm award space first.</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── LEARN TAB ───────────────────────────────────────────────────────────────
 function LearnTab(){
   const [activeTab,setActiveTab]=useState("glossary");
@@ -353,7 +520,7 @@ function LearnTab(){
         <p style={{color:T.text2,marginTop:5,fontSize:14}}>Everything a beginner needs to know</p>
       </div>
       <div style={{display:"flex",gap:8,marginBottom:16}}>
-        {[{v:"glossary",l:"📖 Glossary"},{v:"earning",l:"💳 How to Earn"},{v:"howworks",l:"⚙️ How It Works"}].map(({v,l})=>(
+        {[{v:"glossary",l:"📖 Glossary"},{v:"earning",l:"💳 How to Earn"},{v:"howworks",l:"⚙️ How It Works"},{v:"matrix",l:"🔗 Partner Map"}].map(({v,l})=>(
           <button key={v} onClick={()=>setActiveTab(v)} style={{flex:1,padding:"9px 4px",borderRadius:10,border:`1px solid ${activeTab===v?T.blue:T.border}`,background:activeTab===v?T.blueLight:T.surface2,color:activeTab===v?T.blue:T.text2,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
         ))}
       </div>
@@ -404,6 +571,8 @@ function LearnTab(){
           ))}
         </div>
       )}
+
+      {activeTab==="matrix"&&<TransferMatrix/>}
 
       {activeTab==="howworks"&&(
         <div style={{display:"flex",flexDirection:"column",gap:12}}>
