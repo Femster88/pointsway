@@ -1434,9 +1434,12 @@ function ResultsStep({results,wallet,search,mode,onSelect,onBack}){
           )}
           {!canPool&&<div style={{marginTop:8,padding:"6px 10px",background:T.redLight,borderRadius:8,fontSize:11,color:T.red,fontWeight:600}}>Need {fmt(r.cost)} — you have {fmt(pool?.total||0)} pooled toward {r.loyaltyName}</div>}
         </div>
-        <button onClick={e=>{e.stopPropagation();setExpandedResult(isExpanded?null:r);}} style={{width:"100%",padding:"8px 0 0",background:"none",border:"none",borderTop:`1px solid ${T.border}`,marginTop:10,cursor:"pointer",fontSize:12,color:T.blue,fontWeight:700,fontFamily:"inherit",textAlign:"left"}}>
-          {isExpanded?"▲ Hide explanation":"▼ How does this redemption work?"}
-        </button>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",borderTop:"1px solid "+T.border,marginTop:10,paddingTop:8}}>
+          <button onClick={function(e){e.stopPropagation();setExpandedResult(isExpanded?null:r);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:12,color:T.blue,fontWeight:700,fontFamily:"inherit",padding:0}}>
+            {isExpanded?"▲ Hide explanation":"▼ How does this work?"}
+          </button>
+          <ShareButton deal={r}/>
+        </div>
         {isExpanded&&(
           <div style={{marginTop:10,padding:"12px",background:T.blueLight,borderRadius:10,fontSize:13,color:T.text2,lineHeight:1.7}}>
             {mode==="flights"?(
@@ -1567,16 +1570,151 @@ function GuideStep({redemption,wallet,search,mode,onRestart}){
   );
 }
 
+// ─── SHARED DEAL CARD ─────────────────────────────────────────────
+function SharedDealCard(props) {
+  var deal = props.deal;
+  var onEnter = props.onEnter;
+  var cabinIcons = {economy:"🪑", business:"🛋️", first:"👑", hotel:"🏨"};
+  var icon = cabinIcons[deal.cabin] || "✈️";
+  var cashSaved = deal.cashPrice ? deal.cashPrice - (deal.taxes || 0) : null;
+
+  return (
+    <div style={{width:"100%",maxWidth:540,marginBottom:20}}>
+      <div style={{padding:"10px 14px",background:T.purpleLight,border:"1px solid "+T.purple+"44",borderRadius:"10px 10px 0 0",display:"flex",alignItems:"center",gap:8}}>
+        <span style={{fontSize:14}}>🔗</span>
+        <span style={{fontSize:12,fontWeight:700,color:T.purple}}>Someone shared this deal with you</span>
+      </div>
+      <div style={{background:T.surface,border:"1px solid "+T.purple+"44",borderTop:"none",borderRadius:"0 0 14px 14px",padding:"16px 18px"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:12}}>
+          <div style={{flex:1,marginRight:12}}>
+            <div style={{fontSize:18,fontWeight:800,color:T.text,marginBottom:4}}>
+              {icon} {deal.airline || deal.property}
+            </div>
+            <div style={{fontSize:13,color:T.text3,marginBottom:8}}>
+              {deal.destination && "→ "+deal.destination+" · "}
+              {deal.cabin && deal.cabin.charAt(0).toUpperCase()+deal.cabin.slice(1)+" · "}
+              via {deal.loyaltyName}
+            </div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+              {deal.value >= 5 && <span style={{background:T.greenLight,color:T.green,border:"1px solid "+T.green+"44",borderRadius:6,padding:"2px 8px",fontSize:11,fontWeight:700}}>🏆 Exceptional</span>}
+              {deal.value >= 3.5 && deal.value < 5 && <span style={{background:T.greenLight,color:T.green,border:"1px solid "+T.green+"44",borderRadius:6,padding:"2px 8px",fontSize:11,fontWeight:700}}>⭐ Excellent</span>}
+              {deal.value >= 2 && deal.value < 3.5 && <span style={{background:T.blueLight,color:T.blue,border:"1px solid "+T.blue+"44",borderRadius:6,padding:"2px 8px",fontSize:11,fontWeight:700}}>👍 Good</span>}
+              {deal.tripType === "oneway" && <span style={{background:T.tealLight,color:T.teal,border:"1px solid "+T.teal+"44",borderRadius:6,padding:"2px 8px",fontSize:11,fontWeight:700}}>One Way</span>}
+            </div>
+          </div>
+          <div style={{textAlign:"right",flexShrink:0}}>
+            <div style={{fontSize:26,fontWeight:800,color:T.gold}}>{(deal.cost/1000).toFixed(0)}k</div>
+            <div style={{fontSize:11,color:T.text3}}>points</div>
+            {deal.taxes > 0 && <div style={{fontSize:11,color:T.text3}}>+${deal.taxes} tax</div>}
+            <div style={{marginTop:4,background:T.greenLight,color:T.green,borderRadius:6,padding:"2px 8px",fontSize:13,fontWeight:800}}>{deal.value}¢/pt</div>
+          </div>
+        </div>
+
+        {cashSaved && cashSaved > 0 && (
+          <div style={{padding:"10px 12px",background:T.greenLight,border:"1px solid "+T.green+"33",borderRadius:10,marginBottom:12,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{fontSize:12,color:T.text2}}>vs paying cash</div>
+            <div style={{fontSize:15,fontWeight:800,color:T.green}}>
+              Save ${cashSaved.toLocaleString()}
+            </div>
+          </div>
+        )}
+
+        <div style={{display:"flex",gap:10}}>
+          <button onClick={onEnter}
+            style={{flex:1,padding:"11px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#1a56db,#2563eb)",color:"#fff",fontSize:13,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+            Find Similar Deals →
+          </button>
+          <a href={"https://seats.aero"} target="_blank" rel="noopener noreferrer"
+            style={{flex:1,padding:"11px",borderRadius:12,border:"1px solid "+T.blue+"44",background:T.blueLight,color:T.blue,fontSize:13,fontWeight:700,textDecoration:"none",textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            Check Availability
+          </a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── SHARE BUTTON (used inside ResultsStep result cards) ──────────────────────
+function ShareButton(props) {
+  var deal = props.deal;
+  var [copied, setCopied] = useState(false);
+
+  function handleShare() {
+    try {
+      // Encode only the fields we need into a compact object
+      var payload = {
+        a: deal.airline || deal.property || "",
+        d: deal.destination || "",
+        c: deal.cabin || "hotel",
+        co: deal.cost,
+        t: deal.taxes || 0,
+        v: deal.value,
+        ln: deal.loyaltyName || "",
+        tt: deal.tripType || "",
+        cp: deal.cashPrice || 0,
+      };
+      var encoded = btoa(JSON.stringify(payload));
+      var url = window.location.origin + window.location.pathname + "?share=" + encoded;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(function() {
+          setCopied(true);
+          setTimeout(function() { setCopied(false); }, 2500);
+        });
+      } else {
+        // Fallback for older browsers
+        var ta = document.createElement("textarea");
+        ta.value = url;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        setCopied(true);
+        setTimeout(function() { setCopied(false); }, 2500);
+      }
+    } catch(e) {
+      console.error("Share failed:", e);
+    }
+  }
+
+  return (
+    <button onClick={handleShare}
+      style={{padding:"6px 12px",borderRadius:8,border:"1px solid "+(copied?T.green:T.border),background:copied?T.greenLight:T.surface2,color:copied?T.green:T.text3,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",transition:"all 0.2s"}}>
+      {copied ? "✓ Link copied!" : "🔗 Share"}
+    </button>
+  );
+}
+
 // ─── MAIN APP ─────────────────────────────────────────────────────────────────
 export default function App(){
   const [screen,setScreen]=useState("quiz");
   const [step,setStep]=useState(0);
   const [wallet,setWallet]=useState({});
-  // Safe localStorage - only runs in browser after mount
+  const [sharedDeal, setSharedDeal] = useState(null);
+  // Safe localStorage + URL share param — only runs in browser after mount
   useEffect(()=>{
     try{
       var saved=localStorage.getItem("pw_wallet");
       if(saved){setWallet(JSON.parse(saved));}
+    }catch(e){}
+    // Check for shared deal in URL
+    try{
+      var params = new URLSearchParams(window.location.search);
+      var shareParam = params.get("share");
+      if(shareParam){
+        var decoded = JSON.parse(atob(shareParam));
+        setSharedDeal({
+          airline: decoded.a,
+          destination: decoded.d,
+          cabin: decoded.c,
+          cost: decoded.co,
+          taxes: decoded.t,
+          value: decoded.v,
+          loyaltyName: decoded.ln,
+          tripType: decoded.tt,
+          cashPrice: decoded.cp,
+        });
+      }
     }catch(e){}
   },[]);
   useEffect(()=>{
@@ -1638,7 +1776,12 @@ export default function App(){
           <button onClick={()=>setScreen("app")} style={{fontSize:12,color:T.blue,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",fontWeight:700}}>Skip to app →</button>
           <div style={{fontSize:10,color:T.text3,marginTop:4}}>🌍 Free · No signup</div>
         </div>
-        <div style={{width:"100%",maxWidth:540}}><QuizStep onDone={()=>setScreen("app")}/></div>
+        <div style={{width:"100%",maxWidth:540}}>
+          {sharedDeal && (
+            <SharedDealCard deal={sharedDeal} onEnter={()=>setScreen("app")}/>
+          )}
+          <QuizStep onDone={()=>setScreen("app")}/>
+        </div>
       </div>
     );
   }
