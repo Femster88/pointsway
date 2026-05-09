@@ -1281,11 +1281,18 @@ function GuideStep({redemption,wallet,search,mode,onRestart}){
 export default function App(){
   const [screen,setScreen]=useState("quiz");
   const [step,setStep]=useState(0);
-  const [wallet,setWallet]=useState(()=>{
-    try{const s=localStorage.getItem("pw_wallet");return s?JSON.parse(s):{};}catch{return {};}
-  });
-  // Persist wallet to localStorage whenever it changes
-  useEffect(()=>{try{localStorage.setItem("pw_wallet",JSON.stringify(wallet));}catch{};},[wallet]);
+  const [wallet,setWallet]=useState({});
+  const [walletLoaded,setWalletLoaded]=useState(false);
+  // Load wallet from localStorage after mount (client-side only)
+  useEffect(()=>{
+    try{const s=localStorage.getItem("pw_wallet");if(s)setWallet(JSON.parse(s));}catch{}
+    setWalletLoaded(true);
+  },[]);
+  // Persist wallet to localStorage whenever it changes (after initial load)
+  useEffect(()=>{
+    if(!walletLoaded)return;
+    try{localStorage.setItem("pw_wallet",JSON.stringify(wallet));}catch{}
+  },[wallet,walletLoaded]);
   const [mode,setMode]=useState("flights");
   const [search,setSearch]=useState({origin:"",destination:"",cabin:"business",departDate:"",returnDate:"",hotelChain:"Any",tripType:"both"});
   const [filters,setFilters]=useState({maxPoints:"",maxTaxes:"",minValue:"",affordableOnly:false});
