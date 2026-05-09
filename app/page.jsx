@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const T = {
   bg:"#f0f4f8",surface:"#ffffff",surface2:"#f7f9fc",border:"#dde3ed",
@@ -9,6 +9,94 @@ const T = {
   text:"#1a202c",text2:"#4a5568",text3:"#718096",
   teal:"#0d9488",tealLight:"#e6fffa",purple:"#6d28d9",purpleLight:"#f5f3ff",
 };
+
+// ─── FEATURED REDEMPTION OF THE WEEK ──────────────────────────────────────────
+// Update this object weekly for fresh content
+const FEATURED = {
+  week:"May 2025",
+  headline:"ANA First Class to Tokyo",
+  subline:"One way · Book via Virgin Atlantic",
+  points:55000,
+  loyaltyName:"Virgin Atlantic Flying Club",
+  cabin:"first",
+  destination:"Tokyo",
+  cashValue:4000,
+  taxes:110,
+  value:7.1,
+  cards:["Amex MR","Chase UR","Capital One","Bilt"],
+  why:"Virgin Atlantic prices ANA First Class at just 55,000 miles one-way — a seat that costs $4,000+ in cash. Four major bank programs transfer directly to Virgin Atlantic, making this one of the most accessible luxury redemptions in the hobby. Award space opens frequently on ANA metal.",
+  howToFind:"Search nonstop on Seats.aero using the Virgin Atlantic program filter. Best availability 2-4 months out on weekdays.",
+  seatsUrl:"https://seats.aero/search?origin=JFK&destination=NRT",
+};
+
+// ─── TRANSFER BONUS ALERTS ────────────────────────────────────────────────────
+// Update manually when banks run promos (typically 20-30% bonuses)
+const TRANSFER_BONUSES = [
+  {bank:"Amex MR",to:"Virgin Atlantic",bonus:"30%",expires:"June 30 2025",value:"Transfer 70k → get 91k miles",hot:true},
+  {bank:"Capital One",to:"Turkish Miles&Smiles",bonus:"25%",expires:"May 31 2025",value:"Transfer 40k → get 50k miles",hot:true},
+  {bank:"Chase UR",to:"Air Canada Aeroplan",bonus:"20%",expires:"Ongoing",value:"Transfer 50k → get 60k miles",hot:false},
+  {bank:"Citi TYP",to:"Flying Blue",bonus:"20%",expires:"June 15 2025",value:"Transfer 50k → get 60k miles",hot:false},
+];
+
+// ─── SWEET SPOT LIBRARY ───────────────────────────────────────────────────────
+const SWEET_SPOTS = [
+  {rank:1, title:"ANA First Class to Japan",          via:"Virgin Atlantic",      points:"55,000",dir:"one way",  cabin:"first",   region:"Asia",    value:7.1, cashValue:"$4,000+", cards:["Amex","Chase","Cap One","Bilt"],           why:"The best first class product in the world at one of the lowest redemption rates. Virgin Atlantic charges just 55k miles vs ANA's own 110k."},
+  {rank:2, title:"Park Hyatt Maldives",               via:"World of Hyatt",       points:"25,000",dir:"per night",cabin:"hotel",   region:"Pacific", value:6.0, cashValue:"$1,500/nt",cards:["Chase","Bilt"],                             why:"Category 6 Hyatt property at a fixed 25k points per night. Overwater bungalows go for $1,500 cash. Chase and Bilt both transfer to Hyatt at 1:1."},
+  {rank:3, title:"Singapore Airlines Business Class", via:"Singapore KrisFlyer",  points:"85,000",dir:"round trip",cabin:"business",region:"Asia",    value:5.8, cashValue:"$5,000",  cards:["Amex","Chase","Cap One","Bilt","Citi","Wells","US Bank"],why:"7 bank cards transfer to KrisFlyer. Singapore's Suites product is the gold standard of business/first class travel."},
+  {rank:4, title:"Cathay Pacific First Class to HK",  via:"Alaska Mileage Plan",  points:"70,000",dir:"one way",  cabin:"first",   region:"Asia",    value:5.5, cashValue:"$5,000+", cards:["Bilt"],                                    why:"Alaska charges 70k miles one-way for Cathay First — far less than Cathay's own 110k. Only Bilt transfers to Alaska but it's worth it."},
+  {rank:5, title:"Sydney Business Class (United)",    via:"Air Canada Aeroplan",  points:"80,000",dir:"one way",  cabin:"business",region:"Pacific", value:5.5, cashValue:"$4,400",  cards:["Amex","Chase","Cap One","Bilt","Wells","US Bank"],    why:"Aeroplan books United metal with no fuel surcharges and fixed partner pricing. Six bank cards feed Aeroplan."},
+  {rank:6, title:"ANA Business Class to Tokyo",       via:"Virgin Atlantic",      points:"47,500",dir:"one way",  cabin:"business",region:"Asia",    value:5.2, cashValue:"$2,500",  cards:["Amex","Chase","Cap One","Bilt"],           why:"Same Virgin Atlantic trick at half the price for business class. Nearly the same product quality as first at 47.5k vs 55k miles."},
+  {rank:7, title:"Qatar Qsuites to Europe",           via:"American AAdvantage",  points:"70,000",dir:"round trip",cabin:"business",region:"Europe", value:5.0, cashValue:"$4,000",  cards:["Bilt","Citi"],                             why:"Qatar Qsuites is the best business class cabin. American charges a fair rate with no fuel surcharges. Bilt and Citi both transfer to AAdvantage."},
+  {rank:8, title:"Park Hyatt Kyoto",                  via:"World of Hyatt",       points:"35,000",dir:"per night",cabin:"hotel",   region:"Asia",    value:3.1, cashValue:"$1,100/nt",cards:["Chase","Bilt"],                             why:"One of the most sought-after hotel redemptions in the world. Kyoto in cherry blossom season costs 35k Hyatt points vs $1,100+ cash."},
+  {rank:9, title:"Flying Blue Promo to Paris",        via:"Flying Blue",          points:"35,000",dir:"one way",  cabin:"business",region:"Europe", value:3.7, cashValue:"$1,250",  cards:["Amex","Chase","Cap One","Bilt","Citi","Wells"],       why:"Flying Blue runs monthly promo awards. Business class to Paris can drop to 35k one-way during promos — normally 55k. Check flyingblue.com monthly."},
+  {rank:10,title:"London Business Class (Virgin)",    via:"Virgin Atlantic",      points:"30,000",dir:"one way",  cabin:"business",region:"Europe", value:4.1, cashValue:"$1,500",  cards:["Amex","Chase","Cap One","Bilt"],           why:"Virgin's own flights from the US to London at 30k miles one-way in Upper Class. Amex, Chase, Cap One, and Bilt all transfer direct."},
+  {rank:11,title:"Lufthansa Business to Europe",      via:"Air Canada Aeroplan",  points:"60,000",dir:"one way",  cabin:"business",region:"Europe", value:4.2, cashValue:"$2,500",  cards:["Amex","Chase","Cap One","Bilt","Wells","US Bank"],    why:"Aeroplan books Lufthansa with no fuel surcharges — a major advantage over booking direct through Miles & More. Great product, reliable availability."},
+  {rank:12,title:"Turkish Sweet Spot (US to Europe)", via:"Turkish Miles&Smiles", points:"45,000",dir:"round trip",cabin:"business",region:"Europe", value:4.3, cashValue:"$2,000",  cards:["Amex","Cap One","Bilt","Citi"],            why:"Turkish charges just 45k miles round-trip for business class to Europe on United metal. One of the best-kept secrets in the hobby."},
+  {rank:13,title:"Hyatt Zilara Cancun",               via:"World of Hyatt",       points:"25,000",dir:"per night",cabin:"hotel",   region:"Americas",value:2.4, cashValue:"$600/nt", cards:["Chase","Bilt"],                             why:"All-inclusive resort in Cancun for 25k Hyatt points per night. Adults-only, beachfront. Cash rate runs $600+ per night."},
+  {rank:14,title:"Emirates Business to Dubai",        via:"Emirates Skywards",    points:"36,000",dir:"one way",  cabin:"business",region:"ME/Africa",value:4.0,cashValue:"$1,450", cards:["Amex","Cap One","Bilt","Citi"],            why:"Book Emirates' own metal on Emirates Skywards. The ice system and amenities in Business are world-class. Four bank cards transfer direct."},
+  {rank:15,title:"Maldives Business Class (Etihad)",  via:"Etihad Guest",         points:"58,000",dir:"one way",  cabin:"business",region:"Pacific", value:5.1, cashValue:"$3,000",  cards:["Amex","Cap One","Bilt","Citi"],            why:"Etihad's business class is excellent and 58k miles one-way to the Maldives is a genuine sweet spot. Combine with a Park Hyatt Maldives hotel stay."},
+];
+
+// ─── EXPIRATION GUIDE ─────────────────────────────────────────────────────────
+const EXPIRATION_GUIDE = [
+  {program:"Chase Ultimate Rewards",      expiry:"Never expire",                 keepActive:"N/A — points are permanent",                     tip:"Never expire as long as your Chase card is open. Close the card and you lose the points.",color:T.green},
+  {program:"Amex Membership Rewards",     expiry:"Never expire",                 keepActive:"N/A — points are permanent",                     tip:"Never expire while your Amex card is open. Cancel all Amex cards and points disappear within 30 days.",color:T.green},
+  {program:"Capital One Miles",           expiry:"Never expire",                 keepActive:"N/A — points are permanent",                     tip:"Miles do not expire as long as your Capital One account remains open.",color:T.green},
+  {program:"Bilt Rewards",                expiry:"Never expire",                 keepActive:"N/A — points are permanent",                     tip:"Bilt points are permanent. No activity requirement.",color:T.green},
+  {program:"Citi ThankYou Points",        expiry:"Expire 60 days after closing", keepActive:"Keep at least one Citi card open",               tip:"Points last as long as you hold a ThankYou earning card. If you cancel your last Citi card, points expire in 60 days.",color:T.amber},
+  {program:"United MileagePlus",          expiry:"18 months inactivity",         keepActive:"Any earn or redeem activity every 18 months",    tip:"Shop through the United shopping portal or use the card for a small purchase to reset the clock.",color:T.amber},
+  {program:"Delta SkyMiles",              expiry:"Never expire",                 keepActive:"N/A — miles are permanent",                      tip:"Delta SkyMiles never expire, which is one of their few advantages.",color:T.green},
+  {program:"American AAdvantage",         expiry:"24 months inactivity",         keepActive:"Any earn or redeem activity every 24 months",    tip:"Shop the AAdvantage eShopping portal or use a partner hotel to reset the clock easily.",color:T.amber},
+  {program:"Southwest Rapid Rewards",     expiry:"24 months inactivity",         keepActive:"Any earn or redeem activity every 24 months",    tip:"Buy a $1.80 in-flight snack or a small purchase through the shopping portal to reset.",color:T.amber},
+  {program:"Alaska Mileage Plan",         expiry:"24 months inactivity",         keepActive:"Any earn or redeem activity every 24 months",    tip:"Use the Alaska shopping portal for small purchases to keep miles alive.",color:T.amber},
+  {program:"Air Canada Aeroplan",         expiry:"Never expire",                 keepActive:"N/A — points are permanent",                     tip:"Aeroplan points never expire. One of the reasons Aeroplan is a top-tier program.",color:T.green},
+  {program:"British Airways Avios",       expiry:"36 months inactivity",         keepActive:"Any earn or redeem activity every 36 months",    tip:"Use Avios to book a short-haul flight or earn via the BA shopping portal to reset.",color:T.amber},
+  {program:"Flying Blue (AF/KLM)",        expiry:"24 months inactivity",         keepActive:"Any earn or redeem activity every 24 months",    tip:"Buy miles, use the shopping portal, or take a paid or award flight to reset.",color:T.amber},
+  {program:"World of Hyatt",              expiry:"24 months inactivity",         keepActive:"Stay at any Hyatt property every 24 months",     tip:"Even a paid parking stay at a Hyatt hotel counts as activity. Or earn via the Hyatt credit card.",color:T.amber},
+  {program:"Marriott Bonvoy",             expiry:"24 months inactivity",         keepActive:"Any earn or redeem activity every 24 months",    tip:"Points expire if you have no activity in 24 months. A credit card spend or hotel stay resets the clock.",color:T.amber},
+  {program:"Hilton Honors",               expiry:"24 months inactivity",         keepActive:"Any earn or redeem activity every 24 months",    tip:"Use the Hilton shopping portal, stay at a property, or earn via credit card spend.",color:T.amber},
+  {program:"Singapore KrisFlyer",         expiry:"36 months from earning date",  keepActive:"Redeem or earn every 36 months",                  tip:"Singapore miles expire on a rolling basis from the date earned — more complex than most. Track in the KrisFlyer app.",color:T.red},
+  {program:"Emirates Skywards",           expiry:"36 months inactivity",         keepActive:"Any earn or redeem activity every 36 months",    tip:"Earn via the Emirates shopping portal or a hotel partner to reset without flying.",color:T.amber},
+  {program:"Turkish Miles&Smiles",        expiry:"36 months inactivity",         keepActive:"Any earn or redeem activity every 36 months",    tip:"Turkish has generous expiry rules. Hotel partner stays or shopping portal purchases reset the clock.",color:T.amber},
+  {program:"Virgin Atlantic Flying Club", expiry:"36 months inactivity",         keepActive:"Any earn or redeem activity every 36 months",    tip:"Use the Virgin shopping portal or transfer points in to reset. Three years is plenty of runway.",color:T.amber},
+  {program:"Etihad Guest",                expiry:"18 months inactivity",         keepActive:"Any earn or redeem activity every 18 months",    tip:"18 months is tighter than most — calendar reminders recommended for large Etihad balances.",color:T.red},
+  {program:"Korean Air SkyPass",          expiry:"10 years from earning date",   keepActive:"Miles earned expire after 10 years",             tip:"Korean Air miles have a very long shelf life. Less urgent than most programs.",color:T.green},
+];
+
+// ─── DREAM TRIP TARGETS ───────────────────────────────────────────────────────
+const DREAM_TRIPS = [
+  {key:"tokyo_biz",   label:"Tokyo — Business Class (one way)",     points:47500,  program:"Virgin Atlantic",  cards:["Amex","Chase","Cap One","Bilt"]},
+  {key:"tokyo_first", label:"Tokyo — First Class (one way)",        points:55000,  program:"Virgin Atlantic",  cards:["Amex","Chase","Cap One","Bilt"]},
+  {key:"london_biz",  label:"London — Business Class (one way)",    points:30000,  program:"Virgin Atlantic",  cards:["Amex","Chase","Cap One","Bilt"]},
+  {key:"paris_biz",   label:"Paris — Business Class (one way)",     points:28000,  program:"Flying Blue",      cards:["Amex","Chase","Cap One","Bilt","Citi","Wells"]},
+  {key:"maldives_biz",label:"Maldives — Business Class (one way)",  points:58000,  program:"Etihad Guest",     cards:["Amex","Cap One","Bilt","Citi"]},
+  {key:"maldives_htl",label:"Park Hyatt Maldives (per night)",      points:25000,  program:"World of Hyatt",   cards:["Chase","Bilt"]},
+  {key:"kyoto_htl",   label:"Park Hyatt Kyoto (per night)",         points:35000,  program:"World of Hyatt",   cards:["Chase","Bilt"]},
+  {key:"singapore_biz",label:"Singapore — Business Class (RT)",     points:85000,  program:"Singapore KrisFlyer",cards:["Amex","Chase","Cap One","Bilt","Citi","Wells","US Bank"]},
+  {key:"dubai_biz",   label:"Dubai — Business Class (RT)",          points:45000,  program:"Turkish Miles&Smiles",cards:["Amex","Cap One","Bilt","Citi"]},
+  {key:"cancun_eco",  label:"Cancun — Economy (RT)",                points:22000,  program:"Rapid Rewards",    cards:["Chase","Bilt"]},
+  {key:"custom",      label:"Custom goal",                           points:0,      program:"Any program",      cards:[]},
+];
 
 const GLOSSARY=[
   {term:"Transfer Partner",def:"A loyalty program you can move credit card points into. Example: Chase points can be transferred into Hyatt, United, or British Airways."},
@@ -705,7 +793,7 @@ function LearnTab(){
         <p style={{color:T.text2,marginTop:5,fontSize:14}}>Everything a beginner needs to know</p>
       </div>
       <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:16}}>
-        {[{v:"glossary",l:"📖 Glossary"},{v:"earning",l:"💳 How to Earn"},{v:"howworks",l:"⚙️ How It Works"},{v:"matrix",l:"🔗 Partner Map"},{v:"alliances",l:"✈️ Alliances"}].map(({v,l})=>(
+        {[{v:"glossary",l:"📖 Glossary"},{v:"earning",l:"💳 How to Earn"},{v:"howworks",l:"⚙️ How It Works"},{v:"matrix",l:"🔗 Partner Map"},{v:"alliances",l:"✈️ Alliances"},{v:"bonuses",l:"🔥 Bonuses"},{v:"expiry",l:"⏰ Expiry"},{v:"sweetspots",l:"🏆 Sweet Spots"}].map(({v,l})=>(
           <button key={v} onClick={()=>setActiveTab(v)} style={{padding:"8px 14px",borderRadius:10,border:`1px solid ${activeTab===v?T.blue:T.border}`,background:activeTab===v?T.blueLight:T.surface2,color:activeTab===v?T.blue:T.text2,fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
         ))}
       </div>
@@ -770,6 +858,9 @@ function LearnTab(){
         </div>
       )}
       {activeTab==="alliances"&&<AllianceTab/>}
+      {activeTab==="bonuses"&&<TransferBonusPanel/>}
+      {activeTab==="expiry"&&<ExpirationGuide/>}
+      {activeTab==="sweetspots"&&<SweetSpotLibrary/>}
       {activeTab==="matrix"&&<TransferMatrix/>}
     </div>
   );
@@ -780,7 +871,17 @@ function ToolsHub(){
   return(
     <div>
       <div style={{marginBottom:16}}><h2 style={{fontSize:22,fontWeight:800,color:T.text,margin:0}}>Award Search Tools</h2><p style={{color:T.text2,marginTop:5,fontSize:14}}>Use these alongside PointsWay to find and book live award availability</p></div>
-      <div style={{padding:"12px 14px",background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:10,marginBottom:14,fontSize:13,color:T.text2,lineHeight:1.5}}><strong style={{color:T.blue}}>Tip:</strong> PointsWay shows you the best strategy. These tools confirm live seat availability before you transfer points. Always verify availability first!</div>
+      <div style={{marginBottom:14}}>
+        <div style={{padding:"12px 14px",background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:10,marginBottom:10,fontSize:13,color:T.text2,lineHeight:1.5}}><strong style={{color:T.blue}}>Which tool for which job:</strong> Use Seats.aero to confirm flight award space. Rooms.aero for hotels. Point.me to compare across all programs at once. Roame for a calendar view of when space opens. The others are for power users.</div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:10}}>
+          {[{label:"Find flight space",tool:"Seats.aero"},{label:"Find hotel space",tool:"Rooms.aero"},{label:"Compare all programs",tool:"Point.me"},{label:"Calendar availability",tool:"Roame"},{label:"Set price alerts",tool:"AwardFares"},{label:"Maximize value",tool:"MaxMyPoint"}].map(({label,tool})=>(
+            <div key={tool} style={{padding:"8px 10px",background:T.surface2,border:`1px solid ${T.border}`,borderRadius:8}}>
+              <div style={{fontSize:10,color:T.text3,marginBottom:2}}>{label}</div>
+              <div style={{fontSize:12,fontWeight:700,color:T.blue}}>{tool}</div>
+            </div>
+          ))}
+        </div>
+      </div>
       <div style={{display:"flex",flexDirection:"column",gap:10}}>
         {AWARD_TOOLS.map(tool=>(
           <a key={tool.name} href={tool.url} target="_blank" rel="noopener noreferrer" style={{textDecoration:"none"}}>
@@ -844,6 +945,8 @@ function WalletStep({wallet,setWallet,onNext}){
   return(
     <div>
       <div style={{marginBottom:20}}><h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Your Points Wallet</h2><p style={{color:T.text2,marginTop:5,fontSize:14}}>Click a section → click a program → type your full balance → click away to save</p></div>
+      {/* Featured Redemption — always visible */}
+      <FeaturedDealCard onGoToSearch={()=>onNext()}/>
       {!hasPoints&&<div style={{marginBottom:16,padding:"14px 16px",background:T.amberLight,border:`1px solid ${T.amber}44`,borderRadius:12}}><div style={{fontSize:13,fontWeight:700,color:T.amber,marginBottom:4}}>👋 Not sure what you have?</div><div style={{fontSize:13,color:T.text2,lineHeight:1.5}}>Expand each section below and click any program to see where to find your balance. Most banks show your points when you log in online.</div></div>}
       <ProgramSection title="Bank & Credit Card Points" emoji="💳" programs={BANK_PROGRAMS} wallet={wallet} onSave={handleSave}/>
       <ProgramSection title="Airline Miles" emoji="✈️" programs={AIRLINE_PROGRAMS} wallet={wallet} onSave={handleSave}/>
@@ -867,6 +970,11 @@ function WalletStep({wallet,setWallet,onNext}){
           )}
         </>
       )}
+      {/* Dream Trip Tracker */}
+      <div style={{marginBottom:16}}>
+        <div style={{fontSize:12,fontWeight:700,color:T.text3,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>🎯 Dream Trip Tracker</div>
+        <Card><DreamTracker wallet={wallet}/></Card>
+      </div>
       <button onClick={onNext} disabled={!hasPoints} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",background:hasPoints?"linear-gradient(135deg,#1a56db,#2563eb)":"#e2e8f0",color:hasPoints?"#fff":"#a0aec0",fontSize:15,fontWeight:800,cursor:hasPoints?"pointer":"not-allowed",fontFamily:"inherit"}}>{hasPoints?"Search for Redemptions →":"Enter at least one balance to continue"}</button>
     </div>
   );
@@ -1173,7 +1281,11 @@ function GuideStep({redemption,wallet,search,mode,onRestart}){
 export default function App(){
   const [screen,setScreen]=useState("quiz");
   const [step,setStep]=useState(0);
-  const [wallet,setWallet]=useState({});
+  const [wallet,setWallet]=useState(()=>{
+    try{const s=localStorage.getItem("pw_wallet");return s?JSON.parse(s):{};}catch{return {};}
+  });
+  // Persist wallet to localStorage whenever it changes
+  useEffect(()=>{try{localStorage.setItem("pw_wallet",JSON.stringify(wallet));}catch{};},[wallet]);
   const [mode,setMode]=useState("flights");
   const [search,setSearch]=useState({origin:"",destination:"",cabin:"business",departDate:"",returnDate:"",hotelChain:"Any",tripType:"both"});
   const [filters,setFilters]=useState({maxPoints:"",maxTaxes:"",minValue:"",affordableOnly:false});
@@ -1227,7 +1339,18 @@ export default function App(){
         <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap');*{box-sizing:border-box;}input::placeholder{color:#a0aec0;}a:hover{opacity:0.85;}button:active{transform:scale(0.98);}`}</style>
         <div style={{width:"100%",maxWidth:540,paddingTop:22,paddingBottom:16,borderBottom:`1px solid ${T.border}`,marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <div><div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:T.gold}}>✦ PointsWay</div><div style={{fontSize:11,color:T.text3,letterSpacing:"0.12em",textTransform:"uppercase",marginTop:2}}>Points Travel Optimizer</div></div>
-          <button onClick={()=>setScreen("app")} style={{fontSize:12,color:T.blue,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",fontWeight:700}}>Skip to app →</button>
+          <div style={{textAlign:"right"}}>
+            <button onClick={()=>setScreen("app")} style={{fontSize:12,color:T.blue,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",fontWeight:700,display:"block",marginBottom:4}}>Skip to app →</button>
+            <div style={{fontSize:10,color:T.text3}}>🌍 Free · No account needed</div>
+          </div>
+        </div>
+        <div style={{width:"100%",maxWidth:540,display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:16}}>
+          {[{n:"$2,400",l:"Avg. cash saved"},{ n:"15+",l:"Sweet spots tracked"},{n:"35+",l:"Loyalty programs"}].map(({n,l})=>(
+            <div key={l} style={{padding:"12px 10px",background:T.surface,border:`1px solid ${T.border}`,borderRadius:12,textAlign:"center"}}>
+              <div style={{fontSize:20,fontWeight:800,color:T.gold}}>{n}</div>
+              <div style={{fontSize:10,color:T.text3,marginTop:2}}>{l}</div>
+            </div>
+          ))}
         </div>
         <div style={{width:"100%",maxWidth:540}}><QuizStep onDone={()=>setScreen("app")}/></div>
       </div>
@@ -1284,3 +1407,292 @@ export default function App(){
     </div>
   );
 }
+
+// ─── FEATURED DEAL CARD ───────────────────────────────────────────────────────
+function FeaturedDealCard({onGoToSearch}){
+  const f=FEATURED;
+  const saved=f.cashValue-f.taxes;
+  return(
+    <div style={{marginBottom:20,borderRadius:16,overflow:"hidden",border:`2px solid ${T.goldBorder}`,boxShadow:"0 4px 24px rgba(184,134,11,0.15)"}}>
+      <div style={{background:"linear-gradient(135deg,#b8860b,#d4a017)",padding:"14px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <div>
+          <div style={{fontSize:10,color:"#fdf3d8",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:4}}>Featured Redemption · {f.week}</div>
+          <div style={{fontSize:18,fontWeight:800,color:"#fff"}}>{f.headline}</div>
+          <div style={{fontSize:12,color:"#fdf3d8",marginTop:2}}>{f.subline}</div>
+        </div>
+        <div style={{fontSize:36}}>🏆</div>
+      </div>
+      <div style={{background:T.goldLight,padding:"16px 18px"}}>
+        <div style={{display:"flex",gap:20,marginBottom:14,flexWrap:"wrap"}}>
+          <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Points needed</div><div style={{fontSize:22,fontWeight:800,color:T.gold}}>{f.points.toLocaleString()}</div></div>
+          <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Cash equivalent</div><div style={{fontSize:22,fontWeight:800,color:T.text}}>${f.cashValue.toLocaleString()}</div></div>
+          <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Taxes only</div><div style={{fontSize:22,fontWeight:800,color:T.text}}>${f.taxes}</div></div>
+          <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Value</div><div style={{fontSize:22,fontWeight:800,color:T.green}}>{f.value}¢/pt</div></div>
+        </div>
+        <div style={{marginBottom:12,padding:"10px 14px",background:"#fff",border:`1px solid ${T.goldBorder}`,borderRadius:10,fontSize:13,color:T.text2,lineHeight:1.6}}>{f.why}</div>
+        <div style={{marginBottom:12,padding:"10px 14px",background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:10,fontSize:12,color:T.text2}}>
+          <strong style={{color:T.blue}}>How to find space:</strong> {f.howToFind}
+        </div>
+        <div style={{marginBottom:14}}>
+          <div style={{fontSize:11,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:7}}>Cards that transfer to {f.loyaltyName}</div>
+          <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+            {f.cards.map(c=><span key={c} style={{background:"#fff",border:`1px solid ${T.goldBorder}`,borderRadius:20,padding:"4px 12px",fontSize:12,fontWeight:700,color:T.gold}}>{c}</span>)}
+          </div>
+        </div>
+        <div style={{display:"flex",gap:10}}>
+          <a href={f.seatsUrl} target="_blank" rel="noopener noreferrer" style={{flex:1,padding:"12px",borderRadius:12,background:T.gold,color:"#fff",fontSize:13,fontWeight:800,textDecoration:"none",textAlign:"center"}}>Check Live Space on Seats.aero →</a>
+          <button onClick={onGoToSearch} style={{flex:1,padding:"12px",borderRadius:12,border:`1px solid ${T.goldBorder}`,background:"#fff",color:T.gold,fontSize:13,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>Find My Best Redemption</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── DREAM TRIP TRACKER ───────────────────────────────────────────────────────
+function DreamTracker({wallet}){
+  const [selectedTrip,setSelectedTrip]=useState(DREAM_TRIPS[0].key);
+  const [customPoints,setCustomPoints]=useState("");
+  const [customLabel,setCustomLabel]=useState("");
+  const pooled=buildPooled(wallet);
+  const trip=DREAM_TRIPS.find(t=>t.key===selectedTrip)||DREAM_TRIPS[0];
+  const target=selectedTrip==="custom"?(parseInt(customPoints)||0):trip.points;
+  const label=selectedTrip==="custom"?customLabel:trip.label;
+
+  // Calculate total transferable points toward this trip's program
+  // For custom, use total wallet value
+  const totalPooled=Object.values(pooled).reduce((max,[,v])=>Math.max(max,0),0);
+  // Get best possible pool toward trip's program
+  let bestPool=0;
+  if(selectedTrip!=="custom"){
+    // Find the loyalty key for this trip
+    const lkMap={
+      tokyo_biz:"virginatl",tokyo_first:"virginatl",london_biz:"virginatl",
+      paris_biz:"flyingblue",maldives_biz:"etihad",maldives_htl:"hyatt",
+      kyoto_htl:"hyatt",singapore_biz:"singapore",dubai_biz:"turkish",
+      cancun_eco:"southwest",
+    };
+    const lk=lkMap[selectedTrip];
+    if(lk&&pooled[lk])bestPool=pooled[lk].total;
+    else{
+      // fallback: max across all pools
+      bestPool=Math.max(...Object.values(pooled).map(p=>p.total||0),0);
+    }
+  } else {
+    bestPool=Math.max(...Object.values(pooled).map(p=>p.total||0),0);
+  }
+
+  const pct=target>0?Math.min(100,Math.round((bestPool/target)*100)):0;
+  const remaining=Math.max(0,target-bestPool);
+  const hasWallet=Object.values(wallet).some(v=>parseFloat(v)>0);
+
+  // Find the best card bonus to close the gap
+  const gapCard=remaining>0?EARNING_CARDS.flatMap(g=>g.cards).find(c=>{
+    const bonusNum=parseInt(c.bonus.replace(/[^0-9]/g,""));
+    return bonusNum>=remaining;
+  }):null;
+
+  return(
+    <div>
+      <div style={{marginBottom:16}}>
+        <div style={{fontSize:11,fontWeight:700,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:8}}>Pick your dream trip</div>
+        <select value={selectedTrip} onChange={e=>setSelectedTrip(e.target.value)}
+          style={{width:"100%",padding:"10px 14px",borderRadius:10,border:`1px solid ${T.border}`,background:T.surface,color:T.text,fontSize:14,fontFamily:"inherit",outline:"none",cursor:"pointer"}}>
+          {DREAM_TRIPS.map(t=><option key={t.key} value={t.key}>{t.label} — {t.points>0?`${t.points.toLocaleString()} pts via ${t.program}`:"Set your own goal"}</option>)}
+        </select>
+      </div>
+
+      {selectedTrip==="custom"&&(
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+          <div>
+            <div style={{fontSize:11,color:T.text3,marginBottom:5}}>Trip label</div>
+            <input value={customLabel} onChange={e=>setCustomLabel(e.target.value)} placeholder="e.g. Bali honeymoon"
+              style={{width:"100%",padding:"9px 13px",borderRadius:10,border:`1px solid ${T.border}`,background:T.surface2,color:T.text,fontSize:14,fontFamily:"inherit",outline:"none"}}/>
+          </div>
+          <div>
+            <div style={{fontSize:11,color:T.text3,marginBottom:5}}>Points needed</div>
+            <input type="number" value={customPoints} onChange={e=>setCustomPoints(e.target.value)} placeholder="e.g. 75000"
+              style={{width:"100%",padding:"9px 13px",borderRadius:10,border:`1px solid ${T.border}`,background:T.surface2,color:T.text,fontSize:14,fontFamily:"inherit",outline:"none"}}/>
+          </div>
+        </div>
+      )}
+
+      {!hasWallet&&(
+        <div style={{marginBottom:16,padding:"14px 16px",background:T.amberLight,border:`1px solid ${T.amber}44`,borderRadius:12,fontSize:13,color:T.text2,lineHeight:1.5}}>
+          Enter your points balances in the wallet to see your progress toward this trip.
+        </div>
+      )}
+
+      {target>0&&(
+        <div style={{marginBottom:16}}>
+          {/* Progress bar */}
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:8}}>
+            <div style={{fontSize:15,fontWeight:800,color:T.text}}>{label||"Your goal"}</div>
+            <div style={{fontSize:13,fontWeight:700,color:pct>=100?T.green:T.blue}}>{pct}%</div>
+          </div>
+          <div style={{height:14,background:T.surface2,border:`1px solid ${T.border}`,borderRadius:20,overflow:"hidden",marginBottom:10}}>
+            <div style={{height:"100%",width:`${pct}%`,background:pct>=100?"linear-gradient(90deg,#0e7c4a,#1a9e5a)":"linear-gradient(90deg,#1a56db,#3b82f6)",borderRadius:20,transition:"width 0.6s ease"}}/>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:T.text3,marginBottom:14}}>
+            <span>You have: <strong style={{color:T.blue}}>{bestPool.toLocaleString()} pts</strong></span>
+            <span>Goal: <strong style={{color:T.gold}}>{target.toLocaleString()} pts</strong></span>
+          </div>
+
+          {pct>=100?(
+            <div style={{padding:"14px 16px",background:T.greenLight,border:`1px solid ${T.green}44`,borderRadius:12,textAlign:"center"}}>
+              <div style={{fontSize:20,marginBottom:6}}>🎉</div>
+              <div style={{fontSize:15,fontWeight:800,color:T.green}}>You have enough points!</div>
+              <div style={{fontSize:13,color:T.text2,marginTop:4}}>Head to the search tab to find your best redemption and book it.</div>
+            </div>
+          ):(
+            <div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <div style={{padding:"12px 14px",background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:12}}>
+                <div style={{fontSize:12,fontWeight:700,color:T.blue,marginBottom:4}}>You need {remaining.toLocaleString()} more points</div>
+                {trip.cards&&trip.cards.length>0&&<div style={{fontSize:12,color:T.text2}}>Cards that transfer to {trip.program}: <strong>{trip.cards.join(", ")}</strong></div>}
+              </div>
+              {gapCard&&(
+                <div style={{padding:"12px 14px",background:T.greenLight,border:`1px solid ${T.green}44`,borderRadius:12}}>
+                  <div style={{fontSize:12,fontWeight:700,color:T.green,marginBottom:4}}>💡 One card signup could close the gap</div>
+                  <div style={{fontSize:13,fontWeight:700,color:T.text,marginBottom:3}}>{gapCard.name}</div>
+                  <div style={{fontSize:12,color:T.text2}}><strong style={{color:T.green}}>Bonus: {gapCard.bonus}</strong> with {gapCard.spend}</div>
+                  <div style={{fontSize:12,color:T.text3,marginTop:3}}>{gapCard.why}</div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {selectedTrip!=="custom"&&trip.cards&&trip.cards.length>0&&(
+        <div style={{padding:"12px 14px",background:T.surface2,border:`1px solid ${T.border}`,borderRadius:10,fontSize:12,color:T.text3}}>
+          <strong style={{color:T.text}}>Transferable via:</strong> {trip.program} · Cards: {trip.cards.join(", ")}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── SWEET SPOT LIBRARY ───────────────────────────────────────────────────────
+function SweetSpotLibrary(){
+  const [filter,setFilter]=useState("All");
+  const [openSpot,setOpenSpot]=useState(null);
+  const regions=["All","Asia","Europe","Pacific","Americas","ME/Africa"];
+  const filtered=filter==="All"?SWEET_SPOTS:SWEET_SPOTS.filter(s=>s.region===filter);
+  const cabinIcon={first:"👑",business:"🛋️",economy:"🪑",hotel:"🏨"};
+  return(
+    <div>
+      <div style={{marginBottom:12,padding:"12px 14px",background:T.goldLight,border:`1px solid ${T.goldBorder}`,borderRadius:12,fontSize:13,color:T.text2,lineHeight:1.5}}>
+        <strong style={{color:T.gold}}>The 15 best redemptions in the hobby right now</strong> — curated by value, not by airline ad spend. These are the sweet spots the points community actually uses.
+      </div>
+      <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:14}}>
+        {regions.map(r=>(
+          <button key={r} onClick={()=>setFilter(r)} style={{padding:"6px 12px",borderRadius:20,border:`1px solid ${filter===r?T.gold:T.border}`,background:filter===r?T.goldLight:T.surface2,color:filter===r?T.gold:T.text2,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:filter===r?700:500}}>{r}</button>
+        ))}
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {filtered.map((s,i)=>{
+          const isOpen=openSpot===s.rank;
+          return(
+            <div key={s.rank} onClick={()=>setOpenSpot(isOpen?null:s.rank)}
+              style={{borderRadius:12,border:`1px solid ${isOpen?T.goldBorder:T.border}`,background:isOpen?T.goldLight:T.surface,overflow:"hidden",cursor:"pointer"}}>
+              <div style={{padding:"12px 16px",display:"flex",gap:12,alignItems:"center"}}>
+                <div style={{width:28,height:28,borderRadius:"50%",background:T.gold,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800,flexShrink:0}}>{s.rank}</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:13,fontWeight:700,color:T.text,marginBottom:2}}>{cabinIcon[s.cabin]} {s.title}</div>
+                  <div style={{fontSize:11,color:T.text3}}>via {s.via} · {s.dir} · {s.region}</div>
+                </div>
+                <div style={{textAlign:"right",flexShrink:0}}>
+                  <div style={{fontSize:14,fontWeight:800,color:T.gold}}>{s.points}</div>
+                  <div style={{fontSize:10,color:T.text3}}>pts</div>
+                </div>
+                <div style={{textAlign:"right",flexShrink:0,marginLeft:8}}>
+                  <div style={{background:T.greenLight,color:T.green,borderRadius:6,padding:"2px 8px",fontSize:12,fontWeight:700}}>{s.value}¢</div>
+                </div>
+                <span style={{color:T.text3,fontSize:12,marginLeft:4}}>{isOpen?"▲":"▼"}</span>
+              </div>
+              {isOpen&&(
+                <div style={{padding:"0 16px 16px",borderTop:`1px solid ${T.goldBorder}`}}>
+                  <div style={{paddingTop:12,display:"flex",gap:20,marginBottom:12,flexWrap:"wrap"}}>
+                    <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>Cash value</div><div style={{fontSize:16,fontWeight:800,color:T.text}}>{s.cashValue}</div></div>
+                    <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>Value</div><div style={{fontSize:16,fontWeight:800,color:T.green}}>{s.value}¢/pt</div></div>
+                  </div>
+                  <div style={{fontSize:13,color:T.text2,lineHeight:1.6,marginBottom:12}}>{s.why}</div>
+                  <div>
+                    <div style={{fontSize:11,color:T.text3,marginBottom:6}}>Cards that get you there:</div>
+                    <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
+                      {s.cards.map(c=><span key={c} style={{background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:16,padding:"3px 10px",fontSize:11,color:T.blue,fontWeight:700}}>{c}</span>)}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── TRANSFER BONUS PANEL ─────────────────────────────────────────────────────
+function TransferBonusPanel(){
+  return(
+    <div>
+      <div style={{marginBottom:12,padding:"12px 14px",background:T.redLight,border:`1px solid ${T.red}33`,borderRadius:12,fontSize:13,color:T.text2,lineHeight:1.5}}>
+        <strong style={{color:T.red}}>🔥 Time-sensitive:</strong> Transfer bonuses let you send fewer points and receive more miles. A 30% bonus means 70,000 Amex points → 91,000 Virgin miles. These run for weeks, not months.
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
+        {TRANSFER_BONUSES.map((b,i)=>(
+          <div key={i} style={{padding:"14px 16px",background:b.hot?T.amberLight:T.surface2,border:`1px solid ${b.hot?T.amber+"66":T.border}`,borderRadius:12}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+              <div>
+                <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:4}}>
+                  {b.hot&&<span style={{fontSize:10,fontWeight:700,color:T.red,background:T.redLight,border:`1px solid ${T.red}33`,borderRadius:4,padding:"2px 6px"}}>🔥 HOT</span>}
+                  <span style={{fontSize:14,fontWeight:700,color:T.text}}>{b.bank} → {b.to}</span>
+                </div>
+                <div style={{fontSize:12,color:T.text3}}>Expires: {b.expires}</div>
+              </div>
+              <div style={{background:T.green,color:"#fff",borderRadius:8,padding:"4px 12px",fontSize:16,fontWeight:800,flexShrink:0}}>+{b.bonus}</div>
+            </div>
+            <div style={{fontSize:13,color:T.text2,fontWeight:600}}>{b.value}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{padding:"12px 14px",background:T.surface2,border:`1px solid ${T.border}`,borderRadius:10,fontSize:12,color:T.text3,lineHeight:1.5}}>
+        <strong style={{color:T.text}}>Where to track bonuses:</strong> thePointsGuy.com, Doctor of Credit, and MilesPerDay all post alerts when new transfer bonuses launch. Follow them on social media for real-time notifications.
+      </div>
+    </div>
+  );
+}
+
+// ─── EXPIRATION GUIDE ─────────────────────────────────────────────────────────
+function ExpirationGuide(){
+  const [filter,setFilter]=useState("All");
+  const filtered=filter==="All"?EXPIRATION_GUIDE:filter==="Never"?EXPIRATION_GUIDE.filter(e=>e.color===T.green):filter==="Urgent"?EXPIRATION_GUIDE.filter(e=>e.color===T.red):EXPIRATION_GUIDE.filter(e=>e.color===T.amber);
+  return(
+    <div>
+      <div style={{marginBottom:12,padding:"12px 14px",background:T.amberLight,border:`1px solid ${T.amber}44`,borderRadius:12,fontSize:13,color:T.text2,lineHeight:1.5}}>
+        <strong style={{color:T.amber}}>⚠️ Points can expire and disappear forever.</strong> Millions of miles are lost every year. Know your program's policy and set calendar reminders for programs with tight windows.
+      </div>
+      <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:14}}>
+        {["All","Never","Watch","Urgent"].map(f=>(
+          <button key={f} onClick={()=>setFilter(f)} style={{padding:"6px 12px",borderRadius:20,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:filter===f?700:500,border:`1px solid ${filter===f?(f==="Never"?T.green:f==="Urgent"?T.red:T.amber):T.border}`,background:filter===f?(f==="Never"?T.greenLight:f==="Urgent"?T.redLight:T.amberLight):T.surface2,color:filter===f?(f==="Never"?T.green:f==="Urgent"?T.red:T.amber):T.text2}}>{f==="All"?"All programs":f==="Never"?"✅ Never expire":f==="Watch"?"⚠️ Watch these":"🚨 Urgent"}</button>
+        ))}
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {filtered.map((e,i)=>(
+          <div key={i} style={{padding:"12px 14px",background:e.color===T.green?T.greenLight:e.color===T.red?T.redLight:T.surface2,border:`1px solid ${e.color}33`,borderRadius:12}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:10}}>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:700,color:T.text,marginBottom:3}}>{e.program}</div>
+                <div style={{fontSize:12,fontWeight:600,color:e.color,marginBottom:5}}>{e.expiry}</div>
+                <div style={{fontSize:12,color:T.text2,lineHeight:1.5}}><strong>To stay active:</strong> {e.keepActive}</div>
+                <div style={{fontSize:11,color:T.text3,marginTop:4,fontStyle:"italic"}}>{e.tip}</div>
+              </div>
+              <div style={{width:10,height:10,borderRadius:"50%",background:e.color,flexShrink:0,marginTop:4}}/>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
