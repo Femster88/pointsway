@@ -26,7 +26,7 @@ const FEATURED = {
   cards:["Amex MR","Chase UR","Capital One","Bilt"],
   why:"Virgin Atlantic prices ANA First Class at just 55,000 miles one-way — a seat that costs $4,000+ in cash. Four major bank programs transfer directly to Virgin Atlantic, making this one of the most accessible luxury redemptions in the hobby. Award space opens frequently on ANA metal.",
   howToFind:"Search nonstop on Seats.aero using the Virgin Atlantic program filter. Best availability 2-4 months out on weekdays.",
-  seatsUrl:"https://seats.aero",
+  seatsUrl:"https://seats.aero/search?origin=JFK&destination=NRT",
 };
 
 // ─── TRANSFER BONUS ALERTS ────────────────────────────────────────────────────
@@ -858,10 +858,10 @@ function LearnTab(){
         </div>
       )}
       {activeTab==="alliances"&&<AllianceTab/>}
+      {activeTab==="matrix"&&<TransferMatrix/>}
       {activeTab==="bonuses"&&<TransferBonusPanel/>}
       {activeTab==="expiry"&&<ExpirationGuide/>}
       {activeTab==="sweetspots"&&<SweetSpotLibrary/>}
-      {activeTab==="matrix"&&<TransferMatrix/>}
     </div>
   );
 }
@@ -871,17 +871,7 @@ function ToolsHub(){
   return(
     <div>
       <div style={{marginBottom:16}}><h2 style={{fontSize:22,fontWeight:800,color:T.text,margin:0}}>Award Search Tools</h2><p style={{color:T.text2,marginTop:5,fontSize:14}}>Use these alongside PointsWay to find and book live award availability</p></div>
-      <div style={{marginBottom:14}}>
-        <div style={{padding:"12px 14px",background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:10,marginBottom:10,fontSize:13,color:T.text2,lineHeight:1.5}}><strong style={{color:T.blue}}>Which tool for which job:</strong> Use Seats.aero to confirm flight award space. Rooms.aero for hotels. Point.me to compare across all programs at once. Roame for a calendar view of when space opens. The others are for power users.</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:10}}>
-          {[{label:"Find flight space",tool:"Seats.aero"},{label:"Find hotel space",tool:"Rooms.aero"},{label:"Compare all programs",tool:"Point.me"},{label:"Calendar availability",tool:"Roame"},{label:"Set price alerts",tool:"AwardFares"},{label:"Maximize value",tool:"MaxMyPoint"}].map(({label,tool})=>(
-            <div key={tool} style={{padding:"8px 10px",background:T.surface2,border:`1px solid ${T.border}`,borderRadius:8}}>
-              <div style={{fontSize:10,color:T.text3,marginBottom:2}}>{label}</div>
-              <div style={{fontSize:12,fontWeight:700,color:T.blue}}>{tool}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <div style={{padding:"12px 14px",background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:10,marginBottom:14,fontSize:13,color:T.text2,lineHeight:1.5}}><strong style={{color:T.blue}}>Tip:</strong> PointsWay shows you the best strategy. These tools confirm live seat availability before you transfer points. Always verify availability first!</div>
       <div style={{display:"flex",flexDirection:"column",gap:10}}>
         {AWARD_TOOLS.map(tool=>(
           <a key={tool.name} href={tool.url} target="_blank" rel="noopener noreferrer" style={{textDecoration:"none"}}>
@@ -1275,17 +1265,16 @@ export default function App(){
   const [screen,setScreen]=useState("quiz");
   const [step,setStep]=useState(0);
   const [wallet,setWallet]=useState({});
-  const [walletLoaded,setWalletLoaded]=useState(false);
-  // Load wallet from localStorage after mount (client-side only)
+  // Safe localStorage - only runs in browser after mount
   useEffect(()=>{
-    try{const s=localStorage.getItem("pw_wallet");if(s)setWallet(JSON.parse(s));}catch{}
-    setWalletLoaded(true);
+    try{
+      var saved=localStorage.getItem("pw_wallet");
+      if(saved){setWallet(JSON.parse(saved));}
+    }catch(e){}
   },[]);
-  // Persist wallet to localStorage whenever it changes (after initial load)
   useEffect(()=>{
-    if(!walletLoaded)return;
-    try{localStorage.setItem("pw_wallet",JSON.stringify(wallet));}catch{}
-  },[wallet,walletLoaded]);
+    try{localStorage.setItem("pw_wallet",JSON.stringify(wallet));}catch(e){}
+  },[wallet]);
   const [mode,setMode]=useState("flights");
   const [search,setSearch]=useState({origin:"",destination:"",cabin:"business",departDate:"",returnDate:"",hotelChain:"Any",tripType:"both"});
   const [filters,setFilters]=useState({maxPoints:"",maxTaxes:"",minValue:"",affordableOnly:false});
@@ -1339,18 +1328,8 @@ export default function App(){
         <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap');*{box-sizing:border-box;}input::placeholder{color:#a0aec0;}a:hover{opacity:0.85;}button:active{transform:scale(0.98);}`}</style>
         <div style={{width:"100%",maxWidth:540,paddingTop:22,paddingBottom:16,borderBottom:`1px solid ${T.border}`,marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <div><div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:T.gold}}>✦ PointsWay</div><div style={{fontSize:11,color:T.text3,letterSpacing:"0.12em",textTransform:"uppercase",marginTop:2}}>Points Travel Optimizer</div></div>
-          <div style={{textAlign:"right"}}>
-            <button onClick={()=>setScreen("app")} style={{fontSize:12,color:T.blue,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",fontWeight:700,display:"block",marginBottom:4}}>Skip to app →</button>
-            <div style={{fontSize:10,color:T.text3}}>🌍 Free · No account needed</div>
-          </div>
-        </div>
-        <div style={{width:"100%",maxWidth:540,display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:16}}>
-          {[{n:"$2,400",l:"Avg. cash saved"},{ n:"15+",l:"Sweet spots tracked"},{n:"35+",l:"Loyalty programs"}].map(({n,l})=>(
-            <div key={l} style={{padding:"12px 10px",background:T.surface,border:`1px solid ${T.border}`,borderRadius:12,textAlign:"center"}}>
-              <div style={{fontSize:20,fontWeight:800,color:T.gold}}>{n}</div>
-              <div style={{fontSize:10,color:T.text3,marginTop:2}}>{l}</div>
-            </div>
-          ))}
+          <button onClick={()=>setScreen("app")} style={{fontSize:12,color:T.blue,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",fontWeight:700}}>Skip to app →</button>
+          <div style={{fontSize:10,color:T.text3,marginTop:4}}>🌍 Free · No signup</div>
         </div>
         <div style={{width:"100%",maxWidth:540}}><QuizStep onDone={()=>setScreen("app")}/></div>
       </div>
@@ -1411,6 +1390,7 @@ export default function App(){
 // ─── FEATURED DEAL CARD ───────────────────────────────────────────────────────
 function FeaturedDealCard({onGoToSearch}){
   const f=FEATURED;
+  const saved=f.cashValue-f.taxes;
   return(
     <div style={{marginBottom:20,borderRadius:16,overflow:"hidden",border:`2px solid ${T.goldBorder}`,boxShadow:"0 4px 24px rgba(184,134,11,0.15)"}}>
       <div style={{background:"linear-gradient(135deg,#b8860b,#d4a017)",padding:"14px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
@@ -1449,7 +1429,7 @@ function FeaturedDealCard({onGoToSearch}){
 
 // ─── DREAM TRIP TRACKER ───────────────────────────────────────────────────────
 function DreamTracker({wallet}){
-  const [selectedTrip,setSelectedTrip]=useState("tokyo_biz");
+  const [selectedTrip,setSelectedTrip]=useState(DREAM_TRIPS[0].key);
   const [customPoints,setCustomPoints]=useState("");
   const [customLabel,setCustomLabel]=useState("");
   const pooled=buildPooled(wallet);
@@ -1474,10 +1454,10 @@ function DreamTracker({wallet}){
     if(lk&&pooled[lk])bestPool=pooled[lk].total;
     else{
       // fallback: max across all pools
-      const vals=Object.values(pooled).map(p=>p.total||0); bestPool=vals.length>0?Math.max(...vals,0):0;
+      bestPool=Math.max(...Object.values(pooled).map(p=>p.total||0),0);
     }
   } else {
-    const vals=Object.values(pooled).map(p=>p.total||0); bestPool=vals.length>0?Math.max(...vals,0):0;
+    bestPool=Math.max(...Object.values(pooled).map(p=>p.total||0),0);
   }
 
   const pct=target>0?Math.min(100,Math.round((bestPool/target)*100)):0;
