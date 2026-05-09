@@ -1265,6 +1265,7 @@ function WalletStep({wallet,setWallet,onNext}){
         <div style={{fontSize:12,fontWeight:700,color:T.text3,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>🎯 Dream Trip Tracker</div>
         <Card><DreamTracker wallet={wallet} /></Card>
       </div>
+      <div style={{marginBottom:16}}><EmailCapture compact={true}/></div>
       <button onClick={onNext} disabled={!hasPoints} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",background:hasPoints?"linear-gradient(135deg,#1a56db,#2563eb)":"#e2e8f0",color:hasPoints?"#fff":"#a0aec0",fontSize:15,fontWeight:800,cursor:hasPoints?"pointer":"not-allowed",fontFamily:"inherit"}}>{hasPoints?"Search for Redemptions →":"Enter at least one balance to continue"}</button>
     </div>
   );
@@ -1570,6 +1571,168 @@ function GuideStep({redemption,wallet,search,mode,onRestart}){
   );
 }
 
+// ─── EMAIL CAPTURE ───────────────────────────────────────────────
+var BUTTONDOWN_URL = "https://buttondown.com/api/emails/embed-subscribe/babafemi";
+
+function EmailCapture(props) {
+  var compact = props.compact || false;
+  var [email, setEmail] = useState("");
+  var [status, setStatus] = useState("idle"); // idle | loading | success | error
+  var [errorMsg, setErrorMsg] = useState("");
+
+  function handleSubmit() {
+    if (!email || email.indexOf("@") < 0) {
+      setErrorMsg("Please enter a valid email address.");
+      setStatus("error");
+      return;
+    }
+    setStatus("loading");
+    setErrorMsg("");
+
+    var formData = new FormData();
+    formData.append("email", email);
+    formData.append("tag", "pointsway");
+
+    fetch(BUTTONDOWN_URL, {
+      method: "POST",
+      body: formData,
+      mode: "no-cors",
+    }).then(function() {
+      // no-cors means we can't read the response but submission goes through
+      setStatus("success");
+      setEmail("");
+    }).catch(function() {
+      setStatus("error");
+      setErrorMsg("Something went wrong. Try again or visit buttondown.com/babafemi directly.");
+    });
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter") handleSubmit();
+  }
+
+  if (compact) {
+    // Slim inline version for inside the app
+    return (
+      <div style={{padding:"14px 16px",background:T.purpleLight,border:"1px solid "+T.purple+"44",borderRadius:14}}>
+        <div style={{fontSize:13,fontWeight:800,color:T.purple,marginBottom:3}}>
+          📬 Get weekly deal alerts
+        </div>
+        <div style={{fontSize:12,color:T.text2,marginBottom:12,lineHeight:1.5}}>
+          Transfer bonuses, sweet spots, and promo awards — delivered every Monday. Free, no spam.
+        </div>
+        {status === "success" ? (
+          <div style={{padding:"12px 14px",background:T.greenLight,border:"1px solid "+T.green+"44",borderRadius:10,textAlign:"center"}}>
+            <div style={{fontSize:16,marginBottom:4}}>🎉</div>
+            <div style={{fontSize:13,fontWeight:700,color:T.green}}>You're on the list!</div>
+            <div style={{fontSize:12,color:T.text2,marginTop:2}}>Check your inbox for a confirmation email.</div>
+          </div>
+        ) : (
+          <div style={{display:"flex",gap:8}}>
+            <input
+              type="email"
+              value={email}
+              onChange={function(e) { setEmail(e.target.value); setStatus("idle"); }}
+              onKeyDown={handleKeyDown}
+              placeholder="your@email.com"
+              style={{flex:1,padding:"10px 13px",borderRadius:10,border:"1px solid "+(status==="error"?T.red:T.purple+"44"),background:"#fff",color:T.text,fontSize:13,fontFamily:"inherit",outline:"none"}}
+            />
+            <button
+              onClick={handleSubmit}
+              disabled={status === "loading"}
+              style={{padding:"10px 16px",borderRadius:10,border:"none",background:status==="loading"?"#a0aec0":T.purple,color:"#fff",fontSize:13,fontWeight:800,cursor:status==="loading"?"not-allowed":"pointer",fontFamily:"inherit",flexShrink:0}}>
+              {status === "loading" ? "..." : "Subscribe"}
+            </button>
+          </div>
+        )}
+        {status === "error" && errorMsg && (
+          <div style={{fontSize:11,color:T.red,marginTop:6}}>{errorMsg}</div>
+        )}
+      </div>
+    );
+  }
+
+  // Full version for quiz screen
+  return (
+    <div style={{width:"100%",maxWidth:540,marginBottom:20}}>
+      <div style={{borderRadius:16,overflow:"hidden",border:"1px solid "+T.purple+"44",boxShadow:"0 2px 12px rgba(109,40,217,0.08)"}}>
+        {/* Header */}
+        <div style={{background:"linear-gradient(135deg,#4c1d95,#6d28d9)",padding:"18px 20px"}}>
+          <div style={{fontSize:10,color:"#c4b5fd",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:6}}>
+            Free Weekly Newsletter
+          </div>
+          <div style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:4}}>
+            📬 PointsWay Deal Alerts
+          </div>
+          <div style={{fontSize:13,color:"#c4b5fd",lineHeight:1.5}}>
+            Transfer bonuses, sweet spots, and promo awards — every Monday morning.
+          </div>
+        </div>
+
+        {/* What you get */}
+        <div style={{background:T.purpleLight,padding:"14px 20px",borderBottom:"1px solid "+T.purple+"22"}}>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+            {[
+              {icon:"🔥",text:"Transfer bonus alerts"},
+              {icon:"🏆",text:"Weekly sweet spot picks"},
+              {icon:"📊",text:"Points valuation changes"},
+              {icon:"✈️",text:"Promo award windows"},
+            ].map(function(item) {
+              return (
+                <div key={item.text} style={{display:"flex",alignItems:"center",gap:7,fontSize:12,color:T.text2}}>
+                  <span style={{fontSize:14}}>{item.icon}</span>
+                  <span>{item.text}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Form */}
+        <div style={{background:"#fff",padding:"16px 20px"}}>
+          {status === "success" ? (
+            <div style={{textAlign:"center",padding:"10px 0"}}>
+              <div style={{fontSize:32,marginBottom:10}}>🎉</div>
+              <div style={{fontSize:16,fontWeight:800,color:T.green,marginBottom:4}}>You're on the list!</div>
+              <div style={{fontSize:13,color:T.text2,lineHeight:1.5}}>
+                Check your inbox for a confirmation email from Buttondown. First deal alert arrives Monday.
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div style={{fontSize:12,color:T.text3,marginBottom:8}}>
+                Join free — unsubscribe anytime
+              </div>
+              <div style={{display:"flex",gap:8,marginBottom:status==="error"?8:0}}>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={function(e) { setEmail(e.target.value); setStatus("idle"); }}
+                  onKeyDown={handleKeyDown}
+                  placeholder="your@email.com"
+                  style={{flex:1,padding:"11px 14px",borderRadius:10,border:"1px solid "+(status==="error"?T.red:T.border),background:T.surface2,color:T.text,fontSize:14,fontFamily:"inherit",outline:"none"}}
+                />
+                <button
+                  onClick={handleSubmit}
+                  disabled={status === "loading"}
+                  style={{padding:"11px 18px",borderRadius:10,border:"none",background:status==="loading"?"#a0aec0":"linear-gradient(135deg,#4c1d95,#6d28d9)",color:"#fff",fontSize:13,fontWeight:800,cursor:status==="loading"?"not-allowed":"pointer",fontFamily:"inherit",flexShrink:0}}>
+                  {status === "loading" ? "Subscribing..." : "Subscribe →"}
+                </button>
+              </div>
+              {status === "error" && errorMsg && (
+                <div style={{fontSize:12,color:T.red,lineHeight:1.5}}>{errorMsg}</div>
+              )}
+              <div style={{fontSize:11,color:T.text3,marginTop:8,textAlign:"center"}}>
+                No spam · No credit card · Unsubscribe anytime
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── SHARED DEAL CARD ─────────────────────────────────────────────
 function SharedDealCard(props) {
   var deal = props.deal;
@@ -1781,6 +1944,7 @@ export default function App(){
             <SharedDealCard deal={sharedDeal} onEnter={()=>setScreen("app")}/>
           )}
           <QuizStep onDone={()=>setScreen("app")}/>
+          <EmailCapture/>
         </div>
       </div>
     );
