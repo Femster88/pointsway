@@ -856,6 +856,233 @@ function AllianceTab(){
   );
 }
 
+// ─── VALUATION DASHBOARD ───────────────────────────────────────────
+// Point valuations in cents per point — industry standard estimates
+// Update these periodically as valuations shift
+var POINT_VALUATIONS = {
+  amex:        {rate:2.0,  label:"Amex MR",          color:"#1a56db"},
+  chase:       {rate:2.0,  label:"Chase UR",          color:"#1a6fb5"},
+  capital_one: {rate:1.7,  label:"Capital One",       color:"#cc0000"},
+  bilt:        {rate:1.8,  label:"Bilt",              color:"#0d9488"},
+  citi:        {rate:1.7,  label:"Citi TYP",          color:"#e87722"},
+  wells:       {rate:1.0,  label:"Wells Fargo",       color:"#d4371c"},
+  usbank:      {rate:1.5,  label:"US Bank",           color:"#6d28d9"},
+  bofa:        {rate:1.0,  label:"BofA",              color:"#e31837"},
+  united:      {rate:1.3,  label:"United",            color:"#002868"},
+  delta:       {rate:1.1,  label:"Delta",             color:"#e01933"},
+  american:    {rate:1.4,  label:"American",          color:"#00549f"},
+  southwest:   {rate:1.4,  label:"Southwest",         color:"#304cb2"},
+  alaska:      {rate:1.8,  label:"Alaska",            color:"#0060a9"},
+  aeroplan:    {rate:1.5,  label:"Aeroplan",          color:"#d62b1e"},
+  british:     {rate:1.3,  label:"BA Avios",          color:"#075aaa"},
+  flyingblue:  {rate:1.3,  label:"Flying Blue",       color:"#0033a0"},
+  emirates:    {rate:1.2,  label:"Emirates",          color:"#c60c30"},
+  turkish:     {rate:1.3,  label:"Turkish",           color:"#e30a17"},
+  singapore:   {rate:1.3,  label:"KrisFlyer",         color:"#0033a0"},
+  cathay:      {rate:1.3,  label:"Asia Miles",        color:"#006564"},
+  ana:         {rate:1.5,  label:"ANA",               color:"#003087"},
+  avianca:     {rate:1.4,  label:"LifeMiles",         color:"#e31837"},
+  korean:      {rate:1.3,  label:"SkyPass",           color:"#00629b"},
+  etihad:      {rate:1.2,  label:"Etihad",            color:"#b5985a"},
+  virginatl:   {rate:1.5,  label:"Virgin Atl",        color:"#e10a0a"},
+  qantas:      {rate:1.3,  label:"Qantas",            color:"#e40000"},
+  jetblue:     {rate:1.3,  label:"JetBlue",           color:"#0033a0"},
+  aeromexico:  {rate:1.2,  label:"Aeromexico",        color:"#006847"},
+  qatar:       {rate:1.2,  label:"Qatar",             color:"#5c0632"},
+  iberia:      {rate:1.2,  label:"Iberia",            color:"#cc0000"},
+  finnair:     {rate:1.2,  label:"Finnair",           color:"#003580"},
+  aerlingus:   {rate:1.2,  label:"Aer Lingus",        color:"#007749"},
+  tap:         {rate:1.2,  label:"TAP Air",           color:"#007749"},
+  eva:         {rate:1.2,  label:"EVA Air",           color:"#006341"},
+  thai:        {rate:1.2,  label:"Thai",              color:"#6b006b"},
+  atmos:       {rate:1.8,  label:"Atmos",             color:"#0060a9"},
+  hyatt:       {rate:2.0,  label:"Hyatt",             color:"#1a56db"},
+  marriott:    {rate:0.7,  label:"Marriott",          color:"#b5935a"},
+  hilton:      {rate:0.5,  label:"Hilton",            color:"#004f9f"},
+  ihg:         {rate:0.5,  label:"IHG",               color:"#005eb8"},
+  wyndham:     {rate:0.9,  label:"Wyndham",           color:"#003580"},
+  choice:      {rate:0.6,  label:"Choice",            color:"#00a651"},
+  bestwestern: {rate:0.6,  label:"Best Western",      color:"#003087"},
+  accor:       {rate:0.7,  label:"Accor ALL",         color:"#c5a028"},
+  radisson:    {rate:0.4,  label:"Radisson",          color:"#d4001a"},
+  iprefer:     {rate:0.6,  label:"I Prefer",          color:"#8b6914"},
+  leadersclub: {rate:0.6,  label:"Leaders Club",      color:"#4a4a4a"},
+  preferred:   {rate:0.6,  label:"Preferred",         color:"#1a1a6e"},
+};
+
+function ValuationDashboard(props) {
+  var wallet = props.wallet;
+  var [sortBy, setSortBy] = useState("value");
+  var [showAll, setShowAll] = useState(false);
+
+  // Build portfolio entries from wallet
+  var entries = [];
+  var totalValue = 0;
+  var totalPoints = 0;
+
+  Object.keys(wallet).forEach(function(key) {
+    var bal = parseFloat(wallet[key]) || 0;
+    if (bal <= 0) return;
+    var val = POINT_VALUATIONS[key];
+    if (!val) return;
+    var dollarValue = (bal * val.rate) / 100;
+    totalValue += dollarValue;
+    totalPoints += bal;
+    entries.push({
+      key: key,
+      label: val.label,
+      color: val.color,
+      balance: bal,
+      rate: val.rate,
+      dollarValue: dollarValue,
+    });
+  });
+
+  // Sort
+  if (sortBy === "value") {
+    entries.sort(function(a, b) { return b.dollarValue - a.dollarValue; });
+  } else if (sortBy === "balance") {
+    entries.sort(function(a, b) { return b.balance - a.balance; });
+  } else {
+    entries.sort(function(a, b) { return b.rate - a.rate; });
+  }
+
+  var hasWallet = entries.length > 0;
+  var displayEntries = showAll ? entries : entries.slice(0, 6);
+
+  // Category breakdown
+  var bankKeys = BANK_PROGRAMS.map(function(p) { return p.key; });
+  var airlineKeys = AIRLINE_PROGRAMS.map(function(p) { return p.key; });
+  var hotelKeys = HOTEL_PROGRAMS.map(function(p) { return p.key; });
+
+  var bankValue = 0; var airlineValue = 0; var hotelValue = 0;
+  entries.forEach(function(e) {
+    if (bankKeys.indexOf(e.key) >= 0) bankValue += e.dollarValue;
+    else if (airlineKeys.indexOf(e.key) >= 0) airlineValue += e.dollarValue;
+    else if (hotelKeys.indexOf(e.key) >= 0) hotelValue += e.dollarValue;
+  });
+
+  // Best and worst value programs in wallet
+  var bestEntry = entries.length > 0 ? entries.slice().sort(function(a,b){return b.rate-a.rate;})[0] : null;
+  var worstEntry = entries.length > 1 ? entries.slice().sort(function(a,b){return a.rate-b.rate;})[0] : null;
+
+  if (!hasWallet) {
+    return (
+      <div>
+        <div style={{textAlign:"center",padding:"40px 20px"}}>
+          <div style={{fontSize:48,marginBottom:16}}>💰</div>
+          <div style={{fontSize:18,fontWeight:800,color:T.text,marginBottom:8}}>Your Points Portfolio</div>
+          <div style={{fontSize:14,color:T.text2,lineHeight:1.6,marginBottom:20}}>
+            Enter your points balances in the wallet to see your portfolio value, category breakdown, and which programs give you the best value per point.
+          </div>
+          <button onClick={props.onGoToWallet}
+            style={{padding:"12px 24px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#1a56db,#2563eb)",color:"#fff",fontSize:14,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+            Enter My Balances
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      {/* Total value hero */}
+      <div style={{marginBottom:16,borderRadius:16,overflow:"hidden",border:"2px solid "+T.goldBorder,boxShadow:"0 4px 20px rgba(184,134,11,0.1)"}}>
+        <div style={{background:"linear-gradient(135deg,#1a202c,#2d3748)",padding:"20px 18px"}}>
+          <div style={{fontSize:11,color:"#a0aec0",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:6}}>Total Portfolio Value</div>
+          <div style={{fontSize:42,fontWeight:800,color:T.gold,marginBottom:4}}>${totalValue.toLocaleString("en-US",{maximumFractionDigits:0})}</div>
+          <div style={{fontSize:13,color:"#a0aec0"}}>{totalPoints.toLocaleString()} total points across {entries.length} program{entries.length !== 1 ? "s" : ""}</div>
+        </div>
+        <div style={{background:T.goldLight,padding:"14px 18px",display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
+          <div style={{textAlign:"center"}}>
+            <div style={{fontSize:11,color:T.text3,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:4}}>💳 Bank pts</div>
+            <div style={{fontSize:18,fontWeight:800,color:T.blue}}>${bankValue.toFixed(0)}</div>
+          </div>
+          <div style={{textAlign:"center"}}>
+            <div style={{fontSize:11,color:T.text3,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:4}}>✈️ Airline</div>
+            <div style={{fontSize:18,fontWeight:800,color:T.text}}>${airlineValue.toFixed(0)}</div>
+          </div>
+          <div style={{textAlign:"center"}}>
+            <div style={{fontSize:11,color:T.text3,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:4}}>🏨 Hotel</div>
+            <div style={{fontSize:18,fontWeight:800,color:T.green}}>${hotelValue.toFixed(0)}</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Best and worst value callouts */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+        {bestEntry && (
+          <div style={{padding:"12px 14px",background:T.greenLight,border:"1px solid "+T.green+"44",borderRadius:12}}>
+            <div style={{fontSize:11,color:T.green,fontWeight:700,textTransform:"uppercase",marginBottom:4}}>Best value</div>
+            <div style={{fontSize:14,fontWeight:800,color:T.text}}>{bestEntry.label}</div>
+            <div style={{fontSize:20,fontWeight:800,color:T.green}}>{bestEntry.rate}¢/pt</div>
+            <div style={{fontSize:11,color:T.text3,marginTop:2}}>{bestEntry.balance.toLocaleString()} pts = ${bestEntry.dollarValue.toFixed(0)}</div>
+          </div>
+        )}
+        {worstEntry && worstEntry.key !== bestEntry.key && (
+          <div style={{padding:"12px 14px",background:T.amberLight,border:"1px solid "+T.amber+"44",borderRadius:12}}>
+            <div style={{fontSize:11,color:T.amber,fontWeight:700,textTransform:"uppercase",marginBottom:4}}>Lowest value</div>
+            <div style={{fontSize:14,fontWeight:800,color:T.text}}>{worstEntry.label}</div>
+            <div style={{fontSize:20,fontWeight:800,color:T.amber}}>{worstEntry.rate}¢/pt</div>
+            <div style={{fontSize:11,color:T.text3,marginTop:2}}>{worstEntry.balance.toLocaleString()} pts = ${worstEntry.dollarValue.toFixed(0)}</div>
+          </div>
+        )}
+      </div>
+
+      {/* Sort controls */}
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12,flexWrap:"wrap"}}>
+        <span style={{fontSize:12,color:T.text3,flexShrink:0}}>Sort by:</span>
+        {[{v:"value",l:"$ Value"},{v:"balance",l:"Points"},{v:"rate",l:"¢/pt"}].map(function(s) {
+          return (
+            <button key={s.v} onClick={function() { setSortBy(s.v); }}
+              style={{padding:"5px 12px",borderRadius:20,border:"1px solid "+(sortBy===s.v?T.blue:T.border),background:sortBy===s.v?T.blueLight:T.surface2,color:sortBy===s.v?T.blue:T.text2,fontSize:12,fontWeight:sortBy===s.v?700:500,cursor:"pointer",fontFamily:"inherit"}}>
+              {s.l}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Program breakdown bars */}
+      <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:14}}>
+        {displayEntries.map(function(e) {
+          var pct = totalValue > 0 ? Math.round((e.dollarValue / totalValue) * 100) : 0;
+          return (
+            <div key={e.key} style={{padding:"12px 14px",background:T.surface2,border:"1px solid "+T.border,borderRadius:12}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+                <div style={{display:"flex",alignItems:"center",gap:8}}>
+                  <div style={{width:10,height:10,borderRadius:"50%",background:e.color,flexShrink:0}}/>
+                  <div style={{fontSize:13,fontWeight:700,color:T.text}}>{e.label}</div>
+                </div>
+                <div style={{textAlign:"right"}}>
+                  <div style={{fontSize:14,fontWeight:800,color:T.gold}}>${e.dollarValue.toFixed(0)}</div>
+                  <div style={{fontSize:10,color:T.text3}}>{e.rate}¢/pt · {e.balance.toLocaleString()} pts</div>
+                </div>
+              </div>
+              <div style={{height:6,background:T.border,borderRadius:20,overflow:"hidden"}}>
+                <div style={{height:"100%",width:pct+"%",background:e.color,borderRadius:20,opacity:0.8}}/>
+              </div>
+              <div style={{fontSize:10,color:T.text3,marginTop:4}}>{pct}% of portfolio value</div>
+            </div>
+          );
+        })}
+      </div>
+
+      {entries.length > 6 && (
+        <button onClick={function() { setShowAll(!showAll); }}
+          style={{width:"100%",padding:"10px",borderRadius:10,border:"1px solid "+T.border,background:T.surface2,color:T.text2,fontSize:13,cursor:"pointer",fontFamily:"inherit",marginBottom:14}}>
+          {showAll ? "Show less ▲" : "Show all "+entries.length+" programs ▼"}
+        </button>
+      )}
+
+      {/* Valuation note */}
+      <div style={{padding:"12px 14px",background:T.surface2,border:"1px solid "+T.border,borderRadius:10,fontSize:12,color:T.text3,lineHeight:1.6}}>
+        <strong style={{color:T.text}}>About these valuations: </strong>
+        Values are estimates based on average redemption rates — what you actually get depends on how you redeem. Bank points (Amex, Chase) tend to hold the highest value because they transfer to many programs. Hotel points (Hilton, Marriott) are typically worth less because they're locked to one chain. Hyatt is the exception at 2.0¢/pt.
+      </div>
+    </div>
+  );
+}
+
 // ─── LEARN TAB ───────────────────────────────────────────────────────────────
 function LearnTab(){
   const [activeTab,setActiveTab]=useState("glossary");
@@ -1431,12 +1658,13 @@ export default function App(){
       {/* Quick nav — always accessible tabs */}
       <div style={{width:"100%",maxWidth:540,marginBottom:16}}>
         <div style={{display:"flex",gap:6,padding:"8px 12px",background:T.surface,borderRadius:12,border:`1px solid ${T.border}`,flexWrap:"wrap"}}>
-          {[{id:"redemption",label:"🔍 Find Redemptions"},{id:"learn",label:"📚 Learn"},{id:"tools",label:"🔧 Tools"}].map(({id,label})=>{
-            const isActive=(id==="redemption"&&step<4&&mode!=="learn"&&mode!=="tools")||(id==="learn"&&mode==="learn")||(id==="tools"&&mode==="tools");
+          {[{id:"redemption",label:"🔍 Find Redemptions"},{id:"dashboard",label:"💰 Portfolio"},{id:"learn",label:"📚 Learn"},{id:"tools",label:"🔧 Tools"}].map(({id,label})=>{
+            const isActive=(id==="redemption"&&step<4&&mode!=="learn"&&mode!=="tools"&&mode!=="dashboard")||(id==="learn"&&mode==="learn")||(id==="tools"&&mode==="tools")||(id==="dashboard"&&mode==="dashboard");
             return(
               <button key={id} onClick={()=>{
                 if(id==="learn"){setMode("learn");setStep(1);}
                 else if(id==="tools"){setMode("tools");setStep(1);}
+                else if(id==="dashboard"){setMode("dashboard");setStep(1);}
                 else{setMode("flights");if(step===0||step>1)setStep(0);}
               }} style={{flex:1,minWidth:100,padding:"7px 10px",borderRadius:8,border:`1px solid ${isActive?T.blue:T.border}`,background:isActive?T.blueLight:T.surface2,color:isActive?T.blue:T.text2,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:isActive?700:500}}>{label}</button>
             );
@@ -1457,6 +1685,7 @@ export default function App(){
           </div>
         )}
         {mode==="learn"&&<LearnTab/>}
+        {mode==="dashboard"&&<ValuationDashboard wallet={wallet} onGoToWallet={()=>{setMode("flights");setStep(0);}}/>}
         {mode==="tools"&&<ToolsHub/>}
         {mode!=="learn"&&mode!=="tools"&&step===0&&<WalletStep wallet={wallet} setWallet={setWallet} onNext={()=>setStep(1)}/>}
         {mode!=="learn"&&mode!=="tools"&&step===1&&<SearchStep search={search} setSearch={setSearch} mode={mode} setMode={setMode} filters={filters} setFilters={setFilters} onNext={go} onBack={()=>setStep(0)}/>}
