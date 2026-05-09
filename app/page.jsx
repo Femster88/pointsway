@@ -935,6 +935,7 @@ function WalletStep({wallet,setWallet,onNext}){
   return(
     <div>
       <div style={{marginBottom:20}}><h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Your Points Wallet</h2><p style={{color:T.text2,marginTop:5,fontSize:14}}>Click a section → click a program → type your full balance → click away to save</p></div>
+      <FeaturedDealCard onGoToSearch={onNext} />
       {!hasPoints&&<div style={{marginBottom:16,padding:"14px 16px",background:T.amberLight,border:`1px solid ${T.amber}44`,borderRadius:12}}><div style={{fontSize:13,fontWeight:700,color:T.amber,marginBottom:4}}>👋 Not sure what you have?</div><div style={{fontSize:13,color:T.text2,lineHeight:1.5}}>Expand each section below and click any program to see where to find your balance. Most banks show your points when you log in online.</div></div>}
       <ProgramSection title="Bank & Credit Card Points" emoji="💳" programs={BANK_PROGRAMS} wallet={wallet} onSave={handleSave}/>
       <ProgramSection title="Airline Miles" emoji="✈️" programs={AIRLINE_PROGRAMS} wallet={wallet} onSave={handleSave}/>
@@ -958,6 +959,10 @@ function WalletStep({wallet,setWallet,onNext}){
           )}
         </>
       )}
+      <div style={{marginBottom:16}}>
+        <div style={{fontSize:12,fontWeight:700,color:T.text3,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>🎯 Dream Trip Tracker</div>
+        <Card><DreamTracker wallet={wallet} /></Card>
+      </div>
       <button onClick={onNext} disabled={!hasPoints} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",background:hasPoints?"linear-gradient(135deg,#1a56db,#2563eb)":"#e2e8f0",color:hasPoints?"#fff":"#a0aec0",fontSize:15,fontWeight:800,cursor:hasPoints?"pointer":"not-allowed",fontFamily:"inherit"}}>{hasPoints?"Search for Redemptions →":"Enter at least one balance to continue"}</button>
     </div>
   );
@@ -1387,226 +1392,227 @@ export default function App(){
   );
 }
 
-// ─── FEATURED DEAL CARD ───────────────────────────────────────────────────────
-function FeaturedDealCard({onGoToSearch}){
-  const f=FEATURED;
-  const saved=f.cashValue-f.taxes;
-  return(
-    <div style={{marginBottom:20,borderRadius:16,overflow:"hidden",border:`2px solid ${T.goldBorder}`,boxShadow:"0 4px 24px rgba(184,134,11,0.15)"}}>
-      <div style={{background:"linear-gradient(135deg,#b8860b,#d4a017)",padding:"14px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+// ─── FEATURED DEAL CARD ───────────────────────────────────────────
+function FeaturedDealCard(props) {
+  var f = FEATURED;
+  var cardStyle = {
+    marginBottom: 20,
+    borderRadius: 16,
+    overflow: "hidden",
+    border: "2px solid " + T.goldBorder,
+    boxShadow: "0 4px 20px rgba(184,134,11,0.12)",
+  };
+  var headerStyle = {
+    background: "linear-gradient(135deg,#b8860b,#d4a017)",
+    padding: "14px 18px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  };
+  var bodyStyle = { background: T.goldLight, padding: "16px 18px" };
+
+  return (
+    <div style={cardStyle}>
+      <div style={headerStyle}>
         <div>
-          <div style={{fontSize:10,color:"#fdf3d8",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:4}}>Featured Redemption · {f.week}</div>
+          <div style={{fontSize:10,color:"#fdf3d8",fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:4}}>
+            Featured Redemption
+          </div>
           <div style={{fontSize:18,fontWeight:800,color:"#fff"}}>{f.headline}</div>
           <div style={{fontSize:12,color:"#fdf3d8",marginTop:2}}>{f.subline}</div>
         </div>
         <div style={{fontSize:36}}>🏆</div>
       </div>
-      <div style={{background:T.goldLight,padding:"16px 18px"}}>
-        <div style={{display:"flex",gap:20,marginBottom:14,flexWrap:"wrap"}}>
-          <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Points needed</div><div style={{fontSize:22,fontWeight:800,color:T.gold}}>{f.points.toLocaleString()}</div></div>
-          <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Cash equivalent</div><div style={{fontSize:22,fontWeight:800,color:T.text}}>${f.cashValue.toLocaleString()}</div></div>
-          <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Taxes only</div><div style={{fontSize:22,fontWeight:800,color:T.text}}>${f.taxes}</div></div>
-          <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Value</div><div style={{fontSize:22,fontWeight:800,color:T.green}}>{f.value}¢/pt</div></div>
+      <div style={bodyStyle}>
+        <div style={{display:"flex",gap:16,marginBottom:14,flexWrap:"wrap"}}>
+          <div>
+            <div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>Points</div>
+            <div style={{fontSize:20,fontWeight:800,color:T.gold}}>{f.points.toLocaleString()}</div>
+          </div>
+          <div>
+            <div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>Cash value</div>
+            <div style={{fontSize:20,fontWeight:800,color:T.text}}>${f.cashValue.toLocaleString()}</div>
+          </div>
+          <div>
+            <div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>Taxes only</div>
+            <div style={{fontSize:20,fontWeight:800,color:T.text}}>${f.taxes}</div>
+          </div>
+          <div>
+            <div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>Value</div>
+            <div style={{fontSize:20,fontWeight:800,color:T.green}}>{f.value}c/pt</div>
+          </div>
         </div>
-        <div style={{marginBottom:12,padding:"10px 14px",background:"#fff",border:`1px solid ${T.goldBorder}`,borderRadius:10,fontSize:13,color:T.text2,lineHeight:1.6}}>{f.why}</div>
-        <div style={{marginBottom:12,padding:"10px 14px",background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:10,fontSize:12,color:T.text2}}>
-          <strong style={{color:T.blue}}>How to find space:</strong> {f.howToFind}
+        <div style={{marginBottom:12,padding:"10px 14px",background:"#fff",border:"1px solid "+T.goldBorder,borderRadius:10,fontSize:13,color:T.text2,lineHeight:1.6}}>
+          {f.why}
+        </div>
+        <div style={{marginBottom:12,padding:"10px 14px",background:T.blueLight,border:"1px solid "+T.blue+"44",borderRadius:10,fontSize:12,color:T.text2}}>
+          <strong style={{color:T.blue}}>How to find space: </strong>{f.howToFind}
         </div>
         <div style={{marginBottom:14}}>
-          <div style={{fontSize:11,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:7}}>Cards that transfer to {f.loyaltyName}</div>
+          <div style={{fontSize:11,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:7}}>
+            Cards that transfer to {f.loyaltyName}
+          </div>
           <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
-            {f.cards.map(c=><span key={c} style={{background:"#fff",border:`1px solid ${T.goldBorder}`,borderRadius:20,padding:"4px 12px",fontSize:12,fontWeight:700,color:T.gold}}>{c}</span>)}
+            {f.cards.map(function(card) {
+              return (
+                <span key={card} style={{background:"#fff",border:"1px solid "+T.goldBorder,borderRadius:20,padding:"4px 12px",fontSize:12,fontWeight:700,color:T.gold}}>
+                  {card}
+                </span>
+              );
+            })}
           </div>
         </div>
         <div style={{display:"flex",gap:10}}>
-          <a href={f.seatsUrl} target="_blank" rel="noopener noreferrer" style={{flex:1,padding:"12px",borderRadius:12,background:T.gold,color:"#fff",fontSize:13,fontWeight:800,textDecoration:"none",textAlign:"center"}}>Check Live Space on Seats.aero →</a>
-          <button onClick={onGoToSearch} style={{flex:1,padding:"12px",borderRadius:12,border:`1px solid ${T.goldBorder}`,background:"#fff",color:T.gold,fontSize:13,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>Find My Best Redemption</button>
+          <a href={f.seatsUrl} target="_blank" rel="noopener noreferrer"
+            style={{flex:1,padding:"12px",borderRadius:12,background:T.gold,color:"#fff",fontSize:13,fontWeight:800,textDecoration:"none",textAlign:"center",display:"block"}}>
+            Check Live Space on Seats.aero
+          </a>
+          <button onClick={props.onGoToSearch}
+            style={{flex:1,padding:"12px",borderRadius:12,border:"1px solid "+T.goldBorder,background:"#fff",color:T.gold,fontSize:13,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+            Find My Redemption
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-// ─── DREAM TRIP TRACKER ───────────────────────────────────────────────────────
-function DreamTracker({wallet}){
-  const [selectedTrip,setSelectedTrip]=useState(DREAM_TRIPS[0].key);
-  const [customPoints,setCustomPoints]=useState("");
-  const [customLabel,setCustomLabel]=useState("");
-  const pooled=buildPooled(wallet);
-  const trip=DREAM_TRIPS.find(t=>t.key===selectedTrip)||DREAM_TRIPS[0];
-  const target=selectedTrip==="custom"?(parseInt(customPoints)||0):trip.points;
-  const label=selectedTrip==="custom"?customLabel:trip.label;
+// ─── DREAM TRIP TRACKER ─────────────────────────────────────────────
+function DreamTracker(props) {
+  var wallet = props.wallet;
+  var pooled = buildPooled(wallet);
+  var tripOptions = DREAM_TRIPS;
 
-  // Calculate total transferable points toward this trip's program
-  // For custom, use total wallet value
-  const totalPooled=Object.values(pooled).reduce((max,[,v])=>Math.max(max,0),0);
-  // Get best possible pool toward trip's program
-  let bestPool=0;
-  if(selectedTrip!=="custom"){
-    // Find the loyalty key for this trip
-    const lkMap={
-      tokyo_biz:"virginatl",tokyo_first:"virginatl",london_biz:"virginatl",
-      paris_biz:"flyingblue",maldives_biz:"etihad",maldives_htl:"hyatt",
-      kyoto_htl:"hyatt",singapore_biz:"singapore",dubai_biz:"turkish",
-      cancun_eco:"southwest",
-    };
-    const lk=lkMap[selectedTrip];
-    if(lk&&pooled[lk])bestPool=pooled[lk].total;
-    else{
-      // fallback: max across all pools
-      bestPool=Math.max(...Object.values(pooled).map(p=>p.total||0),0);
+  var [selectedKey, setSelectedKey] = useState("tokyo_biz");
+  var [customPts, setCustomPts] = useState("");
+  var [customName, setCustomName] = useState("");
+
+  var lkMap = {
+    tokyo_biz:"virginatl", tokyo_first:"virginatl", london_biz:"virginatl",
+    paris_biz:"flyingblue", maldives_biz:"etihad", maldives_htl:"hyatt",
+    kyoto_htl:"hyatt", singapore_biz:"singapore", dubai_biz:"turkish",
+    cancun_eco:"southwest",
+  };
+
+  var trip = null;
+  for (var i = 0; i < tripOptions.length; i++) {
+    if (tripOptions[i].key === selectedKey) { trip = tripOptions[i]; break; }
+  }
+  if (!trip) trip = tripOptions[0];
+
+  var target = selectedKey === "custom" ? (parseInt(customPts) || 0) : trip.points;
+  var lk = lkMap[selectedKey] || null;
+  var bestPool = (lk && pooled[lk]) ? pooled[lk].total : 0;
+  var pct = target > 0 ? Math.min(100, Math.round((bestPool / target) * 100)) : 0;
+  var remaining = target > bestPool ? target - bestPool : 0;
+  var hasWallet = Object.values(wallet).some(function(v) { return parseFloat(v) > 0; });
+
+  var gapCard = null;
+  if (remaining > 0) {
+    var allCards = [];
+    for (var g = 0; g < EARNING_CARDS.length; g++) {
+      for (var k = 0; k < EARNING_CARDS[g].cards.length; k++) {
+        allCards.push(EARNING_CARDS[g].cards[k]);
+      }
     }
-  } else {
-    bestPool=Math.max(...Object.values(pooled).map(p=>p.total||0),0);
+    for (var j = 0; j < allCards.length; j++) {
+      var bonusNum = parseInt(allCards[j].bonus.replace(/[^0-9]/g, ""));
+      if (bonusNum >= remaining) { gapCard = allCards[j]; break; }
+    }
   }
 
-  const pct=target>0?Math.min(100,Math.round((bestPool/target)*100)):0;
-  const remaining=Math.max(0,target-bestPool);
-  const hasWallet=Object.values(wallet).some(v=>parseFloat(v)>0);
+  var barColor = pct >= 100
+    ? "linear-gradient(90deg,#0e7c4a,#1a9e5a)"
+    : "linear-gradient(90deg,#1a56db,#3b82f6)";
 
-  // Find the best card bonus to close the gap
-  const gapCard=remaining>0?EARNING_CARDS.flatMap(g=>g.cards).find(c=>{
-    const bonusNum=parseInt(c.bonus.replace(/[^0-9]/g,""));
-    return bonusNum>=remaining;
-  }):null;
-
-  return(
+  return (
     <div>
-      <div style={{marginBottom:16}}>
-        <div style={{fontSize:11,fontWeight:700,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:8}}>Pick your dream trip</div>
-        <select value={selectedTrip} onChange={e=>setSelectedTrip(e.target.value)}
-          style={{width:"100%",padding:"10px 14px",borderRadius:10,border:`1px solid ${T.border}`,background:T.surface,color:T.text,fontSize:14,fontFamily:"inherit",outline:"none",cursor:"pointer"}}>
-          {DREAM_TRIPS.map(t=><option key={t.key} value={t.key}>{t.label} — {t.points>0?`${t.points.toLocaleString()} pts via ${t.program}`:"Set your own goal"}</option>)}
+      <div style={{marginBottom:12}}>
+        <div style={{fontSize:11,fontWeight:700,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:8}}>
+          Pick your dream trip
+        </div>
+        <select value={selectedKey} onChange={function(e) { setSelectedKey(e.target.value); }}
+          style={{width:"100%",padding:"10px 14px",borderRadius:10,border:"1px solid "+T.border,background:T.surface,color:T.text,fontSize:13,fontFamily:"inherit",outline:"none",cursor:"pointer"}}>
+          {tripOptions.map(function(t) {
+            var label = t.points > 0
+              ? t.label + " — " + t.points.toLocaleString() + " pts"
+              : t.label + " — Set your own goal";
+            return <option key={t.key} value={t.key}>{label}</option>;
+          })}
         </select>
       </div>
 
-      {selectedTrip==="custom"&&(
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+      {selectedKey === "custom" && (
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
           <div>
-            <div style={{fontSize:11,color:T.text3,marginBottom:5}}>Trip label</div>
-            <input value={customLabel} onChange={e=>setCustomLabel(e.target.value)} placeholder="e.g. Bali honeymoon"
-              style={{width:"100%",padding:"9px 13px",borderRadius:10,border:`1px solid ${T.border}`,background:T.surface2,color:T.text,fontSize:14,fontFamily:"inherit",outline:"none"}}/>
+            <div style={{fontSize:11,color:T.text3,marginBottom:5}}>Trip name</div>
+            <input value={customName} onChange={function(e) { setCustomName(e.target.value); }}
+              placeholder="e.g. Bali trip"
+              style={{width:"100%",padding:"9px 13px",borderRadius:10,border:"1px solid "+T.border,background:T.surface2,color:T.text,fontSize:13,fontFamily:"inherit",outline:"none"}}/>
           </div>
           <div>
             <div style={{fontSize:11,color:T.text3,marginBottom:5}}>Points needed</div>
-            <input type="number" value={customPoints} onChange={e=>setCustomPoints(e.target.value)} placeholder="e.g. 75000"
-              style={{width:"100%",padding:"9px 13px",borderRadius:10,border:`1px solid ${T.border}`,background:T.surface2,color:T.text,fontSize:14,fontFamily:"inherit",outline:"none"}}/>
+            <input type="number" value={customPts} onChange={function(e) { setCustomPts(e.target.value); }}
+              placeholder="e.g. 75000"
+              style={{width:"100%",padding:"9px 13px",borderRadius:10,border:"1px solid "+T.border,background:T.surface2,color:T.text,fontSize:13,fontFamily:"inherit",outline:"none"}}/>
           </div>
         </div>
       )}
 
-      {!hasWallet&&(
-        <div style={{marginBottom:16,padding:"14px 16px",background:T.amberLight,border:`1px solid ${T.amber}44`,borderRadius:12,fontSize:13,color:T.text2,lineHeight:1.5}}>
-          Enter your points balances in the wallet to see your progress toward this trip.
+      {!hasWallet && (
+        <div style={{marginBottom:12,padding:"12px 14px",background:T.amberLight,border:"1px solid "+T.amber+"44",borderRadius:10,fontSize:13,color:T.text2}}>
+          Enter your balances above to track progress toward this trip.
         </div>
       )}
 
-      {target>0&&(
-        <div style={{marginBottom:16}}>
-          {/* Progress bar */}
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"baseline",marginBottom:8}}>
-            <div style={{fontSize:15,fontWeight:800,color:T.text}}>{label||"Your goal"}</div>
-            <div style={{fontSize:13,fontWeight:700,color:pct>=100?T.green:T.blue}}>{pct}%</div>
+      {target > 0 && (
+        <div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+            <div style={{fontSize:13,fontWeight:700,color:T.text}}>
+              {selectedKey === "custom" ? (customName || "Your goal") : trip.label}
+            </div>
+            <div style={{fontSize:14,fontWeight:800,color:pct >= 100 ? T.green : T.blue}}>{pct}%</div>
           </div>
-          <div style={{height:14,background:T.surface2,border:`1px solid ${T.border}`,borderRadius:20,overflow:"hidden",marginBottom:10}}>
-            <div style={{height:"100%",width:`${pct}%`,background:pct>=100?"linear-gradient(90deg,#0e7c4a,#1a9e5a)":"linear-gradient(90deg,#1a56db,#3b82f6)",borderRadius:20,transition:"width 0.6s ease"}}/>
+          <div style={{height:12,background:T.surface2,border:"1px solid "+T.border,borderRadius:20,overflow:"hidden",marginBottom:8}}>
+            <div style={{height:"100%",width:pct+"%",background:barColor,borderRadius:20,transition:"width 0.5s ease"}}/>
           </div>
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:12,color:T.text3,marginBottom:14}}>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:T.text3,marginBottom:12}}>
             <span>You have: <strong style={{color:T.blue}}>{bestPool.toLocaleString()} pts</strong></span>
             <span>Goal: <strong style={{color:T.gold}}>{target.toLocaleString()} pts</strong></span>
           </div>
-
-          {pct>=100?(
-            <div style={{padding:"14px 16px",background:T.greenLight,border:`1px solid ${T.green}44`,borderRadius:12,textAlign:"center"}}>
-              <div style={{fontSize:20,marginBottom:6}}>🎉</div>
-              <div style={{fontSize:15,fontWeight:800,color:T.green}}>You have enough points!</div>
-              <div style={{fontSize:13,color:T.text2,marginTop:4}}>Head to the search tab to find your best redemption and book it.</div>
+          {pct >= 100 ? (
+            <div style={{padding:"12px 14px",background:T.greenLight,border:"1px solid "+T.green+"44",borderRadius:12,textAlign:"center"}}>
+              <div style={{fontSize:20,marginBottom:4}}>🎉</div>
+              <div style={{fontSize:14,fontWeight:800,color:T.green}}>You have enough points!</div>
+              <div style={{fontSize:12,color:T.text2,marginTop:3}}>Search to find and book your redemption.</div>
             </div>
-          ):(
-            <div style={{display:"flex",flexDirection:"column",gap:10}}>
-              <div style={{padding:"12px 14px",background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:12}}>
-                <div style={{fontSize:12,fontWeight:700,color:T.blue,marginBottom:4}}>You need {remaining.toLocaleString()} more points</div>
-                {trip.cards&&trip.cards.length>0&&<div style={{fontSize:12,color:T.text2}}>Cards that transfer to {trip.program}: <strong>{trip.cards.join(", ")}</strong></div>}
+          ) : (
+            <div style={{display:"flex",flexDirection:"column",gap:8}}>
+              <div style={{padding:"10px 14px",background:T.blueLight,border:"1px solid "+T.blue+"33",borderRadius:10}}>
+                <div style={{fontSize:12,fontWeight:700,color:T.blue,marginBottom:3}}>
+                  Need {remaining.toLocaleString()} more points
+                </div>
+                {trip.cards && trip.cards.length > 0 && (
+                  <div style={{fontSize:12,color:T.text2}}>
+                    Cards for {trip.program}: <strong>{trip.cards.join(", ")}</strong>
+                  </div>
+                )}
               </div>
-              {gapCard&&(
-                <div style={{padding:"12px 14px",background:T.greenLight,border:`1px solid ${T.green}44`,borderRadius:12}}>
-                  <div style={{fontSize:12,fontWeight:700,color:T.green,marginBottom:4}}>💡 One card signup could close the gap</div>
-                  <div style={{fontSize:13,fontWeight:700,color:T.text,marginBottom:3}}>{gapCard.name}</div>
-                  <div style={{fontSize:12,color:T.text2}}><strong style={{color:T.green}}>Bonus: {gapCard.bonus}</strong> with {gapCard.spend}</div>
-                  <div style={{fontSize:12,color:T.text3,marginTop:3}}>{gapCard.why}</div>
+              {gapCard && (
+                <div style={{padding:"10px 14px",background:T.greenLight,border:"1px solid "+T.green+"44",borderRadius:10}}>
+                  <div style={{fontSize:12,fontWeight:700,color:T.green,marginBottom:3}}>
+                    💡 One signup could close the gap
+                  </div>
+                  <div style={{fontSize:13,fontWeight:700,color:T.text,marginBottom:2}}>{gapCard.name}</div>
+                  <div style={{fontSize:12,color:T.text2}}>
+                    <strong style={{color:T.green}}>{gapCard.bonus}</strong> · {gapCard.spend}
+                  </div>
                 </div>
               )}
             </div>
           )}
         </div>
       )}
-
-      {selectedTrip!=="custom"&&trip.cards&&trip.cards.length>0&&(
-        <div style={{padding:"12px 14px",background:T.surface2,border:`1px solid ${T.border}`,borderRadius:10,fontSize:12,color:T.text3}}>
-          <strong style={{color:T.text}}>Transferable via:</strong> {trip.program} · Cards: {trip.cards.join(", ")}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── SWEET SPOT LIBRARY ───────────────────────────────────────────────────────
-function SweetSpotLibrary(){
-  const [filter,setFilter]=useState("All");
-  const [openSpot,setOpenSpot]=useState(null);
-  const regions=["All","Asia","Europe","Pacific","Americas","ME/Africa"];
-  const filtered=filter==="All"?SWEET_SPOTS:SWEET_SPOTS.filter(s=>s.region===filter);
-  const cabinIcon={first:"👑",business:"🛋️",economy:"🪑",hotel:"🏨"};
-  return(
-    <div>
-      <div style={{marginBottom:12,padding:"12px 14px",background:T.goldLight,border:`1px solid ${T.goldBorder}`,borderRadius:12,fontSize:13,color:T.text2,lineHeight:1.5}}>
-        <strong style={{color:T.gold}}>The 15 best redemptions in the hobby right now</strong> — curated by value, not by airline ad spend. These are the sweet spots the points community actually uses.
-      </div>
-      <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:14}}>
-        {regions.map(r=>(
-          <button key={r} onClick={()=>setFilter(r)} style={{padding:"6px 12px",borderRadius:20,border:`1px solid ${filter===r?T.gold:T.border}`,background:filter===r?T.goldLight:T.surface2,color:filter===r?T.gold:T.text2,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:filter===r?700:500}}>{r}</button>
-        ))}
-      </div>
-      <div style={{display:"flex",flexDirection:"column",gap:8}}>
-        {filtered.map((s,i)=>{
-          const isOpen=openSpot===s.rank;
-          return(
-            <div key={s.rank} onClick={()=>setOpenSpot(isOpen?null:s.rank)}
-              style={{borderRadius:12,border:`1px solid ${isOpen?T.goldBorder:T.border}`,background:isOpen?T.goldLight:T.surface,overflow:"hidden",cursor:"pointer"}}>
-              <div style={{padding:"12px 16px",display:"flex",gap:12,alignItems:"center"}}>
-                <div style={{width:28,height:28,borderRadius:"50%",background:T.gold,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800,flexShrink:0}}>{s.rank}</div>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{fontSize:13,fontWeight:700,color:T.text,marginBottom:2}}>{cabinIcon[s.cabin]} {s.title}</div>
-                  <div style={{fontSize:11,color:T.text3}}>via {s.via} · {s.dir} · {s.region}</div>
-                </div>
-                <div style={{textAlign:"right",flexShrink:0}}>
-                  <div style={{fontSize:14,fontWeight:800,color:T.gold}}>{s.points}</div>
-                  <div style={{fontSize:10,color:T.text3}}>pts</div>
-                </div>
-                <div style={{textAlign:"right",flexShrink:0,marginLeft:8}}>
-                  <div style={{background:T.greenLight,color:T.green,borderRadius:6,padding:"2px 8px",fontSize:12,fontWeight:700}}>{s.value}¢</div>
-                </div>
-                <span style={{color:T.text3,fontSize:12,marginLeft:4}}>{isOpen?"▲":"▼"}</span>
-              </div>
-              {isOpen&&(
-                <div style={{padding:"0 16px 16px",borderTop:`1px solid ${T.goldBorder}`}}>
-                  <div style={{paddingTop:12,display:"flex",gap:20,marginBottom:12,flexWrap:"wrap"}}>
-                    <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>Cash value</div><div style={{fontSize:16,fontWeight:800,color:T.text}}>{s.cashValue}</div></div>
-                    <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>Value</div><div style={{fontSize:16,fontWeight:800,color:T.green}}>{s.value}¢/pt</div></div>
-                  </div>
-                  <div style={{fontSize:13,color:T.text2,lineHeight:1.6,marginBottom:12}}>{s.why}</div>
-                  <div>
-                    <div style={{fontSize:11,color:T.text3,marginBottom:6}}>Cards that get you there:</div>
-                    <div style={{display:"flex",flexWrap:"wrap",gap:5}}>
-                      {s.cards.map(c=><span key={c} style={{background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:16,padding:"3px 10px",fontSize:11,color:T.blue,fontWeight:700}}>{c}</span>)}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
     </div>
   );
 }
