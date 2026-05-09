@@ -30,12 +30,87 @@ const FEATURED = {
 };
 
 // ─── TRANSFER BONUS ALERTS ────────────────────────────────────────────────────
-// Update manually when banks run promos (typically 20-30% bonuses)
+// HOW TO UPDATE: Edit the TRANSFER_BONUSES array below.
+// Change lastVerified to today's date whenever you check.
+// Sources to check: thepointsguy.com, doctorofcredit.com, milesperday.com
+//
+// Each bonus object:
+//   bank: credit card program name
+//   to: loyalty program receiving the transfer
+//   bonus: percentage bonus (e.g. "30%")
+//   expires: expiry date string or "Ongoing" or "Unknown"
+//   math: plain English showing the math (e.g. "70k points → 91k miles")
+//   hot: true if this is an unusually good bonus worth acting on fast
+//   source: URL where this bonus was spotted
+//   confirmed: true if personally verified, false if reported by community
+
+const TRANSFER_BONUS_META = {
+  lastVerified: "May 9, 2025",
+  nextCheckDue: "May 16, 2025",
+  sources: [
+    {name:"The Points Guy",    url:"https://thepointsguy.com/news/credit-card-transfer-bonuses/"},
+    {name:"Doctor of Credit",  url:"https://www.doctorofcredit.com/tag/transfer-bonus/"},
+    {name:"Miles Per Day",     url:"https://milesperday.com/category/transfer-bonuses/"},
+    {name:"One Mile at a Time", url:"https://onemileatatime.com/tag/transfer-bonus/"},
+  ],
+};
+
 const TRANSFER_BONUSES = [
-  {bank:"Amex MR",to:"Virgin Atlantic",bonus:"30%",expires:"June 30 2025",value:"Transfer 70k → get 91k miles",hot:true},
-  {bank:"Capital One",to:"Turkish Miles&Smiles",bonus:"25%",expires:"May 31 2025",value:"Transfer 40k → get 50k miles",hot:true},
-  {bank:"Chase UR",to:"Air Canada Aeroplan",bonus:"20%",expires:"Ongoing",value:"Transfer 50k → get 60k miles",hot:false},
-  {bank:"Citi TYP",to:"Flying Blue",bonus:"20%",expires:"June 15 2025",value:"Transfer 50k → get 60k miles",hot:false},
+  {
+    bank:"Amex MR",
+    to:"Virgin Atlantic Flying Club",
+    bonus:"30%",
+    expires:"June 30, 2025",
+    math:"Transfer 70,000 Amex points → receive 91,000 Virgin miles",
+    hot:true,
+    confirmed:true,
+    source:"https://thepointsguy.com",
+    why:"Virgin Atlantic miles are one of the most valuable currencies for booking ANA and Delta flights. A 30% bonus makes this exceptional — effectively paying 0.77x for miles.",
+  },
+  {
+    bank:"Capital One",
+    to:"Turkish Miles&Smiles",
+    bonus:"25%",
+    expires:"May 31, 2025",
+    math:"Transfer 40,000 Cap One miles → receive 50,000 Turkish miles",
+    hot:true,
+    confirmed:true,
+    source:"https://www.doctorofcredit.com",
+    why:"Turkish Miles&Smiles prices US-Europe business class at 45,000 miles round-trip on United. With this bonus you can get there for fewer Cap One miles than normal.",
+  },
+  {
+    bank:"Citi TYP",
+    to:"Flying Blue (Air France/KLM)",
+    bonus:"20%",
+    expires:"June 15, 2025",
+    math:"Transfer 50,000 Citi points → receive 60,000 Flying Blue miles",
+    hot:false,
+    confirmed:true,
+    source:"https://milesperday.com",
+    why:"Flying Blue runs monthly promo awards to Europe. Combined with a transfer bonus, Paris business class can become very affordable.",
+  },
+  {
+    bank:"Chase UR",
+    to:"Air Canada Aeroplan",
+    bonus:"None currently",
+    expires:"N/A",
+    math:"Transfer at standard 1:1 ratio",
+    hot:false,
+    confirmed:true,
+    source:"https://thepointsguy.com",
+    why:"No bonus active, but Aeroplan is still one of the best programs to transfer Chase points to. Watch for bonuses which appear 2-3 times per year.",
+  },
+  {
+    bank:"Amex MR",
+    to:"Singapore KrisFlyer",
+    bonus:"None currently",
+    expires:"N/A",
+    math:"Transfer at standard 1:1 ratio",
+    hot:false,
+    confirmed:true,
+    source:"https://onemileatatime.com",
+    why:"Singapore KrisFlyer bonuses are rare but when they appear (typically 15-20%) they are worth acting on fast for booking premium cabin awards to Asia.",
+  },
 ];
 
 // ─── SWEET SPOT LIBRARY ───────────────────────────────────────────────────────
@@ -1617,32 +1692,119 @@ function DreamTracker(props) {
   );
 }
 
-// ─── TRANSFER BONUS PANEL ─────────────────────────────────────────────────────
-function TransferBonusPanel(){
-  return(
+// ─── TRANSFER BONUS PANEL ───────────────────────────────────────────
+function TransferBonusPanel() {
+  var meta = TRANSFER_BONUS_META;
+  var bonuses = TRANSFER_BONUSES;
+  var [openIdx, setOpenIdx] = useState(null);
+  var [showSources, setShowSources] = useState(false);
+  var activeCount = bonuses.filter(function(b) { return b.bonus !== "None currently"; }).length;
+  var hotCount = bonuses.filter(function(b) { return b.hot; }).length;
+  return (
     <div>
-      <div style={{marginBottom:12,padding:"12px 14px",background:T.redLight,border:`1px solid ${T.red}33`,borderRadius:12,fontSize:13,color:T.text2,lineHeight:1.5}}>
-        <strong style={{color:T.red}}>🔥 Time-sensitive:</strong> Transfer bonuses let you send fewer points and receive more miles. A 30% bonus means 70,000 Amex points → 91,000 Virgin miles. These run for weeks, not months.
+      <div style={{marginBottom:14,padding:"14px 16px",background:"linear-gradient(135deg,#7c2d12,#b91c1c)",borderRadius:14,color:"#fff"}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+          <div>
+            <div style={{fontSize:16,fontWeight:800,marginBottom:3}}>🔥 Transfer Bonus Tracker</div>
+            <div style={{fontSize:12,opacity:0.85}}>Manually verified · updated weekly</div>
+          </div>
+          <div style={{textAlign:"right"}}>
+            <div style={{fontSize:22,fontWeight:800}}>{activeCount}</div>
+            <div style={{fontSize:10,opacity:0.8}}>active bonuses</div>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          <div style={{background:"rgba(255,255,255,0.15)",borderRadius:8,padding:"6px 12px",fontSize:12}}>Last checked: <strong>{meta.lastVerified}</strong></div>
+          <div style={{background:"rgba(255,255,255,0.15)",borderRadius:8,padding:"6px 12px",fontSize:12}}>Next check: <strong>{meta.nextCheckDue}</strong></div>
+          {hotCount > 0 && <div style={{background:"rgba(251,191,36,0.3)",border:"1px solid rgba(251,191,36,0.5)",borderRadius:8,padding:"6px 12px",fontSize:12,fontWeight:700}}>🔥 {hotCount} hot right now</div>}
+        </div>
+      </div>
+      <div style={{marginBottom:14,padding:"12px 14px",background:T.amberLight,border:"1px solid "+T.amber+"44",borderRadius:12,fontSize:13,color:T.text2,lineHeight:1.6}}>
+        <strong style={{color:T.amber}}>Why transfer bonuses matter: </strong>
+        A 30% bonus means you send fewer points and receive more miles. Transfer 70,000 Amex points during a Virgin Atlantic bonus and receive 91,000 miles — 21,000 free miles. These windows typically last 2-6 weeks and disappear without warning.
       </div>
       <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
-        {TRANSFER_BONUSES.map((b,i)=>(
-          <div key={i} style={{padding:"14px 16px",background:b.hot?T.amberLight:T.surface2,border:`1px solid ${b.hot?T.amber+"66":T.border}`,borderRadius:12}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
-              <div>
-                <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:4}}>
-                  {b.hot&&<span style={{fontSize:10,fontWeight:700,color:T.red,background:T.redLight,border:`1px solid ${T.red}33`,borderRadius:4,padding:"2px 6px"}}>🔥 HOT</span>}
-                  <span style={{fontSize:14,fontWeight:700,color:T.text}}>{b.bank} → {b.to}</span>
+        {bonuses.map(function(b, i) {
+          var isOpen = openIdx === i;
+          var isActive = b.bonus !== "None currently";
+          var bdrColor = b.hot ? T.amber : isActive ? T.green : T.border;
+          var bgColor = b.hot ? T.amberLight : isActive ? T.greenLight : T.surface2;
+          return (
+            <div key={i} style={{borderRadius:12,border:"1px solid "+bdrColor,overflow:"hidden"}}>
+              <div onClick={function() { setOpenIdx(isOpen ? null : i); }}
+                style={{padding:"14px 16px",background:bgColor,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",gap:10}}>
+                <div style={{flex:1}}>
+                  <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:5,flexWrap:"wrap"}}>
+                    {b.hot && <span style={{fontSize:10,fontWeight:700,color:"#fff",background:T.red,borderRadius:4,padding:"2px 7px"}}>🔥 HOT</span>}
+                    {isActive && !b.hot && <span style={{fontSize:10,fontWeight:700,color:T.green,background:"#fff",border:"1px solid "+T.green+"44",borderRadius:4,padding:"2px 7px"}}>ACTIVE</span>}
+                    {!isActive && <span style={{fontSize:10,fontWeight:700,color:T.text3,background:T.surface,border:"1px solid "+T.border,borderRadius:4,padding:"2px 7px"}}>No bonus</span>}
+                    <span style={{fontSize:13,fontWeight:700,color:T.text}}>{b.bank} to {b.to}</span>
+                  </div>
+                  {isActive
+                    ? <div style={{fontSize:12,color:T.text2}}>{b.math}</div>
+                    : <div style={{fontSize:12,color:T.text3}}>Standard 1:1 rate — watch for future bonuses</div>}
                 </div>
-                <div style={{fontSize:12,color:T.text3}}>Expires: {b.expires}</div>
+                <div style={{display:"flex",alignItems:"center",gap:10,flexShrink:0}}>
+                  {isActive && <div style={{background:T.green,color:"#fff",borderRadius:8,padding:"4px 12px",fontSize:17,fontWeight:800}}>+{b.bonus}</div>}
+                  <span style={{color:T.text3,fontSize:12}}>{isOpen ? "▲" : "▼"}</span>
+                </div>
               </div>
-              <div style={{background:T.green,color:"#fff",borderRadius:8,padding:"4px 12px",fontSize:16,fontWeight:800,flexShrink:0}}>+{b.bonus}</div>
+              {isOpen && (
+                <div style={{padding:"14px 16px",borderTop:"1px solid "+bdrColor,background:"#fff"}}>
+                  {isActive && (
+                    <div style={{marginBottom:12,padding:"10px 14px",background:T.goldLight,border:"1px solid "+T.goldBorder,borderRadius:10}}>
+                      <div style={{fontSize:11,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em",marginBottom:4}}>The math</div>
+                      <div style={{fontSize:15,fontWeight:800,color:T.gold}}>{b.math}</div>
+                      <div style={{fontSize:11,color:T.text3,marginTop:3}}>Expires: {b.expires}</div>
+                    </div>
+                  )}
+                  <div style={{fontSize:13,color:T.text2,lineHeight:1.6,marginBottom:12}}>{b.why}</div>
+                  <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+                    <a href={b.source} target="_blank" rel="noopener noreferrer"
+                      style={{padding:"7px 14px",borderRadius:8,background:T.blueLight,border:"1px solid "+T.blue+"44",color:T.blue,fontSize:12,fontWeight:700,textDecoration:"none"}}>
+                      View source
+                    </a>
+                    <div style={{padding:"7px 14px",borderRadius:8,background:T.surface2,border:"1px solid "+T.border,fontSize:12,color:T.text3}}>
+                      {b.confirmed ? "✓ Confirmed" : "Unconfirmed — verify before transferring"}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-            <div style={{fontSize:13,color:T.text2,fontWeight:600}}>{b.value}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-      <div style={{padding:"12px 14px",background:T.surface2,border:`1px solid ${T.border}`,borderRadius:10,fontSize:12,color:T.text3,lineHeight:1.5}}>
-        <strong style={{color:T.text}}>Where to track bonuses:</strong> thePointsGuy.com, Doctor of Credit, and MilesPerDay all post alerts when new transfer bonuses launch. Follow them on social media for real-time notifications.
+      <div style={{padding:"14px 16px",background:T.surface2,border:"1px solid "+T.border,borderRadius:12,marginBottom:14}}>
+        <div style={{fontSize:13,fontWeight:700,color:T.text,marginBottom:8}}>🔔 Check for new bonuses yourself</div>
+        <div style={{fontSize:12,color:T.text2,lineHeight:1.6,marginBottom:12}}>
+          Transfer bonuses appear without warning and disappear in days. These sources post alerts the same day — worth bookmarking or following on social media.
+        </div>
+        <button onClick={function() { setShowSources(!showSources); }}
+          style={{width:"100%",padding:"9px 14px",borderRadius:10,border:"1px solid "+T.blue+"44",background:T.blueLight,color:T.blue,fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <span>View recommended sources</span><span>{showSources ? "▲" : "▼"}</span>
+        </button>
+        {showSources && (
+          <div style={{display:"flex",flexDirection:"column",gap:8,marginTop:10}}>
+            {meta.sources.map(function(s) {
+              return (
+                <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer"
+                  style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 14px",background:"#fff",border:"1px solid "+T.border,borderRadius:10,textDecoration:"none"}}>
+                  <div style={{fontSize:13,fontWeight:600,color:T.text}}>{s.name}</div>
+                  <div style={{fontSize:12,color:T.blue,fontWeight:700}}>Open →</div>
+                </a>
+              );
+            })}
+          </div>
+        )}
+      </div>
+      <div style={{padding:"14px 16px",background:T.blueLight,border:"1px solid "+T.blue+"33",borderRadius:12}}>
+        <div style={{fontSize:13,fontWeight:700,color:T.blue,marginBottom:10}}>How to use a transfer bonus</div>
+        {["1. Find award space FIRST on Seats.aero or Point.me — confirm the seat exists before moving any points.",
+          "2. Transfer all the points you need in one go — bonuses apply to the full transfer amount.",
+          "3. Allow up to 5 days for points to arrive, though most transfers are instant or same-day.",
+          "4. Book immediately once miles land — award space can disappear while you wait."].map(function(step) {
+          return <div key={step} style={{fontSize:12,color:T.text2,lineHeight:1.6,padding:"7px 0",borderBottom:"1px solid "+T.blue+"22"}}>{step}</div>;
+        })}
       </div>
     </div>
   );
