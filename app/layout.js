@@ -1,7 +1,4 @@
-// ─────────────────────────────────────────────────────────────────
-// INSTRUCTIONS: Replace the contents of app/layout.js (or layout.jsx)
-// with this file. This fixes the "Create Next App" browser tab title.
-// ─────────────────────────────────────────────────────────────────
+
 
 export const metadata = {
   title: "PointsWay — Points & Miles Travel Optimizer",
