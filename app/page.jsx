@@ -26,7 +26,7 @@ const FEATURED = {
   cards:["Amex MR","Chase UR","Capital One","Bilt"],
   why:"Virgin Atlantic prices ANA First Class at just 55,000 miles one-way — a seat that costs $4,000+ in cash. Four major bank programs transfer directly to Virgin Atlantic, making this one of the most accessible luxury redemptions in the hobby. Award space opens frequently on ANA metal.",
   howToFind:"Search nonstop on Seats.aero using the Virgin Atlantic program filter. Best availability 2-4 months out on weekdays.",
-  seatsUrl:"https://seats.aero/search?origin=JFK&destination=NRT",
+  seatsUrl:"https://seats.aero",
 };
 
 // ─── TRANSFER BONUS ALERTS ────────────────────────────────────────────────────
@@ -945,8 +945,6 @@ function WalletStep({wallet,setWallet,onNext}){
   return(
     <div>
       <div style={{marginBottom:20}}><h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Your Points Wallet</h2><p style={{color:T.text2,marginTop:5,fontSize:14}}>Click a section → click a program → type your full balance → click away to save</p></div>
-      {/* Featured Redemption — always visible */}
-      <FeaturedDealCard onGoToSearch={()=>onNext()}/>
       {!hasPoints&&<div style={{marginBottom:16,padding:"14px 16px",background:T.amberLight,border:`1px solid ${T.amber}44`,borderRadius:12}}><div style={{fontSize:13,fontWeight:700,color:T.amber,marginBottom:4}}>👋 Not sure what you have?</div><div style={{fontSize:13,color:T.text2,lineHeight:1.5}}>Expand each section below and click any program to see where to find your balance. Most banks show your points when you log in online.</div></div>}
       <ProgramSection title="Bank & Credit Card Points" emoji="💳" programs={BANK_PROGRAMS} wallet={wallet} onSave={handleSave}/>
       <ProgramSection title="Airline Miles" emoji="✈️" programs={AIRLINE_PROGRAMS} wallet={wallet} onSave={handleSave}/>
@@ -970,11 +968,6 @@ function WalletStep({wallet,setWallet,onNext}){
           )}
         </>
       )}
-      {/* Dream Trip Tracker */}
-      <div style={{marginBottom:16}}>
-        <div style={{fontSize:12,fontWeight:700,color:T.text3,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>🎯 Dream Trip Tracker</div>
-        <Card><DreamTracker wallet={wallet}/></Card>
-      </div>
       <button onClick={onNext} disabled={!hasPoints} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",background:hasPoints?"linear-gradient(135deg,#1a56db,#2563eb)":"#e2e8f0",color:hasPoints?"#fff":"#a0aec0",fontSize:15,fontWeight:800,cursor:hasPoints?"pointer":"not-allowed",fontFamily:"inherit"}}>{hasPoints?"Search for Redemptions →":"Enter at least one balance to continue"}</button>
     </div>
   );
@@ -1418,7 +1411,6 @@ export default function App(){
 // ─── FEATURED DEAL CARD ───────────────────────────────────────────────────────
 function FeaturedDealCard({onGoToSearch}){
   const f=FEATURED;
-  const saved=f.cashValue-f.taxes;
   return(
     <div style={{marginBottom:20,borderRadius:16,overflow:"hidden",border:`2px solid ${T.goldBorder}`,boxShadow:"0 4px 24px rgba(184,134,11,0.15)"}}>
       <div style={{background:"linear-gradient(135deg,#b8860b,#d4a017)",padding:"14px 18px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
@@ -1457,7 +1449,7 @@ function FeaturedDealCard({onGoToSearch}){
 
 // ─── DREAM TRIP TRACKER ───────────────────────────────────────────────────────
 function DreamTracker({wallet}){
-  const [selectedTrip,setSelectedTrip]=useState(DREAM_TRIPS[0].key);
+  const [selectedTrip,setSelectedTrip]=useState("tokyo_biz");
   const [customPoints,setCustomPoints]=useState("");
   const [customLabel,setCustomLabel]=useState("");
   const pooled=buildPooled(wallet);
@@ -1482,10 +1474,10 @@ function DreamTracker({wallet}){
     if(lk&&pooled[lk])bestPool=pooled[lk].total;
     else{
       // fallback: max across all pools
-      bestPool=Math.max(...Object.values(pooled).map(p=>p.total||0),0);
+      const vals=Object.values(pooled).map(p=>p.total||0); bestPool=vals.length>0?Math.max(...vals,0):0;
     }
   } else {
-    bestPool=Math.max(...Object.values(pooled).map(p=>p.total||0),0);
+    const vals=Object.values(pooled).map(p=>p.total||0); bestPool=vals.length>0?Math.max(...vals,0):0;
   }
 
   const pct=target>0?Math.min(100,Math.round((bestPool/target)*100)):0;
