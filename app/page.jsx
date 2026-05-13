@@ -45,8 +45,8 @@ const FEATURED = {
 //   confirmed: true if personally verified, false if reported by community
 
 const TRANSFER_BONUS_META = {
-  lastVerified: "May 9, 2025",
-  nextCheckDue: "May 16, 2025",
+  lastVerified: "May 9, 2026",
+  nextCheckDue: "May 16, 2026",
   sources: [
     {name:"The Points Guy",    url:"https://thepointsguy.com/news/credit-card-transfer-bonuses/"},
     {name:"Doctor of Credit",  url:"https://www.doctorofcredit.com/tag/transfer-bonus/"},
@@ -60,7 +60,7 @@ const TRANSFER_BONUSES = [
     bank:"Amex MR",
     to:"Virgin Atlantic Flying Club",
     bonus:"30%",
-    expires:"June 30, 2025",
+    expires:"June 30, 2026",
     math:"Transfer 70,000 Amex points → receive 91,000 Virgin miles",
     hot:true,
     confirmed:true,
@@ -71,7 +71,7 @@ const TRANSFER_BONUSES = [
     bank:"Capital One",
     to:"Turkish Miles&Smiles",
     bonus:"25%",
-    expires:"May 31, 2025",
+    expires:"May 31, 2026",
     math:"Transfer 40,000 Cap One miles → receive 50,000 Turkish miles",
     hot:true,
     confirmed:true,
@@ -82,7 +82,7 @@ const TRANSFER_BONUSES = [
     bank:"Citi TYP",
     to:"Flying Blue (Air France/KLM)",
     bonus:"20%",
-    expires:"June 15, 2025",
+    expires:"June 15, 2026",
     math:"Transfer 50,000 Citi points → receive 60,000 Flying Blue miles",
     hot:false,
     confirmed:true,
