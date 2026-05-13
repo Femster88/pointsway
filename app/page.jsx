@@ -13,7 +13,7 @@ const T = {
 // ─── FEATURED REDEMPTION OF THE WEEK ──────────────────────────────────────────
 // Update this object weekly for fresh content
 const FEATURED = {
-  week:"May 2025",
+  week:"May 2026",
   headline:"ANA First Class to Tokyo",
   subline:"One way · Book via Virgin Atlantic",
   points:55000,
