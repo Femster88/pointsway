@@ -13,7 +13,7 @@ const T = {
 // ─── FEATURED REDEMPTION OF THE WEEK ──────────────────────────────────────────
 // Update this object weekly for fresh content
 const FEATURED = {
-  week:"May 2026",
+  week:"May 2025",
   headline:"ANA First Class to Tokyo",
   subline:"One way · Book via Virgin Atlantic",
   points:55000,
@@ -1079,6 +1079,110 @@ function ValuationDashboard(props) {
         <strong style={{color:T.text}}>About these valuations: </strong>
         Values are estimates based on average redemption rates — what you actually get depends on how you redeem. Bank points (Amex, Chase) tend to hold the highest value because they transfer to many programs. Hotel points (Hilton, Marriott) are typically worth less because they're locked to one chain. Hyatt is the exception at 2.0¢/pt.
       </div>
+    </div>
+  );
+}
+
+// ─── SWEET SPOT LIBRARY ───────────────────────────────────────────
+function SweetSpotLibrary() {
+  var [filter, setFilter] = useState("All");
+  var [openRank, setOpenRank] = useState(null);
+  var regions = ["All","Asia","Europe","Pacific","Americas","ME/Africa"];
+  var cabinIcon = {first:"👑", business:"🛋️", economy:"🪑", hotel:"🏨"};
+
+  var filtered = filter === "All"
+    ? SWEET_SPOTS
+    : SWEET_SPOTS.filter(function(s) { return s.region === filter; });
+
+  return (
+    <div>
+      <div style={{marginBottom:12,padding:"12px 14px",background:T.goldLight,border:"1px solid "+T.goldBorder,borderRadius:12,fontSize:13,color:T.text2,lineHeight:1.5}}>
+        <strong style={{color:T.gold}}>The 15 best redemptions in the hobby right now</strong> — curated by value. Tap any to see the full breakdown and which cards get you there.
+      </div>
+
+      {/* Region filter */}
+      <div style={{display:"flex",gap:7,flexWrap:"wrap",marginBottom:14}}>
+        {regions.map(function(r) {
+          return (
+            <button key={r} onClick={function() { setFilter(r); }}
+              style={{padding:"6px 12px",borderRadius:20,border:"1px solid "+(filter===r?T.gold:T.border),background:filter===r?T.goldLight:T.surface2,color:filter===r?T.gold:T.text2,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:filter===r?700:500}}>
+              {r}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Sweet spot cards */}
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {filtered.map(function(s) {
+          var isOpen = openRank === s.rank;
+          return (
+            <div key={s.rank}
+              onClick={function() { setOpenRank(isOpen ? null : s.rank); }}
+              style={{borderRadius:12,border:"1px solid "+(isOpen?T.goldBorder:T.border),background:isOpen?T.goldLight:T.surface,overflow:"hidden",cursor:"pointer"}}>
+              {/* Row */}
+              <div style={{padding:"12px 16px",display:"flex",gap:12,alignItems:"center"}}>
+                <div style={{width:28,height:28,borderRadius:"50%",background:T.gold,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:800,flexShrink:0}}>
+                  {s.rank}
+                </div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:13,fontWeight:700,color:T.text,marginBottom:2}}>
+                    {cabinIcon[s.cabin]} {s.title}
+                  </div>
+                  <div style={{fontSize:11,color:T.text3}}>via {s.via} · {s.dir} · {s.region}</div>
+                </div>
+                <div style={{textAlign:"right",flexShrink:0,marginRight:8}}>
+                  <div style={{fontSize:14,fontWeight:800,color:T.gold}}>{s.points}</div>
+                  <div style={{fontSize:10,color:T.text3}}>pts</div>
+                </div>
+                <div style={{flexShrink:0}}>
+                  <div style={{background:T.greenLight,color:T.green,borderRadius:6,padding:"3px 8px",fontSize:12,fontWeight:700}}>{s.value}¢</div>
+                </div>
+                <span style={{color:T.text3,fontSize:12,flexShrink:0}}>{isOpen?"▲":"▼"}</span>
+              </div>
+
+              {/* Expanded detail */}
+              {isOpen && (
+                <div style={{padding:"0 16px 16px",borderTop:"1px solid "+T.goldBorder}}>
+                  <div style={{paddingTop:12,display:"flex",gap:20,marginBottom:12,flexWrap:"wrap"}}>
+                    <div>
+                      <div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Cash value</div>
+                      <div style={{fontSize:16,fontWeight:800,color:T.text}}>{s.cashValue}</div>
+                    </div>
+                    <div>
+                      <div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Value</div>
+                      <div style={{fontSize:16,fontWeight:800,color:T.green}}>{s.value}¢/pt</div>
+                    </div>
+                    <div>
+                      <div style={{fontSize:10,color:T.text3,textTransform:"uppercase",letterSpacing:"0.07em"}}>Direction</div>
+                      <div style={{fontSize:16,fontWeight:800,color:T.text}}>{s.dir}</div>
+                    </div>
+                  </div>
+                  <div style={{fontSize:13,color:T.text2,lineHeight:1.6,marginBottom:12}}>{s.why}</div>
+                  <div>
+                    <div style={{fontSize:11,color:T.text3,marginBottom:6,textTransform:"uppercase",letterSpacing:"0.06em"}}>Cards that get you there</div>
+                    <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
+                      {s.cards.map(function(card) {
+                        return (
+                          <span key={card} style={{background:T.blueLight,border:"1px solid "+T.blue+"33",borderRadius:16,padding:"3px 10px",fontSize:11,color:T.blue,fontWeight:700}}>
+                            {card}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {filtered.length === 0 && (
+        <div style={{textAlign:"center",padding:"30px 20px",color:T.text3,fontSize:14}}>
+          No sweet spots found for this region yet.
+        </div>
+      )}
     </div>
   );
 }
