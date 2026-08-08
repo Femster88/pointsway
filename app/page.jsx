@@ -45,8 +45,8 @@ const FEATURED = {
 //   confirmed: true if personally verified, false if reported by community
 
 const TRANSFER_BONUS_META = {
-  lastVerified: "May 9, 2026",
-  nextCheckDue: "May 16, 2026",
+  lastVerified: "May 9, 2025",
+  nextCheckDue: "May 16, 2025",
   sources: [
     {name:"The Points Guy",    url:"https://thepointsguy.com/news/credit-card-transfer-bonuses/"},
     {name:"Doctor of Credit",  url:"https://www.doctorofcredit.com/tag/transfer-bonus/"},
@@ -60,7 +60,7 @@ const TRANSFER_BONUSES = [
     bank:"Amex MR",
     to:"Virgin Atlantic Flying Club",
     bonus:"30%",
-    expires:"June 30, 2026",
+    expires:"June 30, 2025",
     math:"Transfer 70,000 Amex points → receive 91,000 Virgin miles",
     hot:true,
     confirmed:true,
@@ -71,7 +71,7 @@ const TRANSFER_BONUSES = [
     bank:"Capital One",
     to:"Turkish Miles&Smiles",
     bonus:"25%",
-    expires:"May 31, 2026",
+    expires:"May 31, 2025",
     math:"Transfer 40,000 Cap One miles → receive 50,000 Turkish miles",
     hot:true,
     confirmed:true,
@@ -82,7 +82,7 @@ const TRANSFER_BONUSES = [
     bank:"Citi TYP",
     to:"Flying Blue (Air France/KLM)",
     bonus:"20%",
-    expires:"June 15, 2026",
+    expires:"June 15, 2025",
     math:"Transfer 50,000 Citi points → receive 60,000 Flying Blue miles",
     hot:false,
     confirmed:true,
@@ -188,18 +188,35 @@ const GLOSSARY=[
   {term:"One Way vs Round Trip",def:"Booking two one-way awards often unlocks more seat availability than a round trip. Each direction can use a different program and airline."},
 ];
 
-const AWARD_TOOLS=[
-  {name:"Point.me",url:"https://point.me",icon:"🎯",desc:"Search award availability across all programs at once",free:true},
-  {name:"Roame",url:"https://roame.travel",icon:"🗺️",desc:"Visual award calendar search across all programs",free:true},
-  {name:"Seats.aero",url:"https://seats.aero",icon:"✈️",desc:"Real-time flight award availability — best for saver space",free:true},
-  {name:"Rooms.aero",url:"https://rooms.aero",icon:"🏨",desc:"Real-time hotel award availability across all chains",free:true},
-  {name:"AwardFares",url:"https://awardfares.com",icon:"🔍",desc:"Award seat finder with alerts and calendar search",free:true},
-  {name:"Awayz",url:"https://awayz.com",icon:"🌍",desc:"Hotel award optimizer",free:true},
-  {name:"MaxMyPoint",url:"https://maxmypoint.com",icon:"📈",desc:"Maximize point value across transfer partners",free:true},
-  {name:"Gondola",url:"https://gondola.com",icon:"🚡",desc:"Award booking concierge — searches and books for you",free:false},
-  {name:"ExpertFlyer",url:"https://www.expertflyer.com",icon:"📡",desc:"Award availability alerts and seat maps",free:false},
-  {name:"PointsYeah",url:"https://pointsyeah.com",icon:"🙌",desc:"Points valuation and transfer partner optimizer",free:true},
-];
+const AWARD_TOOLS={
+  // International flight search tools
+  international:[
+    {name:"Seats.aero",    url:"https://seats.aero",          icon:"✈️",desc:"Best for saver space — real-time availability across all programs. Start here for international awards.",free:true,best:true},
+    {name:"Point.me",      url:"https://point.me",            icon:"🎯",desc:"Compares all programs at once. Enter your route and it shows every program that can book it and the points cost.",free:true,best:true},
+    {name:"Roame",         url:"https://roame.travel",        icon:"🗺️",desc:"Visual calendar view — shows the cheapest award dates across a full month. Great for flexible travel.",free:true,best:false},
+    {name:"AwardFares",    url:"https://awardfares.com",       icon:"🔍",desc:"Real-time award search with alerts and seat maps. Covers 17 programs including Flying Blue and Turkish.",free:true,best:false},
+    {name:"Gondola",       url:"https://gondola.com",          icon:"🚡",desc:"Concierge service — searches and books for you. Best if you want someone else to handle the complexity.",free:false,best:false},
+    {name:"ExpertFlyer",   url:"https://www.expertflyer.com",  icon:"📡",desc:"Award availability alerts and detailed seat maps. Essential for tracking when award space opens up.",free:false,best:false},
+  ],
+  // Domestic USA flight search tools
+  domestic:[
+    {name:"Southwest.com",   url:"https://www.southwest.com/air/booking/",icon:"🟡",desc:"Search Southwest Rapid Rewards awards directly. No blackout dates, no partner complexity. Best for domestic flexibility.",free:true,best:true},
+    {name:"United.com",      url:"https://www.united.com/en/us/flights/book/",icon:"✈️",desc:"Search United MileagePlus saver awards. Great for domestic routes — especially hubs like ORD, IAH, EWR, DEN, LAX.",free:true,best:true},
+    {name:"Delta.com",       url:"https://www.delta.com/us/en/flight-search/book-a-flight",icon:"🔺",desc:"Search Delta SkyMiles awards. Dynamic pricing means costs vary — always compare with Flying Blue for Delta flights.",free:true,best:false},
+    {name:"AA.com",          url:"https://www.aa.com/booking/find-flights",icon:"🦅",desc:"Search American AAdvantage saver awards. Best for routes through Charlotte, Dallas, Miami, and Philadelphia.",free:true,best:false},
+    {name:"Points Path",     url:"https://pointspath.co",      icon:"🔎",desc:"Free Chrome extension — shows award prices alongside cash prices in Google Flights. Covers Alaska, American, Delta, JetBlue, United. Best domestic companion tool.",free:true,best:true},
+    {name:"Flightpoints",    url:"https://flightpoints.com",   icon:"📊",desc:"Searches multiple programs at once for domestic routes. Good for comparing United vs Delta vs Southwest for the same route.",free:true,best:false},
+    {name:"Alaska Airlines", url:"https://www.alaskaair.com/booking/flight-search",icon:"🗻",desc:"Search Atmos (Alaska+Hawaiian) Mileage Plan awards. Best for West Coast routes and Hawaii. Great partner redemptions.",free:true,best:false},
+    {name:"JetBlue.com",     url:"https://www.jetblue.com/booking/",icon:"🔵",desc:"Search JetBlue TrueBlue awards. No blackout dates, points match cash price. Best for routes JetBlue dominates like BOS, JFK, FLL.",free:true,best:false},
+  ],
+  // Hotel search tools
+  hotels:[
+    {name:"Rooms.aero",  url:"https://rooms.aero",             icon:"🏨",desc:"Real-time hotel award availability across Hyatt, Marriott, Hilton and more. Like Seats.aero but for hotels.",free:true,best:true},
+    {name:"Awayz",       url:"https://awayz.com",              icon:"🌍",desc:"Hotel award optimizer — finds the best points value for hotel stays by destination.",free:true,best:false},
+    {name:"MaxMyPoint",  url:"https://maxmypoint.com",         icon:"📈",desc:"Compares hotel point values across chains to find where your points go furthest.",free:true,best:false},
+    {name:"PointsYeah",  url:"https://pointsyeah.com",         icon:"🙌",desc:"Points valuation tool — check what your hotel and airline points are worth before redeeming.",free:true,best:false},
+  ],
+};
 
 const EARNING_CARDS=[
   {goal:"I want flexible points I can use anywhere",cards:[
@@ -276,13 +293,60 @@ const HOTEL_PROGRAMS=[
 ];
 const ALL_PROGRAMS=[...BANK_PROGRAMS,...AIRLINE_PROGRAMS,...HOTEL_PROGRAMS];
 
+// Transfer partners verified August 2026
+// Key 2026 changes:
+// - Amex: Etihad ends June 30 2026; Korean Air added
+// - Chase: Wyndham added Feb 2026
+// - Wells Fargo: JetBlue added Nov 2025, Wyndham + Cathay added Apr 2026
+// - Bilt: JAL (japan) added; now 24 partners
+// - Capital One: 22 partners confirmed
 const BANK_TO_LOYALTY={
-  amex:["delta","ana","flyingblue","british","aeromexico","cathay","emirates","etihad","iberia","jetblue","qantas","qatar","singapore","virginatl","aeroplan","avianca","turkish","korean","hilton","marriott","choice"],
-  chase:["aerlingus","aeroplan","british","flyingblue","iberia","jetblue","singapore","southwest","united","virginatl","hyatt","ihg","marriott","wyndham"],
-  capital_one:["qantas","aeromexico","aeroplan","cathay","avianca","british","emirates","etihad","eva","finnair","flyingblue","jetblue","qatar","singapore","tap","turkish","virginatl","wyndham","iprefer","choice","accor"],
-  bilt:["aerlingus","american","aeroplan","avianca","british","cathay","emirates","etihad","flyingblue","iberia","jetblue","qatar","singapore","southwest","tap","turkish","united","virginatl","atmos","ana","korean","accor","hilton","hyatt","ihg","marriott","wyndham"],
-  citi:["american","avianca","cathay","emirates","etihad","eva","flyingblue","jetblue","qantas","qatar","singapore","thai","turkish","virginatl","accor","choice","leadersclub","preferred","wyndham"],
-  wells:["aerlingus","avianca","british","cathay","flyingblue","iberia","jetblue","virginatl","choice","wyndham"],
+  amex:[
+    // Airlines (17 partners - Etihad ended June 30 2026)
+    "aeroplan","aeromexico","ana","avianca","british","cathay","delta",
+    "emirates","flyingblue","iberia","jetblue","qantas","qatar",
+    "singapore","turkish","virginatl","aerlingus",
+    // Hotels (3 partners)
+    "hilton","marriott","choice"
+  ],
+  chase:[
+    // Airlines (10 partners)
+    "aerlingus","aeroplan","british","flyingblue","iberia","jetblue",
+    "singapore","southwest","united","virginatl",
+    // Hotels (4 partners - Wyndham added Feb 2026)
+    "hyatt","ihg","marriott","wyndham"
+  ],
+  capital_one:[
+    // Airlines (18 partners)
+    "qantas","aeromexico","aeroplan","cathay","avianca","british",
+    "emirates","etihad","eva","finnair","flyingblue","jetblue","qatar",
+    "singapore","tap","turkish","virginatl","aerlingus",
+    // Hotels (4 partners)
+    "wyndham","iprefer","choice","accor"
+  ],
+  bilt:[
+    // Airlines (17 partners - JAL added)
+    "aerlingus","american","aeroplan","avianca","british","cathay",
+    "emirates","etihad","flyingblue","iberia","jetblue","qatar",
+    "singapore","southwest","tap","turkish","united","virginatl",
+    "atmos","ana","korean","japan",
+    // Hotels (6 partners)
+    "accor","hilton","hyatt","ihg","marriott","wyndham","preferred"
+  ],
+  citi:[
+    // Airlines (14 partners)
+    "american","avianca","cathay","emirates","etihad","eva","flyingblue",
+    "jetblue","qantas","qatar","singapore","thai","turkish","virginatl",
+    // Hotels (5 partners)
+    "accor","choice","leadersclub","preferred","wyndham"
+  ],
+  wells:[
+    // Airlines (8 partners - JetBlue Nov 2025, Cathay Apr 2026 added)
+    "aerlingus","avianca","british","cathay","flyingblue","iberia",
+    "jetblue","virginatl",
+    // Hotels (2 partners - Wyndham Apr 2026 added, at 1:2 ratio)
+    "choice","wyndham"
+  ],
   usbank:["aeroplan","korean","singapore"],
 };
 
@@ -300,7 +364,8 @@ const LOYALTY_PARTNERS={
 
 // Matrix partners: airlines A-Z then hotels A-Z
 const MATRIX_PARTNERS=[
-  {key:"aerlingus", label:"Aer Lingus AerClub",           type:"airline",cards:["chase","bilt","wells"]},
+  // Airlines A-Z verified August 2026
+  {key:"aerlingus", label:"Aer Lingus AerClub",           type:"airline",cards:["amex","chase","bilt","wells"]},
   {key:"aeromexico",label:"Aeromexico Club Premier",       type:"airline",cards:["amex","capital_one"]},
   {key:"aeroplan",  label:"Air Canada Aeroplan",           type:"airline",cards:["amex","chase","capital_one","bilt","wells","usbank"]},
   {key:"american",  label:"American AAdvantage",           type:"airline",cards:["bilt","citi"]},
@@ -310,11 +375,12 @@ const MATRIX_PARTNERS=[
   {key:"cathay",    label:"Cathay Pacific Asia Miles",     type:"airline",cards:["amex","capital_one","bilt","citi","wells"]},
   {key:"delta",     label:"Delta SkyMiles",                type:"airline",cards:["amex"]},
   {key:"emirates",  label:"Emirates Skywards",             type:"airline",cards:["amex","capital_one","bilt","citi"]},
-  {key:"etihad",    label:"Etihad Guest",                  type:"airline",cards:["amex","capital_one","bilt","citi"]},
+  {key:"etihad",    label:"Etihad Guest",                  type:"airline",cards:["capital_one","bilt","citi"]},
   {key:"eva",       label:"EVA Air Infinity MileageLands", type:"airline",cards:["capital_one","citi"]},
   {key:"finnair",   label:"Finnair Plus",                  type:"airline",cards:["capital_one"]},
   {key:"flyingblue",label:"Flying Blue (Air France/KLM)", type:"airline",cards:["amex","chase","capital_one","bilt","citi","wells"]},
   {key:"iberia",    label:"Iberia Plus",                   type:"airline",cards:["amex","chase","capital_one","bilt","wells"]},
+  {key:"japan",     label:"JAL Mileage Bank",              type:"airline",cards:["bilt"]},
   {key:"jetblue",   label:"JetBlue TrueBlue",              type:"airline",cards:["amex","chase","capital_one","bilt","citi","wells"]},
   {key:"korean",    label:"Korean Air SkyPass",            type:"airline",cards:["amex","bilt","usbank"]},
   {key:"qantas",    label:"Qantas Frequent Flyer",         type:"airline",cards:["amex","capital_one","citi"]},
@@ -327,21 +393,231 @@ const MATRIX_PARTNERS=[
   {key:"united",    label:"United MileagePlus",            type:"airline",cards:["chase","bilt"]},
   {key:"virginatl", label:"Virgin Atlantic Flying Club",   type:"airline",cards:["amex","chase","capital_one","bilt","citi","wells"]},
   {key:"atmos",     label:"Atmos (Alaska+Hawaiian)",       type:"airline",cards:["bilt"]},
-  {key:"accor",     label:"ALL - Accor Live Limitless",    type:"hotel",  cards:["capital_one","bilt","citi"]},
-  {key:"choice",    label:"Choice Privileges",             type:"hotel",  cards:["amex","capital_one","citi","wells"]},
-  {key:"hilton",    label:"Hilton Honors",                 type:"hotel",  cards:["amex","bilt"]},
-  {key:"hyatt",     label:"World of Hyatt",                type:"hotel",  cards:["chase","bilt"]},
-  {key:"ihg",       label:"IHG One Rewards",               type:"hotel",  cards:["chase","bilt"]},
-  {key:"iprefer",   label:"I Prefer Hotel Rewards",        type:"hotel",  cards:["capital_one"]},
+  // Hotels A-Z verified August 2026
+  {key:"accor",      label:"ALL - Accor Live Limitless",   type:"hotel",  cards:["capital_one","bilt","citi"]},
+  {key:"choice",     label:"Choice Privileges",            type:"hotel",  cards:["amex","capital_one","citi","wells"]},
+  {key:"hilton",     label:"Hilton Honors",                type:"hotel",  cards:["amex","bilt"]},
+  {key:"hyatt",      label:"World of Hyatt",               type:"hotel",  cards:["chase","bilt"]},
+  {key:"ihg",        label:"IHG One Rewards",              type:"hotel",  cards:["chase","bilt"]},
+  {key:"iprefer",    label:"I Prefer Hotel Rewards",       type:"hotel",  cards:["capital_one","bilt"]},
   {key:"leadersclub",label:"Leaders Club",                 type:"hotel",  cards:["citi"]},
-  {key:"marriott",  label:"Marriott Bonvoy",               type:"hotel",  cards:["amex","chase","bilt"]},
-  {key:"preferred", label:"Preferred Hotels & Resorts",    type:"hotel",  cards:["citi"]},
-  {key:"wyndham",   label:"Wyndham Rewards",               type:"hotel",  cards:["chase","capital_one","bilt","citi","wells"]},
+  {key:"marriott",   label:"Marriott Bonvoy",              type:"hotel",  cards:["amex","chase","bilt"]},
+  {key:"preferred",  label:"Preferred Hotels & Resorts",   type:"hotel",  cards:["citi","bilt"]},
+  {key:"wyndham",    label:"Wyndham Rewards",              type:"hotel",  cards:["chase","capital_one","bilt","citi","wells"]},
 ];
-
 const PROGRAM_SITES={amex:"https://www.americanexpress.com/en-us/rewards/membership-rewards/",chase:"https://ultimaterewards.com",capital_one:"https://www.capitalone.com/miles/",bilt:"https://www.biltrewards.com",citi:"https://www.thankyou.com",wells:"https://www.wellsfargo.com/credit-cards/rewards/",usbank:"https://www.usbank.com/travel/altitude-reserve.html",united:"https://www.united.com/en/us/fly/mileageplus.html",delta:"https://www.delta.com/us/en/skymiles/overview",american:"https://www.aa.com/aadvantage",southwest:"https://www.southwest.com/rapidrewards/",alaska:"https://www.alaskaair.com/content/mileage-plan",aeroplan:"https://www.aircanada.com/aeroplan",british:"https://www.britishairways.com/en-us/executive-club",flyingblue:"https://www.flyingblue.com",emirates:"https://www.emirates.com/us/english/skywards/",turkish:"https://www.turkishairlines.com/en-us/miles-and-smiles/",singapore:"https://www.singaporeair.com/en_UK/us/ppsclub-krisflyer/",cathay:"https://www.cathaypacific.com/cx/en_US/asia-miles.html",ana:"https://www.ana.co.jp/en/us/amc/",avianca:"https://www.lifemiles.com",korean:"https://www.koreanair.com/skypass",etihad:"https://www.etihad.com/en-us/etihadguest",virginatl:"https://www.virginatlantic.com/us/en/flying-club.html",hyatt:"https://world.hyatt.com",marriott:"https://www.marriott.com/loyalty.mi",hilton:"https://www.hilton.com/en/hilton-honors/",ihg:"https://www.ihg.com/rewardsclub",wyndham:"https://www.wyndhamhotels.com/wyndham-rewards",choice:"https://www.choicehotels.com/choice-privileges",bestwestern:"https://www.bestwestern.com/en_US/best-western-rewards.html",accor:"https://all.accor.com",radisson:"https://www.radissonhotels.com/en-us/rewards",qantas:"https://www.qantas.com/us/en/frequent-flyer.html",jetblue:"https://www.jetblue.com/trueblue",aeromexico:"https://aeromexico.com/en-us/club-premier",qatar:"https://www.qatarairways.com/en/privilege-club.html",iberia:"https://www.iberia.com/us/iberia-plus/",finnair:"https://www.finnair.com/en/finnair-plus",aerlingus:"https://www.aerlingus.com/aerclub/",tap:"https://www.flytap.com/en-us/miles-and-go",eva:"https://www.evaair.com/en-global/infinity-mileagelands/",thai:"https://www.thaiairways.com/en_US/royal_orchid_plus/",atmos:"https://www.alaskaair.com/content/mileage-plan",iprefer:"https://www.iprefer.com",leadersclub:"https://www.leadinghotels.com/en/leaders-club",preferred:"https://preferredhotels.com"};
 
-const DOMESTIC_DESTS=["Atlanta","Boston","Charlotte","Chicago","Dallas","Denver","Honolulu","Houston","Las Vegas","Los Angeles","Miami","Nashville","New York","Orlando","Phoenix","Seattle"];
+
+// ─── AIRCRAFT & CABIN PRODUCTS ───────────────────────────────────────────────
+// Maps airline + cabin to the actual product name, aircraft, and key features
+const CABIN_PRODUCTS = {
+  // Qatar Airways
+  "qatar_business": {
+    product:"Qsuites",
+    aircraft:"A350-1000 / Boeing 777-300ER",
+    features:["Sliding privacy door","Fully lie-flat bed","Double bed for couples","Quad configuration for groups","Direct aisle access"],
+    rating:5,
+    note:"Guaranteed Qsuites on routes to JFK, LAX, LHR, CDG, SYD, SIN, NRT. Always check seat map before booking.",
+    icon:"👑",
+  },
+  // ANA
+  "ana_business": {
+    product:"The Room / ANA Business",
+    aircraft:"Boeing 777-9 (The Room) / 787-9",
+    features:["Fully lie-flat","Private suite with door","Aisle access from every seat","70-inch seat pitch"],
+    rating:5,
+    note:"The Room is on select 777-9 routes. Standard ANA Business on 787-9 is still excellent.",
+    icon:"🏠",
+  },
+  "ana_first": {
+    product:"ANA First Class",
+    aircraft:"Boeing 777-300ER",
+    features:["180-degree fully flat bed","Private suite","Dine-on-demand","Exclusive lounge access"],
+    rating:5,
+    note:"Only available on select routes from Tokyo (NRT/HND) to select US/EU cities.",
+    icon:"👑",
+  },
+  // Singapore Airlines
+  "singapore_business": {
+    product:"Business Class Suite",
+    aircraft:"Airbus A350 / Boeing 787-10",
+    features:["Fully lie-flat","Enclosed suite with door","Direct aisle access","Award-winning service"],
+    rating:5,
+    note:"Singapore Airlines consistently rated world's best business class. Book well in advance.",
+    icon:"🦁",
+  },
+  "singapore_first": {
+    product:"Suites (First Class)",
+    aircraft:"Airbus A380",
+    features:["Private cabin with door","Double bed","Personal butler","Only on A380 routes"],
+    rating:5,
+    note:"Singapore Suites only on A380. Routes: SIN-LHR, SIN-JFK, SIN-FRA, SIN-SYD.",
+    icon:"🌟",
+  },
+  // Virgin Atlantic
+  "virginatl_business": {
+    product:"Upper Class Suite",
+    aircraft:"Airbus A350-1000",
+    features:["Private suite","Fully lie-flat","Social space lounge onboard","Direct aisle access"],
+    rating:4,
+    note:"New Upper Class on A350 is a significant upgrade over older 787 product. Check aircraft before booking.",
+    icon:"💜",
+  },
+  // Delta
+  "delta_business": {
+    product:"Delta One Suite",
+    aircraft:"Airbus A350 / A330neo",
+    features:["Sliding door for privacy","Fully lie-flat","Lumbar massage","Direct aisle access"],
+    rating:4,
+    note:"Delta One Suite on A350/A330neo routes. Older 767 routes have Delta One without door.",
+    icon:"🔴",
+  },
+  // United
+  "united_business": {
+    product:"Polaris Business",
+    aircraft:"Boeing 787-9 / 777-300ER / A321XLR",
+    features:["Fully lie-flat","Aisle access from every seat","Saks Fifth Avenue bedding","Direct aisle access"],
+    rating:4,
+    note:"Polaris on widebody international. All seats have aisle access — no climbing over neighbor.",
+    icon:"⭐",
+  },
+  // Emirates
+  "emirates_business": {
+    product:"Business Class",
+    aircraft:"Boeing 777 / Airbus A380",
+    features:["Fully lie-flat","Private mini-bar","Onboard bar (A380)","ICE entertainment system"],
+    rating:4,
+    note:"A380 routes have the famous onboard bar. Check aircraft — 777 business is still excellent.",
+    icon:"🇦🇪",
+  },
+  "emirates_first": {
+    product:"First Class Private Suite",
+    aircraft:"Airbus A380",
+    features:["Private suite with closing door","Shower spa onboard","Fine dining","Only on A380"],
+    rating:5,
+    note:"Emirates First with shower is only on A380. One of the most iconic premium experiences in aviation.",
+    icon:"🚿",
+  },
+  // Cathay Pacific
+  "cathay_business": {
+    product:"Business Class",
+    aircraft:"Airbus A350-1000 / Boeing 777-300ER",
+    features:["Fully lie-flat","Direct aisle access","Hong Kong cuisine","Award-winning cabin crew"],
+    rating:4,
+    note:"Cathay's new A350 business class is exceptional. Older 777 product still very good.",
+    icon:"🐉",
+  },
+  // British Airways
+  "british_business": {
+    product:"Club Suite",
+    aircraft:"Airbus A350 / A380 / Boeing 787-9",
+    features:["Private suite with door","Fully lie-flat","Direct aisle access"],
+    rating:4,
+    note:"Club Suite is on newer aircraft. Older Club World (no door, awkward 2-4-2) is on some 777/747 routes — avoid if possible.",
+    icon:"🇬🇧",
+  },
+  // Korean Air
+  "korean_business": {
+    product:"Prestige Suite",
+    aircraft:"Boeing 787-9 / 777-300ER",
+    features:["Fully lie-flat","Private suite","Direct aisle access","Korean cuisine"],
+    rating:4,
+    note:"Korean Air's 787-9 Prestige Suite is excellent. Older 777 Prestige is still lie-flat but less private.",
+    icon:"🇰🇷",
+  },
+  // Air France
+  "flyingblue_business": {
+    product:"Business (La Première on select)",
+    aircraft:"Airbus A350 / A380 / Boeing 777",
+    features:["Fully lie-flat","Private suite (A350)","Bar lounge (A380)","French cuisine"],
+    rating:4,
+    note:"New Air France business on A350 has private suite. A380 has onboard bar. Watch for promo awards via Flying Blue.",
+    icon:"🇫🇷",
+  },
+  // Etihad
+  "etihad_business": {
+    product:"Business Studio",
+    aircraft:"Boeing 787-9 / 777-300ER",
+    features:["Fully lie-flat","Direct aisle access","Adjustable privacy screen","Dine anytime"],
+    rating:4,
+    note:"Etihad's Business Studio is solid. The legendary Apartment First is on A380 routes. Note: Amex no longer transfers to Etihad as of June 2026.",
+    icon:"🌴",
+  },
+  // Turkish
+  "turkish_business": {
+    product:"Business Class",
+    aircraft:"Airbus A350 / Boeing 787-9 / 777-300ER",
+    features:["Fully lie-flat","Award-winning food","Istanbul lounge access","Generous award rates"],
+    rating:4,
+    note:"Turkish has the world's best airline food by many accounts. Business class is competitive at very low points rates.",
+    icon:"🌙",
+  },
+  // Aeroplan / Lufthansa
+  "aeroplan_business": {
+    product:"Lufthansa / Swiss / United (Star Alliance)",
+    aircraft:"Varies by operating carrier",
+    features:["Fully lie-flat","No fuel surcharges","Star Alliance partners","Wide network"],
+    rating:4,
+    note:"Aeroplan lets you book Lufthansa, Swiss, ANA, Singapore with no fuel surcharges. Best no-surcharge program for Star Alliance.",
+    icon:"🍁",
+  },
+};
+
+// Helper to get cabin product for a flight
+function getCabinProduct(loyaltyKey, cabin) {
+  var key = loyaltyKey + "_" + cabin;
+  return CABIN_PRODUCTS[key] || null;
+}
+
+
+// ─── AIRPORT CODE LOOKUP ─────────────────────────────────────────────────────
+const AIRPORT_MAP = {
+  atl:"Atlanta",ord:"Chicago",lax:"Los Angeles",dfw:"Dallas",den:"Denver",
+  jfk:"New York",lga:"New York",ewr:"New York",sfo:"San Francisco",
+  sea:"Seattle",las:"Las Vegas",mco:"Orlando",mia:"Miami",bos:"Boston",
+  phl:"Philadelphia",phx:"Phoenix",iah:"Houston",hou:"Houston",
+  dtw:"Detroit",msp:"Minneapolis",dca:"Washington DC",iad:"Washington DC",
+  bwi:"Washington DC",slc:"Salt Lake City",pdx:"Portland",mdw:"Chicago",
+  oak:"San Francisco",sjc:"San Francisco",san:"San Diego",sna:"Orange County",
+  bna:"Nashville",mem:"Memphis",stl:"St. Louis",ind:"Indianapolis",
+  mke:"Milwaukee",rsw:"Fort Myers",tpa:"Tampa",jax:"Jacksonville",
+  sju:"Puerto Rico",oma:"Omaha",okc:"Oklahoma City",tul:"Tulsa",
+  lit:"Little Rock",grr:"Grand Rapids",hnl:"Honolulu",ogg:"Maui",
+  koa:"Kona",lih:"Kauai",anc:"Anchorage",fai:"Fairbanks",jnu:"Juneau",
+  rdu:"Raleigh",clt:"Charlotte",cvg:"Cincinnati",cmh:"Columbus",
+  pit:"Pittsburgh",buf:"Buffalo",sat:"San Antonio",aus:"Austin",
+  msy:"New Orleans",mil:"Milwaukee",ont:"Los Angeles",bur:"Los Angeles",
+  // Also accept full city names (lowercase)
+  "new york":"New York","los angeles":"Los Angeles","san francisco":"San Francisco",
+  "washington dc":"Washington DC","washington":"Washington DC",
+  "chicago":"Chicago","dallas":"Dallas","atlanta":"Atlanta","denver":"Denver",
+  "seattle":"Seattle","las vegas":"Las Vegas","orlando":"Orlando",
+  "miami":"Miami","boston":"Boston","philadelphia":"Philadelphia",
+  "phoenix":"Phoenix","houston":"Houston","detroit":"Detroit",
+  "minneapolis":"Minneapolis","charlotte":"Charlotte","nashville":"Nashville",
+  "salt lake city":"Salt Lake City","portland":"Portland","san diego":"San Diego",
+  "austin":"Austin","raleigh":"Raleigh","honolulu":"Honolulu","maui":"Maui",
+  "new orleans":"New Orleans","san antonio":"San Antonio","columbus":"Columbus",
+  "pittsburgh":"Pittsburgh","indianapolis":"Indianapolis","memphis":"Memphis",
+  "st. louis":"St. Louis","milwaukee":"Milwaukee","tampa":"Tampa",
+  "washington":"Washington DC","cancun":"Cancun",
+};
+
+// Resolve airport code or city name to city
+function resolveDestination(input) {
+  if (!input) return "";
+  var lower = input.trim().toLowerCase();
+  return AIRPORT_MAP[lower] || (input.trim().charAt(0).toUpperCase() + input.trim().slice(1));
+}
+
+const DOMESTIC_DESTS=[
+  "Anchorage","Atlanta","Austin","Boston","Charlotte","Chicago","Columbus",
+  "Dallas","Denver","Detroit","Honolulu","Houston","Indianapolis","Kauai",
+  "Kona","Las Vegas","Los Angeles","Maui","Memphis","Miami","Milwaukee",
+  "Minneapolis","Nashville","New Orleans","New York","Orlando","Philadelphia",
+  "Phoenix","Pittsburgh","Portland","Raleigh","Salt Lake City","San Antonio",
+  "San Diego","San Francisco","Seattle","St. Louis","Tampa","Washington DC"
+];
 const ALL_DESTS=["Bali","Cancun","Dubai","Hong Kong","Kyoto","London","Maldives","Paris","Seoul","Singapore","Sydney","Tokyo","Vancouver","Zurich",...DOMESTIC_DESTS].sort();
 const CABIN_ICONS={economy:"🪑",business:"🛋️",first:"👑"};
 function fmt(n){return n>=1000?`${(n/1000).toFixed(0)}k`:String(n);}
@@ -371,6 +647,7 @@ function buildPooled(wallet){
 }
 
 const FLIGHT_DATA=[
+  // ── INTERNATIONAL ─────────────────────────────────────
   {destination:"Tokyo",   airline:"ANA",               loyaltyKey:"virginatl",loyaltyName:"Virgin Atlantic",       cost:95000, cabin:"business",taxes:200,tripType:"roundtrip",value:5.2,cashPrice:5000,domestic:false},
   {destination:"Tokyo",   airline:"ANA",               loyaltyKey:"ana",      loyaltyName:"ANA Mileage Club",      cost:88000, cabin:"business",taxes:200,tripType:"roundtrip",value:5.0,cashPrice:5000,domestic:false},
   {destination:"Tokyo",   airline:"ANA",               loyaltyKey:"virginatl",loyaltyName:"Virgin Atlantic",       cost:110000,cabin:"first",   taxes:200,tripType:"roundtrip",value:7.1,cashPrice:8000,domestic:false},
@@ -411,31 +688,587 @@ const FLIGHT_DATA=[
   {destination:"Cancun",  airline:"American Airlines",  loyaltyKey:"american", loyaltyName:"AAdvantage",           cost:25000, cabin:"economy", taxes:30, tripType:"roundtrip",value:1.8,cashPrice:450, domestic:false},
   {destination:"Cancun",  airline:"Southwest",          loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:22000, cabin:"economy", taxes:0,  tripType:"roundtrip",value:1.9,cashPrice:420, domestic:false},
   {destination:"Vancouver",airline:"Air Canada",        loyaltyKey:"aeroplan", loyaltyName:"Air Canada Aeroplan",  cost:30000, cabin:"economy", taxes:30, tripType:"roundtrip",value:2.0,cashPrice:600, domestic:false},
-  {destination:"New York",   airline:"Delta",             loyaltyKey:"delta",    loyaltyName:"Delta SkyMiles",       cost:15000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:320,domestic:true},
-  {destination:"New York",   airline:"Delta",             loyaltyKey:"delta",    loyaltyName:"Delta SkyMiles",       cost:8000, cabin:"economy",taxes:10,tripType:"oneway",   value:2.1,cashPrice:160,domestic:true},
-  {destination:"New York",   airline:"American Airlines", loyaltyKey:"american", loyaltyName:"AAdvantage",           cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:240,domestic:true},
-  {destination:"Los Angeles",airline:"United",            loyaltyKey:"united",   loyaltyName:"United MileagePlus",   cost:12500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:240,domestic:true},
-  {destination:"Los Angeles",airline:"Alaska Airlines",   loyaltyKey:"alaska",   loyaltyName:"Alaska Mileage Plan",  cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true},
-  {destination:"Los Angeles",airline:"Southwest",         loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:14000,cabin:"economy",taxes:0, tripType:"roundtrip",value:1.8,cashPrice:250,domestic:true},
-  {destination:"Miami",      airline:"American Airlines", loyaltyKey:"american", loyaltyName:"AAdvantage",           cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:220,domestic:true},
-  {destination:"Miami",      airline:"Southwest",         loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:11000,cabin:"economy",taxes:0, tripType:"roundtrip",value:1.9,cashPrice:210,domestic:true},
-  {destination:"Chicago",    airline:"United",            loyaltyKey:"united",   loyaltyName:"United MileagePlus",   cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.7,cashPrice:170,domestic:true},
-  {destination:"Chicago",    airline:"Southwest",         loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:9000, cabin:"economy",taxes:0, tripType:"roundtrip",value:1.7,cashPrice:155,domestic:true},
-  {destination:"Orlando",    airline:"Southwest",         loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:9500, cabin:"economy",taxes:0, tripType:"roundtrip",value:2.0,cashPrice:190,domestic:true},
-  {destination:"Las Vegas",  airline:"Southwest",         loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:10000,cabin:"economy",taxes:0, tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true},
-  {destination:"Seattle",    airline:"Alaska Airlines",   loyaltyKey:"alaska",   loyaltyName:"Alaska Mileage Plan",  cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.2,cashPrice:220,domestic:true},
-  {destination:"Atlanta",    airline:"Delta",             loyaltyKey:"delta",    loyaltyName:"Delta SkyMiles",       cost:8000, cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:168,domestic:true},
-  {destination:"Atlanta",    airline:"Southwest",         loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:7500, cabin:"economy",taxes:0, tripType:"roundtrip",value:2.0,cashPrice:150,domestic:true},
-  {destination:"Denver",     airline:"United",            loyaltyKey:"united",   loyaltyName:"United MileagePlus",   cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true},
-  {destination:"Denver",     airline:"Southwest",         loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:9000, cabin:"economy",taxes:0, tripType:"roundtrip",value:2.0,cashPrice:180,domestic:true},
-  {destination:"Dallas",     airline:"American Airlines", loyaltyKey:"american", loyaltyName:"AAdvantage",           cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true},
-  {destination:"Nashville",  airline:"Southwest",         loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:8000, cabin:"economy",taxes:0, tripType:"roundtrip",value:2.1,cashPrice:168,domestic:true},
-  {destination:"Charlotte",  airline:"American Airlines", loyaltyKey:"american", loyaltyName:"AAdvantage",           cost:8000, cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:152,domestic:true},
-  {destination:"Houston",    airline:"United",            loyaltyKey:"united",   loyaltyName:"United MileagePlus",   cost:9000, cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true},
-  {destination:"Honolulu",   airline:"Alaska Airlines",   loyaltyKey:"atmos",    loyaltyName:"Atmos (Alaska+Hawaiian)",cost:30000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true},
-  {destination:"Honolulu",   airline:"United",            loyaltyKey:"united",   loyaltyName:"United MileagePlus",   cost:35000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.2,cashPrice:770,domestic:true},
-  {destination:"Phoenix",    airline:"Southwest",         loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",        cost:8500, cabin:"economy",taxes:0, tripType:"roundtrip",value:2.0,cashPrice:170,domestic:true},
-  {destination:"Boston",     airline:"American Airlines", loyaltyKey:"american", loyaltyName:"AAdvantage",           cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:215,domestic:true},
+  // ── DOMESTIC USA ──────────────────────────────────────
+  {destination:"Atlanta",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:168,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Atlanta",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:2.1,cashPrice:84,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Atlanta",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:700,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Atlanta",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:350,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Atlanta",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:7500,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:150,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Atlanta",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:3750,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:75,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Atlanta",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Atlanta",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Atlanta",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Atlanta",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Atlanta",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Atlanta",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Atlanta",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:700,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Atlanta",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:350,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Chicago",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.7,cashPrice:170,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Chicago",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.7,cashPrice:85,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Chicago",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Chicago",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Chicago",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:9000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.7,cashPrice:155,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Chicago",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4500,cabin:"economy",taxes:0,tripType:"oneway",value:1.7,cashPrice:77,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Chicago",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:198,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Chicago",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:99,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Chicago",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:910,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Chicago",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:455,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Chicago",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:180,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Chicago",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:90,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Chicago",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Chicago",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Chicago",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:9500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:181,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Chicago",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:4750,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:90,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Chicago",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Chicago",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Los Angeles",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:12500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:237,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Los Angeles",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:6250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:118,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Los Angeles",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:910,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Los Angeles",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:455,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Los Angeles",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Los Angeles",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:100,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Los Angeles",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:840,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Los Angeles",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:420,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Los Angeles",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:14000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.8,cashPrice:250,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Los Angeles",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:7000,cabin:"economy",taxes:0,tripType:"oneway",value:1.8,cashPrice:125,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Los Angeles",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:13000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:247,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Los Angeles",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:6500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:123,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Los Angeles",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:38000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:950,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Los Angeles",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:19000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:475,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Los Angeles",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:228,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Los Angeles",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:6000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:114,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Los Angeles",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:910,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Los Angeles",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:455,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Dallas",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Dallas",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Dallas",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:780,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Dallas",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:390,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Dallas",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:9500,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:190,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Dallas",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4750,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:95,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Dallas",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:198,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Dallas",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:99,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Dallas",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Dallas",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Dallas",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:198,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Dallas",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:99,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Dallas",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:875,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Dallas",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:437,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Denver",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Denver",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Denver",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:780,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Denver",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:390,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Denver",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:9000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:180,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Denver",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4500,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:90,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Denver",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:10500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:200,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Denver",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:100,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Denver",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Denver",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Denver",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Denver",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Denver",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Denver",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Denver",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:9500,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:190,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Denver",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:4750,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:95,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Denver",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:728,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Denver",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:364,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"New York",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:15000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:315,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"New York",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:7500,cabin:"economy",taxes:10,tripType:"oneway",value:2.1,cashPrice:157,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"New York",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:40000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:1120,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"New York",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:20000,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:560,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"New York",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:240,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"New York",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:6000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:120,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"New York",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:945,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"New York",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:472,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"New York",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:13000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:247,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"New York",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:6500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:123,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"New York",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:38000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:988,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"New York",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:19000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:494,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"New York",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:11000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:220,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"New York",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:5500,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:110,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"New York",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.2,cashPrice:220,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"New York",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:2.2,cashPrice:110,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"New York",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:3.0,cashPrice:900,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"New York",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:3.0,cashPrice:450,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Miami",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:216,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Miami",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:6000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:108,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Miami",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:875,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Miami",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:437,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Miami",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:11000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:210,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Miami",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:5500,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:105,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Miami",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:13000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:247,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Miami",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:6500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:123,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Miami",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:38000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:950,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Miami",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:19000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:475,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Miami",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:216,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Miami",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:6000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:108,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Miami",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:875,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Miami",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:437,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Miami",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:210,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Miami",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:2.1,cashPrice:105,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Miami",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:840,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Miami",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:420,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Seattle",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.2,cashPrice:220,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Seattle",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:2.2,cashPrice:110,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Seattle",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:3.0,cashPrice:840,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Seattle",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:3.0,cashPrice:420,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Seattle",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:240,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Seattle",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:6000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:120,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Seattle",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:945,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Seattle",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:472,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Seattle",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:11000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:220,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Seattle",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:5500,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:110,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Seattle",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:220,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Seattle",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:110,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Seattle",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:864,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Seattle",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:432,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Seattle",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:209,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Seattle",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:104,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Seattle",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:832,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Seattle",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:416,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Las Vegas",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:10000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Las Vegas",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:5000,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:100,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Las Vegas",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:216,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Las Vegas",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:6000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:108,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Las Vegas",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:875,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Las Vegas",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:437,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Las Vegas",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:13000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:247,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Las Vegas",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:6500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:123,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Las Vegas",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:38000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:950,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Las Vegas",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:19000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:475,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Las Vegas",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:209,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Las Vegas",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:104,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Las Vegas",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Las Vegas",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Las Vegas",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Las Vegas",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:100,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Las Vegas",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:810,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Las Vegas",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:405,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Orlando",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:9500,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:190,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Orlando",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4750,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:95,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Orlando",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:13000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:234,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Orlando",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:6500,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:117,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Orlando",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:38000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:950,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Orlando",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:19000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:475,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Orlando",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:216,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Orlando",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:6000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:108,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Orlando",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:840,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Orlando",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:420,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Orlando",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:209,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Orlando",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:104,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Orlando",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Orlando",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Orlando",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:189,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Orlando",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.1,cashPrice:94,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Orlando",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:784,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Orlando",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:392,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Boston",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.2,cashPrice:176,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Boston",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:2.2,cashPrice:88,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Boston",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:3.0,cashPrice:750,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Boston",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:3.0,cashPrice:375,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Boston",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:216,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Boston",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:6000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:108,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Boston",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:875,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Boston",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:437,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Boston",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:13000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:247,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Boston",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:6500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:123,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Boston",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:38000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:950,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Boston",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:19000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:475,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Boston",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:209,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Boston",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:104,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Boston",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:832,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Boston",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:416,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Boston",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:10000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Boston",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:5000,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Houston",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Houston",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Houston",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:728,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Houston",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:364,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Houston",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8500,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:170,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Houston",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4250,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:85,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Houston",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:9500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:181,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Houston",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4750,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:90,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Houston",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Houston",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Houston",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Houston",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Houston",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Houston",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Detroit",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:180,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Detroit",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:90,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Detroit",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:756,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Detroit",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:378,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Detroit",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Detroit",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Detroit",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Detroit",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Detroit",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8500,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Detroit",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4250,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Detroit",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:9500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:181,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Detroit",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4750,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:90,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Detroit",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:700,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Detroit",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:350,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Minneapolis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Minneapolis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:100,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Minneapolis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:810,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Minneapolis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:405,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Minneapolis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:209,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Minneapolis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:104,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Minneapolis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Minneapolis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Minneapolis",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:9500,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:181,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Minneapolis",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4750,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:90,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Minneapolis",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Minneapolis",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:100,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Minneapolis",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:780,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Minneapolis",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:390,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Charlotte",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:152,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Charlotte",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:76,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Charlotte",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:650,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Charlotte",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:325,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Charlotte",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:180,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Charlotte",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:90,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Charlotte",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:756,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Charlotte",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:378,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Charlotte",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:152,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Charlotte",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4000,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:76,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Charlotte",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:153,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Charlotte",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:76,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Charlotte",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Charlotte",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Nashville",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.1,cashPrice:168,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Nashville",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4000,cabin:"economy",taxes:0,tripType:"oneway",value:2.1,cashPrice:84,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Nashville",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Nashville",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Nashville",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Nashville",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Nashville",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:180,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Nashville",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:90,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Nashville",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:728,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Nashville",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:364,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Nashville",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Nashville",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Nashville",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Nashville",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Phoenix",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8500,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:170,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Phoenix",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4250,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:85,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Phoenix",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Phoenix",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Phoenix",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:700,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Phoenix",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:350,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Phoenix",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:9500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:181,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Phoenix",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4750,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:90,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Phoenix",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Phoenix",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Phoenix",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Phoenix",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Phoenix",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:700,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Phoenix",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:350,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Phoenix",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:170,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Phoenix",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:85,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Phoenix",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:676,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Phoenix",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:338,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Washington DC",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Washington DC",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Washington DC",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:780,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Washington DC",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:390,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Washington DC",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:220,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Washington DC",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:110,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Washington DC",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:864,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Washington DC",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:432,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Washington DC",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Washington DC",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Washington DC",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:780,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Washington DC",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:390,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Washington DC",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:9000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Washington DC",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4500,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Washington DC",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:179,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Washington DC",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:2.1,cashPrice:89,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Washington DC",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:728,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Washington DC",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:364,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"San Francisco",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.2,cashPrice:198,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"San Francisco",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.2,cashPrice:99,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"San Francisco",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:3.0,cashPrice:840,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"San Francisco",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:3.0,cashPrice:420,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"San Francisco",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"San Francisco",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:100,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"San Francisco",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:810,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"San Francisco",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:405,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"San Francisco",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:11000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:209,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"San Francisco",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:5500,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:104,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"San Francisco",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:12000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:228,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"San Francisco",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:6000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:114,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"San Francisco",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:35000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:910,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"San Francisco",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:17500,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:455,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"San Francisco",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:209,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"San Francisco",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:104,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"San Francisco",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"San Francisco",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Salt Lake City",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:180,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Salt Lake City",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:90,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Salt Lake City",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:756,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Salt Lake City",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:378,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Salt Lake City",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8500,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:170,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Salt Lake City",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4250,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:85,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Salt Lake City",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Salt Lake City",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Salt Lake City",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:700,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Salt Lake City",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:350,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Salt Lake City",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:170,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Salt Lake City",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:85,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Salt Lake City",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:702,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Salt Lake City",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:351,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Salt Lake City",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Salt Lake City",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Salt Lake City",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:700,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Salt Lake City",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:350,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Portland",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.2,cashPrice:198,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Portland",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.2,cashPrice:99,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Portland",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:3.0,cashPrice:840,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Portland",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:3.0,cashPrice:420,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Portland",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:10000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Portland",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:5000,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:100,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Portland",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:220,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Portland",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:110,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Portland",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:864,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Portland",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:432,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Portland",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:200,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Portland",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:100,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Portland",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:780,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Portland",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:390,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Portland",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Portland",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Portland",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Portland",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Honolulu",airline:"Alaska",loyaltyKey:"atmos",loyaltyName:"Atmos (Alaska+Hawaiian)",cost:30000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Honolulu",airline:"Alaska",loyaltyKey:"atmos",loyaltyName:"Atmos (Alaska+Hawaiian)",cost:15000,cabin:"economy",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Honolulu",airline:"Alaska",loyaltyKey:"atmos",loyaltyName:"Atmos (Alaska+Hawaiian)",cost:50000,cabin:"business",taxes:25,tripType:"roundtrip",value:3.2,cashPrice:1600,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Honolulu",airline:"Alaska",loyaltyKey:"atmos",loyaltyName:"Atmos (Alaska+Hawaiian)",cost:25000,cabin:"business",taxes:10,tripType:"oneway",value:3.2,cashPrice:800,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Honolulu",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:35000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.2,cashPrice:770,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Honolulu",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:17500,cabin:"economy",taxes:10,tripType:"oneway",value:2.2,cashPrice:385,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Honolulu",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:55000,cabin:"business",taxes:25,tripType:"roundtrip",value:3.0,cashPrice:1650,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Honolulu",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:27500,cabin:"business",taxes:10,tripType:"oneway",value:3.0,cashPrice:825,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Honolulu",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:40000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:800,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Honolulu",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:20000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:400,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Honolulu",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:65000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:1820,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Honolulu",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:32500,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:910,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Honolulu",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:32000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.3,cashPrice:736,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Honolulu",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:16000,cabin:"economy",taxes:0,tripType:"oneway",value:2.3,cashPrice:368,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Honolulu",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:35000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:735,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Honolulu",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:17500,cabin:"economy",taxes:10,tripType:"oneway",value:2.1,cashPrice:367,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Honolulu",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:55000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.9,cashPrice:1595,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Honolulu",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:27500,cabin:"business",taxes:10,tripType:"oneway",value:2.9,cashPrice:797,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"San Diego",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:9500,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:190,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"San Diego",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4750,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:95,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"San Diego",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:189,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"San Diego",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.1,cashPrice:94,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"San Diego",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:784,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"San Diego",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:392,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"San Diego",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"San Diego",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"San Diego",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:780,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"San Diego",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:390,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"San Diego",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:209,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"San Diego",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:104,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"San Diego",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:800,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"San Diego",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:400,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"San Diego",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"San Diego",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"San Diego",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"San Diego",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Austin",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.1,cashPrice:168,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Austin",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4000,cabin:"economy",taxes:0,tripType:"oneway",value:2.1,cashPrice:84,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Austin",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Austin",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Austin",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Austin",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Austin",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Austin",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Austin",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:700,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Austin",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:350,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Austin",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:9500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:181,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Austin",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4750,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:90,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Austin",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Austin",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Austin",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:170,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Austin",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:85,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Austin",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:676,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Austin",airline:"Alaska",loyaltyKey:"alaska",loyaltyName:"Alaska Mileage Plan",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:338,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Raleigh",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Raleigh",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Raleigh",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Raleigh",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Raleigh",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:152,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Raleigh",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4000,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:76,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Raleigh",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:180,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Raleigh",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:90,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Raleigh",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:756,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Raleigh",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:378,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Raleigh",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:153,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Raleigh",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:76,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Raleigh",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Raleigh",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"New Orleans",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:160,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"New Orleans",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4000,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:80,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"New Orleans",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:180,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"New Orleans",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:90,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"New Orleans",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.7,cashPrice:756,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"New Orleans",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.7,cashPrice:378,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"New Orleans",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"New Orleans",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"New Orleans",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"New Orleans",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"New Orleans",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"New Orleans",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"New Orleans",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"New Orleans",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Tampa",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:8500,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:170,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Tampa",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4250,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:85,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Tampa",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Tampa",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Tampa",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:700,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Tampa",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:350,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Tampa",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Tampa",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Tampa",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Tampa",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Tampa",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:9000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:162,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Tampa",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4500,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:81,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Tampa",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:28000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:672,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Tampa",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:14000,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:336,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Tampa",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:7500,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:158,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Tampa",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:3750,cabin:"economy",taxes:10,tripType:"oneway",value:2.1,cashPrice:79,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Tampa",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:23000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:644,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Tampa",airline:"JetBlue",loyaltyKey:"jetblue",loyaltyName:"JetBlue TrueBlue",cost:11500,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:322,domestic:true,bookUrl:"https://www.jetblue.com/booking/"},
+  {destination:"Philadelphia",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:190,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Philadelphia",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:95,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Philadelphia",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:780,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Philadelphia",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:390,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Philadelphia",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:9000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:171,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Philadelphia",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:4500,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:85,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Philadelphia",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:11000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:209,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Philadelphia",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:5500,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:104,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Philadelphia",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:32000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:832,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Philadelphia",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:16000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:416,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Philadelphia",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:10000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:180,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Philadelphia",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:5000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:90,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Philadelphia",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:30000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:750,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Philadelphia",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:15000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:375,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Indianapolis",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:7500,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:143,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Indianapolis",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:3750,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:71,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Indianapolis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:152,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Indianapolis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:76,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Indianapolis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:625,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Indianapolis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:312,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Indianapolis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Indianapolis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Indianapolis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:676,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Indianapolis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:338,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Indianapolis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:144,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Indianapolis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:72,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Indianapolis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:600,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Indianapolis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:300,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Milwaukee",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:7000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:133,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Milwaukee",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:3500,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:66,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Milwaukee",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:7500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:143,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Milwaukee",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:3750,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:71,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Milwaukee",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:23000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:575,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Milwaukee",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:11500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:287,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Milwaukee",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:152,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Milwaukee",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:76,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Milwaukee",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:625,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Milwaukee",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:312,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Milwaukee",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:7500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:135,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Milwaukee",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:3750,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:67,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Milwaukee",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:23000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:552,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Milwaukee",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:11500,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:276,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"St. Louis",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:7500,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:150,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"St. Louis",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:3750,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:75,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"St. Louis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:152,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"St. Louis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:76,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"St. Louis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:625,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"St. Louis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:312,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"St. Louis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"St. Louis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"St. Louis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"St. Louis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"St. Louis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:144,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"St. Louis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:72,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"St. Louis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:600,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"St. Louis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:300,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Columbus",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:7500,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:143,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Columbus",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:3750,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:71,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Columbus",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:144,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Columbus",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:72,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Columbus",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:600,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Columbus",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:300,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Columbus",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Columbus",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Columbus",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Columbus",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Columbus",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:7500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:135,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Columbus",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:3750,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:67,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Columbus",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:23000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:552,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Columbus",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:11500,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:276,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Pittsburgh",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:7500,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:143,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Pittsburgh",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:3750,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:71,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Pittsburgh",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:152,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Pittsburgh",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:76,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Pittsburgh",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:625,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Pittsburgh",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:312,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Pittsburgh",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:8500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:162,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Pittsburgh",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4250,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:81,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Pittsburgh",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:26000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:650,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Pittsburgh",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:13000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:325,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Pittsburgh",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:144,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Pittsburgh",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:72,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Pittsburgh",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:600,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Pittsburgh",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:300,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Memphis",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:7000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.0,cashPrice:140,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Memphis",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:3500,cabin:"economy",taxes:0,tripType:"oneway",value:2.0,cashPrice:70,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Memphis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:8000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:160,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Memphis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:4000,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:80,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Memphis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:25000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.6,cashPrice:650,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Memphis",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:12500,cabin:"business",taxes:10,tripType:"oneway",value:2.6,cashPrice:325,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Memphis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:7500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.9,cashPrice:143,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Memphis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:3750,cabin:"economy",taxes:10,tripType:"oneway",value:1.9,cashPrice:71,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Memphis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:23000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:575,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Memphis",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:11500,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:287,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Memphis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:7500,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:135,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Memphis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:3750,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:67,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Memphis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:23000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:552,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Memphis",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:11500,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:276,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Maui",airline:"Alaska",loyaltyKey:"atmos",loyaltyName:"Atmos (Alaska+Hawaiian)",cost:25000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.6,cashPrice:650,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Maui",airline:"Alaska",loyaltyKey:"atmos",loyaltyName:"Atmos (Alaska+Hawaiian)",cost:12500,cabin:"economy",taxes:10,tripType:"oneway",value:2.6,cashPrice:325,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Maui",airline:"Alaska",loyaltyKey:"atmos",loyaltyName:"Atmos (Alaska+Hawaiian)",cost:45000,cabin:"business",taxes:25,tripType:"roundtrip",value:3.3,cashPrice:1485,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Maui",airline:"Alaska",loyaltyKey:"atmos",loyaltyName:"Atmos (Alaska+Hawaiian)",cost:22500,cabin:"business",taxes:10,tripType:"oneway",value:3.3,cashPrice:742,domestic:true,bookUrl:"https://www.alaskaair.com/booking/flight-search"},
+  {destination:"Maui",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:30000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.2,cashPrice:660,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Maui",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:15000,cabin:"economy",taxes:10,tripType:"oneway",value:2.2,cashPrice:330,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Maui",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:50000,cabin:"business",taxes:25,tripType:"roundtrip",value:3.0,cashPrice:1500,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Maui",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:25000,cabin:"business",taxes:10,tripType:"oneway",value:3.0,cashPrice:750,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Maui",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:28000,cabin:"economy",taxes:0,tripType:"roundtrip",value:2.3,cashPrice:644,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Maui",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:14000,cabin:"economy",taxes:0,tripType:"oneway",value:2.3,cashPrice:322,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Maui",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:35000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.0,cashPrice:700,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Maui",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:17500,cabin:"economy",taxes:10,tripType:"oneway",value:2.0,cashPrice:350,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Maui",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:60000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.8,cashPrice:1680,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Maui",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:30000,cabin:"business",taxes:10,tripType:"oneway",value:2.8,cashPrice:840,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Maui",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:30000,cabin:"economy",taxes:15,tripType:"roundtrip",value:2.1,cashPrice:630,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Maui",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:15000,cabin:"economy",taxes:10,tripType:"oneway",value:2.1,cashPrice:315,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Maui",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:50000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.9,cashPrice:1450,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Maui",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:25000,cabin:"business",taxes:10,tripType:"oneway",value:2.9,cashPrice:725,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Cancun",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:25000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:450,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Cancun",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:12500,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:225,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Cancun",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:50000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.5,cashPrice:1250,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Cancun",airline:"American",loyaltyKey:"american",loyaltyName:"AAdvantage",cost:25000,cabin:"business",taxes:10,tripType:"oneway",value:2.5,cashPrice:625,domestic:true,bookUrl:"https://www.aa.com/booking/find-flights"},
+  {destination:"Cancun",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:22000,cabin:"economy",taxes:0,tripType:"roundtrip",value:1.9,cashPrice:420,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Cancun",airline:"Southwest",loyaltyKey:"southwest",loyaltyName:"Rapid Rewards",cost:11000,cabin:"economy",taxes:0,tripType:"oneway",value:1.9,cashPrice:210,domestic:true,bookUrl:"https://www.southwest.com/air/booking/"},
+  {destination:"Cancun",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:25000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:450,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Cancun",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:12500,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:225,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Cancun",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:50000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:1200,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Cancun",airline:"United",loyaltyKey:"united",loyaltyName:"United MileagePlus",cost:25000,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:600,domestic:true,bookUrl:"https://www.united.com/en/us/flights/book/"},
+  {destination:"Cancun",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:28000,cabin:"economy",taxes:15,tripType:"roundtrip",value:1.8,cashPrice:504,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Cancun",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:14000,cabin:"economy",taxes:10,tripType:"oneway",value:1.8,cashPrice:252,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Cancun",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:55000,cabin:"business",taxes:25,tripType:"roundtrip",value:2.4,cashPrice:1320,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
+  {destination:"Cancun",airline:"Delta",loyaltyKey:"delta",loyaltyName:"Delta SkyMiles",cost:27500,cabin:"business",taxes:10,tripType:"oneway",value:2.4,cashPrice:660,domestic:true,bookUrl:"https://www.delta.com/us/en/flight-search/book-a-flight"},
 ];
 
 const HOTEL_DATA=[
@@ -476,7 +1309,31 @@ function Badge({children,color=T.gold,bg}){return <span style={{background:bg||c
 function Lbl({children}){return <label style={{fontSize:11,fontWeight:700,color:T.text2,letterSpacing:"0.07em",textTransform:"uppercase",display:"block",marginBottom:7}}>{children}</label>;}
 function TextInput({label,value,onChange,placeholder,type="text",min,hint}){return(<div style={{display:"flex",flexDirection:"column",gap:5}}>{label&&<Lbl>{label}</Lbl>}<input type={type} value={value} min={min} onChange={e=>onChange(e.target.value)} placeholder={placeholder} style={{background:T.surface2,border:`1px solid ${T.border}`,borderRadius:10,color:T.text,fontSize:15,padding:"9px 13px",outline:"none",fontFamily:"inherit"}} onFocus={e=>e.target.style.borderColor=T.blue} onBlur={e=>e.target.style.borderColor=T.border}/>{hint&&<div style={{fontSize:11,color:T.text3}}>{hint}</div>}</div>);}
 function NumInput({value,onChange,placeholder}){return <input type="text" inputMode="numeric" value={value} onChange={e=>onChange(e.target.value.replace(/[^0-9]/g,""))} placeholder={placeholder||"0"} style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:8,color:T.gold,fontSize:15,fontWeight:700,padding:"8px 12px",width:"100%",outline:"none",fontFamily:"inherit"}} onFocus={e=>e.target.style.borderColor=T.blue} onBlur={e=>e.target.style.borderColor=T.border}/>;}
-function LiveBanner({mode,origin,dest}){const url=mode==="hotels"?getRoomsUrl(dest):getSeatsUrl(origin,dest);const isH=mode==="hotels";return(<div style={{marginBottom:14,padding:"12px 15px",background:isH?T.tealLight:T.blueLight,border:`1px solid ${isH?T.teal+"44":T.blue+"44"}`,borderRadius:12}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:10}}><div><div style={{fontSize:12,fontWeight:700,color:isH?T.teal:T.blue,marginBottom:2}}>{isH?"🏨 Check Rooms.aero for live availability":"✈️ Check Seats.aero for live award space"}</div><div style={{fontSize:11,color:T.text3}}>{isH?"Real-time hotel award space":"Live saver award seats across all programs"}</div></div><a href={url} target="_blank" rel="noopener noreferrer" style={{background:isH?T.teal:T.blue,color:"#fff",padding:"7px 13px",borderRadius:8,fontSize:12,fontWeight:700,textDecoration:"none",whiteSpace:"nowrap",flexShrink:0}}>Open →</a></div></div>);}
+function LiveBanner(props){
+  var mode=props.mode; var origin=props.origin; var dest=props.dest;
+  var isDomestic=props.isDomestic||false;
+  var url=mode==="hotels"?getRoomsUrl(dest):getSeatsUrl(origin,dest);
+  var isH=mode==="hotels";
+  if(isDomestic){
+    return(
+      <div style={{marginBottom:14,display:"flex",flexDirection:"column",gap:8}}>
+        <div style={{padding:"10px 14px",background:T.greenLight,border:"1px solid "+T.green+"44",borderRadius:10,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div><div style={{fontSize:12,fontWeight:700,color:T.green,marginBottom:1}}>🟡 Southwest — no blackout dates</div><div style={{fontSize:11,color:T.text3}}>Easiest domestic award search</div></div>
+          <a href="https://www.southwest.com/air/booking/" target="_blank" rel="noopener noreferrer" style={{background:T.green,color:"#fff",padding:"6px 12px",borderRadius:8,fontSize:12,fontWeight:700,textDecoration:"none",whiteSpace:"nowrap"}}>Search →</a>
+        </div>
+        <div style={{padding:"10px 14px",background:T.blueLight,border:"1px solid "+T.blue+"44",borderRadius:10,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div><div style={{fontSize:12,fontWeight:700,color:T.blue,marginBottom:1}}>✈️ United — saver award search</div><div style={{fontSize:11,color:T.text3}}>Look for the Saver label for lowest points</div></div>
+          <a href="https://www.united.com/en/us/flights/book/" target="_blank" rel="noopener noreferrer" style={{background:T.blue,color:"#fff",padding:"6px 12px",borderRadius:8,fontSize:12,fontWeight:700,textDecoration:"none",whiteSpace:"nowrap"}}>Search →</a>
+        </div>
+        <div style={{padding:"10px 14px",background:T.surface2,border:"1px solid "+T.border,borderRadius:10,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div><div style={{fontSize:12,fontWeight:700,color:T.text,marginBottom:1}}>🔎 Points Path — Google Flights overlay</div><div style={{fontSize:11,color:T.text3}}>Free Chrome extension — shows award prices in Google Flights</div></div>
+          <a href="https://pointspath.co" target="_blank" rel="noopener noreferrer" style={{background:T.text,color:"#fff",padding:"6px 12px",borderRadius:8,fontSize:12,fontWeight:700,textDecoration:"none",whiteSpace:"nowrap"}}>Install →</a>
+        </div>
+      </div>
+    );
+  }
+  return(<div style={{marginBottom:14,padding:"12px 15px",background:isH?T.tealLight:T.blueLight,border:"1px solid "+(isH?T.teal+"44":T.blue+"44"),borderRadius:12}}><div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:10}}><div><div style={{fontSize:12,fontWeight:700,color:isH?T.teal:T.blue,marginBottom:2}}>{isH?"🏨 Check Rooms.aero for live availability":"✈️ Check Seats.aero for live award space"}</div><div style={{fontSize:11,color:T.text3}}>{isH?"Real-time hotel award space":"Live saver award seats across all programs"}</div></div><a href={url} target="_blank" rel="noopener noreferrer" style={{background:isH?T.teal:T.blue,color:"#fff",padding:"7px 13px",borderRadius:8,fontSize:12,fontWeight:700,textDecoration:"none",whiteSpace:"nowrap",flexShrink:0}}>Open →</a></div></div>);
+}
 
 // ─── PROGRAM ROW — local state prevents cursor reset bug ──────────────────────
 function ProgramRow({programKey,label,short,icon,rate,color,balanceUrl,balanceTip,savedValue,onSave}){
@@ -1272,29 +2129,117 @@ function LearnTab(){
   );
 }
 
-// ─── TOOLS HUB ───────────────────────────────────────────────────────────────
-function ToolsHub(){
-  return(
+// ─── TOOLS HUB ───────────────────────────────────────────────
+function ToolsHub() {
+  var [activeTab, setActiveTab] = useState("domestic");
+
+  var tabData = {
+    domestic: {label:"🇺🇸 Domestic", tools: AWARD_TOOLS.domestic, tip:"For domestic flights, go directly to the airline's own website — they always show their own award space first. Points Path is the best companion tool if you use Google Flights."},
+    international: {label:"🌍 International", tools: AWARD_TOOLS.international, tip:"For international awards, always confirm seat availability on Seats.aero or Point.me BEFORE transferring any points. Transfers are irreversible."},
+    hotels: {label:"🏨 Hotels", tools: AWARD_TOOLS.hotels, tip:"Rooms.aero is the equivalent of Seats.aero for hotels — it shows real-time award availability across all major chains in one place."},
+  };
+
+  var current = tabData[activeTab];
+
+  function ToolCard(props) {
+    var tool = props.tool;
+    return (
+      <a href={tool.url} target="_blank" rel="noopener noreferrer" style={{textDecoration:"none",display:"block"}}>
+        <div style={{padding:"14px 16px",background:tool.best?T.blueLight:T.surface2,border:"1px solid "+(tool.best?T.blue+"44":T.border),borderRadius:12,display:"flex",alignItems:"center",gap:12,transition:"all 0.15s"}}>
+          <div style={{width:42,height:42,borderRadius:10,background:tool.best?"linear-gradient(135deg,#1a56db,#2563eb)":T.surface,border:"1px solid "+(tool.best?T.blue+"44":T.border),display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>
+            {tool.icon}
+          </div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3,flexWrap:"wrap"}}>
+              <span style={{fontSize:14,fontWeight:800,color:T.text}}>{tool.name}</span>
+              {tool.best && <span style={{fontSize:10,fontWeight:700,color:"#fff",background:T.blue,borderRadius:4,padding:"2px 6px"}}>TOP PICK</span>}
+              <span style={{fontSize:10,fontWeight:700,color:tool.free?T.green:T.amber,background:tool.free?T.greenLight:T.amberLight,border:"1px solid "+(tool.free?T.green:T.amber)+"44",borderRadius:4,padding:"2px 6px"}}>{tool.free?"Free":"Paid"}</span>
+            </div>
+            <div style={{fontSize:12,color:T.text2,lineHeight:1.5}}>{tool.desc}</div>
+          </div>
+          <div style={{color:T.blue,fontSize:16,flexShrink:0}}>→</div>
+        </div>
+      </a>
+    );
+  }
+
+  return (
     <div>
-      <div style={{marginBottom:16}}><h2 style={{fontSize:22,fontWeight:800,color:T.text,margin:0}}>Award Search Tools</h2><p style={{color:T.text2,marginTop:5,fontSize:14}}>Use these alongside PointsWay to find and book live award availability</p></div>
-      <div style={{padding:"12px 14px",background:T.blueLight,border:`1px solid ${T.blue}33`,borderRadius:10,marginBottom:14,fontSize:13,color:T.text2,lineHeight:1.5}}><strong style={{color:T.blue}}>Tip:</strong> PointsWay shows you the best strategy. These tools confirm live seat availability before you transfer points. Always verify availability first!</div>
-      <div style={{display:"flex",flexDirection:"column",gap:10}}>
-        {AWARD_TOOLS.map(tool=>(
-          <a key={tool.name} href={tool.url} target="_blank" rel="noopener noreferrer" style={{textDecoration:"none"}}>
-            <Card><div style={{display:"flex",alignItems:"center",gap:12}}>
-              <div style={{width:40,height:40,borderRadius:10,background:T.blueLight,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{tool.icon}</div>
-              <div style={{flex:1}}>
-                <div style={{display:"flex",alignItems:"center",gap:7,marginBottom:3}}><span style={{fontSize:14,fontWeight:800,color:T.text}}>{tool.name}</span><Badge color={tool.free?T.green:T.amber} bg={tool.free?T.greenLight:T.amberLight}>{tool.free?"Free":"Paid"}</Badge></div>
-                <div style={{fontSize:12,color:T.text3}}>{tool.desc}</div>
-              </div>
-              <div style={{color:T.blue,fontSize:18}}>→</div>
-            </div></Card>
-          </a>
-        ))}
+      <div style={{marginBottom:16}}>
+        <h2 style={{fontSize:22,fontWeight:800,color:T.text,margin:0}}>Award Search Tools</h2>
+        <p style={{color:T.text2,marginTop:5,fontSize:14}}>The right tool depends on what you're searching for</p>
       </div>
+
+      {/* Tab switcher */}
+      <div style={{display:"flex",gap:8,marginBottom:14}}>
+        {Object.keys(tabData).map(function(key) {
+          var isActive = activeTab === key;
+          return (
+            <button key={key} onClick={function() { setActiveTab(key); }}
+              style={{flex:1,padding:"10px 4px",borderRadius:10,border:"1px solid "+(isActive?T.blue:T.border),background:isActive?T.blueLight:T.surface2,color:isActive?T.blue:T.text2,fontSize:12,fontWeight:isActive?800:500,cursor:"pointer",fontFamily:"inherit"}}>
+              {tabData[key].label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Tip for current tab */}
+      <div style={{marginBottom:14,padding:"12px 14px",background:T.amberLight,border:"1px solid "+T.amber+"44",borderRadius:10,fontSize:13,color:T.text2,lineHeight:1.5}}>
+        <strong style={{color:T.amber}}>Pro tip: </strong>{current.tip}
+      </div>
+
+      {/* Tool cards */}
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {current.tools.map(function(tool) {
+          return <ToolCard key={tool.name} tool={tool}/>;
+        })}
+      </div>
+
+      {/* How to use section for domestic */}
+      {activeTab === "domestic" && (
+        <div style={{marginTop:16,padding:"14px 16px",background:T.blueLight,border:"1px solid "+T.blue+"33",borderRadius:12}}>
+          <div style={{fontSize:13,fontWeight:700,color:T.blue,marginBottom:10}}>How to find domestic award seats</div>
+          {[
+            {step:"1",text:"Pick your route and dates in Google Flights to see cash prices and get a baseline."},
+            {step:"2",text:"Install Points Path (free Chrome extension) — it overlays award prices directly in Google Flights results."},
+            {step:"3",text:"Go to Southwest.com for any route Southwest flies — Rapid Rewards has no blackout dates and the search is straightforward."},
+            {step:"4",text:"Check United.com for saver space on United routes — look for the 'Saver' label which is the lowest points price."},
+            {step:"5",text:"For Delta routes, compare what Delta.com shows in SkyMiles vs what Flying Blue charges for the same Delta flight — Flying Blue is often cheaper."},
+          ].map(function(s) {
+            return (
+              <div key={s.step} style={{display:"flex",gap:10,marginBottom:8,alignItems:"flex-start"}}>
+                <div style={{width:22,height:22,borderRadius:"50%",background:T.blue,color:"#fff",fontSize:11,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{s.step}</div>
+                <div style={{fontSize:12,color:T.text2,lineHeight:1.6}}>{s.text}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* How to use section for international */}
+      {activeTab === "international" && (
+        <div style={{marginTop:16,padding:"14px 16px",background:T.blueLight,border:"1px solid "+T.blue+"33",borderRadius:12}}>
+          <div style={{fontSize:13,fontWeight:700,color:T.blue,marginBottom:10}}>The right order for international searches</div>
+          {[
+            {step:"1",text:"Search Seats.aero first — it shows real-time saver space across all programs. Filter by your route and cabin."},
+            {step:"2",text:"Use Point.me to compare which program offers the seat at the lowest points cost."},
+            {step:"3",text:"Confirm the aircraft type — check if the flight has the premium product you want (Qsuites, The Room, etc)."},
+            {step:"4",text:"THEN transfer your points — only after confirming availability. Never transfer speculatively."},
+            {step:"5",text:"Book immediately after transfer — award space can disappear while your points are in transit."},
+          ].map(function(s) {
+            return (
+              <div key={s.step} style={{display:"flex",gap:10,marginBottom:8,alignItems:"flex-start"}}>
+                <div style={{width:22,height:22,borderRadius:"50%",background:T.blue,color:"#fff",fontSize:11,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{s.step}</div>
+                <div style={{fontSize:12,color:T.text2,lineHeight:1.6}}>{s.text}</div>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
+
 
 // ─── QUIZ ────────────────────────────────────────────────────────────────────
 function QuizStep({onDone}){
@@ -1379,7 +2324,14 @@ function WalletStep({wallet,setWallet,onNext}){
 function SearchStep({search,setSearch,mode,setMode,filters,setFilters,onNext,onBack}){
   const [showSug,setShowSug]=useState(false);
   const [showFilters,setShowFilters]=useState(false);
-  const filteredDests=ALL_DESTS.filter(d=>d.toLowerCase().includes((search.destination||"").toLowerCase())&&(search.destination||"").length>0);
+  const rawInput=(search.destination||"").trim().toLowerCase();
+  const resolvedInput=resolveDestination(rawInput);
+  const destPool=(mode==="flights"&&(search.flightScope||"international")==="domestic")?DOMESTIC_DESTS:ALL_DESTS;
+  const filteredDests=rawInput.length>0?destPool.filter(d=>
+    d.toLowerCase().includes(rawInput)||
+    d.toLowerCase().includes(resolvedInput.toLowerCase())||
+    Object.entries(AIRPORT_MAP).some(([code,city])=>city===d&&code.startsWith(rawInput))
+  ):[];
   const canGo=search.destination&&(mode==="hotels"||search.origin);
   return(
     <div>
@@ -1397,13 +2349,19 @@ function SearchStep({search,setSearch,mode,setMode,filters,setFilters,onNext,onB
           {mode==="flights"&&(
             <>
               <div style={{marginBottom:12}}>
-                <Lbl>Trip Type</Lbl>
-                <div style={{display:"flex",gap:8}}>
-                  {[{v:"both",l:"All"},{v:"roundtrip",l:"Round Trip"},{v:"oneway",l:"One Way"}].map(({v,l})=>(
-                    <button key={v} onClick={()=>setSearch(p=>({...p,tripType:v,destination:""}))} style={{flex:1,padding:"8px 4px",borderRadius:10,cursor:"pointer",fontFamily:"inherit",background:(search.tripType||"both")===v?T.blueLight:T.surface2,border:`1px solid ${(search.tripType||"both")===v?T.blue:T.border}`,color:(search.tripType||"both")===v?T.blue:T.text2,fontSize:12,fontWeight:700}}>{l}</button>
+                <Lbl>Flight Type</Lbl>
+                <div style={{display:"flex",gap:8,marginBottom:10}}>
+                  {[{v:"international",l:"🌍 International"},{v:"domestic",l:"🇺🇸 Domestic USA"}].map(({v,l})=>(
+                    <button key={v} onClick={()=>setSearch(p=>({...p,flightScope:v,destination:"",tripType:v==="domestic"?"roundtrip":"oneway",cabin:v==="domestic"?"economy":"business"}))} style={{flex:1,padding:"9px 4px",borderRadius:10,cursor:"pointer",fontFamily:"inherit",background:(search.flightScope||"international")===v?T.blueLight:T.surface2,border:`1px solid ${(search.flightScope||"international")===v?T.blue:T.border}`,color:(search.flightScope||"international")===v?T.blue:T.text2,fontSize:13,fontWeight:700}}>{l}</button>
                   ))}
                 </div>
-                {(search.tripType==="oneway")&&<div style={{marginTop:8,padding:"8px 12px",background:T.greenLight,border:`1px solid ${T.green}44`,borderRadius:8,fontSize:12,color:T.green,fontWeight:600}}>✓ One-way search shows more available award seats</div>}
+                <div style={{display:"flex",gap:8}}>
+                  {[{v:"oneway",l:"One Way"},{v:"roundtrip",l:"Round Trip"},{v:"both",l:"Both"}].map(({v,l})=>(
+                    <button key={v} onClick={()=>setSearch(p=>({...p,tripType:v}))} style={{flex:1,padding:"7px 4px",borderRadius:10,cursor:"pointer",fontFamily:"inherit",background:(search.tripType||"oneway")===v?T.greenLight:T.surface2,border:`1px solid ${(search.tripType||"oneway")===v?T.green:T.border}`,color:(search.tripType||"oneway")===v?T.green:T.text2,fontSize:12,fontWeight:700}}>{l}</button>
+                  ))}
+                </div>
+                {(search.flightScope||"international")==="international"&&<div style={{marginTop:8,padding:"8px 12px",background:T.blueLight,border:`1px solid ${T.blue}44`,borderRadius:8,fontSize:12,color:T.blue,fontWeight:600}}>✈️ International: one-way bookings often show more award seats</div>}
+                {(search.flightScope||"international")==="domestic"&&<div style={{marginTop:8,padding:"8px 12px",background:T.greenLight,border:`1px solid ${T.green}44`,borderRadius:8,fontSize:12,color:T.green,fontWeight:600}}>🇺🇸 Domestic: Southwest, United, Delta and Alaska have the best domestic award rates</div>}
               </div>
               <TextInput label="From (Airport Code)" value={search.origin||""} onChange={v=>setSearch(p=>({...p,origin:v.toUpperCase().slice(0,3)}))} placeholder="ATL"/>
             </>
@@ -1411,7 +2369,7 @@ function SearchStep({search,setSearch,mode,setMode,filters,setFilters,onNext,onB
           <div style={{display:"flex",flexDirection:"column",gap:13,marginBottom:14,marginTop:mode==="flights"?13:0}}>
             <div style={{position:"relative"}}>
               <Lbl>{mode==="hotels"?"City / Destination":"To (City)"}</Lbl>
-              <input value={search.destination||""} onChange={e=>{setSearch(p=>({...p,destination:e.target.value}));setShowSug(true);}} placeholder="e.g. Tokyo or Atlanta"
+              <input value={search.destination||""} onChange={e=>{setSearch(p=>({...p,destination:e.target.value}));setShowSug(true);}} placeholder="City or airport code, e.g. Atlanta, DTW, LAX"
                 style={{background:T.surface2,border:`1px solid ${T.border}`,borderRadius:10,color:T.text,fontSize:15,padding:"9px 13px",outline:"none",fontFamily:"inherit",width:"100%"}}
                 onFocus={e=>e.target.style.borderColor=T.blue} onBlur={e=>e.target.style.borderColor=T.border}/>
               {showSug&&filteredDests.length>0&&(
@@ -1539,11 +2497,34 @@ function ResultsStep({results,wallet,search,mode,onSelect,onBack}){
           )}
           {!canPool&&<div style={{marginTop:8,padding:"6px 10px",background:T.redLight,borderRadius:8,fontSize:11,color:T.red,fontWeight:600}}>Need {fmt(r.cost)} — you have {fmt(pool?.total||0)} pooled toward {r.loyaltyName}</div>}
         </div>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",borderTop:"1px solid "+T.border,marginTop:10,paddingTop:8}}>
+        {/* Aircraft & cabin product — international flights only */}
+        {mode==="flights"&&!r.domestic&&(function(){
+          var prod=getCabinProduct(r.loyaltyKey,r.cabin);
+          if(!prod)return null;
+          return(
+            <div style={{marginTop:8,padding:"10px 12px",background:T.purpleLight,border:"1px solid "+T.purple+"33",borderRadius:10}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:4}}>
+                <div style={{fontSize:12,fontWeight:700,color:T.purple}}>{prod.icon} {prod.product}</div>
+                <div style={{display:"flex",gap:2}}>
+                  {[1,2,3,4,5].map(function(s){return <span key={s} style={{fontSize:10,color:s<=prod.rating?T.gold:T.border}}>★</span>;})}
+                </div>
+              </div>
+              <div style={{fontSize:11,color:T.text3,marginBottom:5}}>{prod.aircraft}</div>
+              <div style={{display:"flex",flexWrap:"wrap",gap:4,marginBottom:5}}>
+                {prod.features.map(function(f){return <span key={f} style={{fontSize:10,background:T.purpleLight,border:"1px solid "+T.purple+"22",borderRadius:4,padding:"2px 6px",color:T.purple}}>{f}</span>;})}
+              </div>
+              <div style={{fontSize:11,color:T.text3,fontStyle:"italic"}}>{prod.note}</div>
+            </div>
+          );
+        })()}
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",borderTop:"1px solid "+T.border,marginTop:10,paddingTop:8,gap:8,flexWrap:"wrap"}}>
           <button onClick={function(e){e.stopPropagation();setExpandedResult(isExpanded?null:r);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:12,color:T.blue,fontWeight:700,fontFamily:"inherit",padding:0}}>
             {isExpanded?"▲ Hide explanation":"▼ How does this work?"}
           </button>
-          <ShareButton deal={r}/>
+          <div style={{display:"flex",gap:6,alignItems:"center"}}>
+            {r.bookUrl&&<a href={r.bookUrl} target="_blank" rel="noopener noreferrer" onClick={function(e){e.stopPropagation();}} style={{padding:"5px 10px",borderRadius:7,background:T.greenLight,border:"1px solid "+T.green+"44",color:T.green,fontSize:11,fontWeight:700,textDecoration:"none"}}>Book on {r.loyaltyName.split(" ")[0]} →</a>}
+            <ShareButton deal={r}/>
+          </div>
         </div>
         {isExpanded&&(
           <div style={{marginTop:10,padding:"12px",background:T.blueLight,borderRadius:10,fontSize:13,color:T.text2,lineHeight:1.7}}>
@@ -1574,8 +2555,8 @@ function ResultsStep({results,wallet,search,mode,onSelect,onBack}){
 
   return(
     <div>
-      <div style={{marginBottom:16}}><h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Best Redemptions</h2><p style={{color:T.text2,marginTop:5,fontSize:14}}>{mode==="flights"?`${search.origin} → ${search.destination} · ${search.cabin}${search.tripType==="oneway"?" · One Way":search.tripType==="roundtrip"?" · Round Trip":""}`:`Hotels in ${search.destination}`}</p></div>
-      <LiveBanner mode={mode} origin={search.origin||""} dest={search.destination||""}/>
+      <div style={{marginBottom:16}}><h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Best Redemptions</h2><p style={{color:T.text2,marginTop:5,fontSize:14}}>{mode==="flights"?((search.flightScope||"international")==="domestic"?`🇺🇸 Domestic to ${search.destination} · ${search.cabin}`:(`${search.origin} → ${search.destination} · ${search.cabin}${search.tripType==="oneway"?" · One Way":search.tripType==="roundtrip"?" · Round Trip":""}`)): `Hotels in ${search.destination}`}</p></div>
+      <LiveBanner mode={mode} origin={search.origin||""} dest={search.destination||""} isDomestic={search.flightScope==="domestic"}/>
       {results.length>0&&<div style={{marginBottom:14,padding:"12px 14px",background:T.amberLight,border:`1px solid ${T.amber}33`,borderRadius:10,fontSize:13,color:T.text2,lineHeight:1.5}}>💡 <strong>New to this?</strong> Tap any result and click "How does this redemption work?" for a plain-English explanation.</div>}
       {mode==="flights"&&maneuvers.length>0&&(
         <div style={{marginBottom:14}}>
@@ -1653,7 +2634,7 @@ function GuideStep({redemption,wallet,search,mode,onRestart}){
         </div>
       </Card>
       {cashSaved&&cashSaved>0&&<div style={{marginBottom:14,padding:"14px 16px",background:T.greenLight,border:`1px solid ${T.green}44`,borderRadius:12,textAlign:"center"}}><div style={{fontSize:13,color:T.text2,marginBottom:4}}>Instead of paying <strong>{redemption.cashPrice?fmtD(redemption.cashPrice):"full price"}</strong> in cash, you pay just ~${redemption.taxes||0} in taxes.</div><div style={{fontSize:20,fontWeight:800,color:T.green}}>Total savings: {fmtD(cashSaved)}</div><div style={{fontSize:12,color:T.text3,marginTop:4}}>That is {redemption.value}¢ per point — {redemption.value>=5?"exceptional":"excellent"} vs the standard 1¢.</div></div>}
-      <LiveBanner mode={mode} origin={search.origin||""} dest={redemption.destination||search.destination}/>
+      <LiveBanner mode={mode} origin={search.origin||""} dest={redemption.destination||search.destination} isDomestic={false}/>
       {pool&&<Card style={{marginBottom:14,background:needsPool?T.purpleLight:T.greenLight,border:`1px solid ${needsPool?T.purple+"33":T.green+"44"}`}}><div style={{fontSize:12,fontWeight:700,color:needsPool?T.purple:T.green,marginBottom:8}}>{needsPool?"💡 Points Pooling Plan":"✅ Points Breakdown"}</div><div style={{display:"flex",flexWrap:"wrap",gap:6}}>{pool.sources.map(s=><div key={s.key} style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:8,padding:"6px 10px",fontSize:12}}><div style={{fontWeight:700,color:T.text}}>{s.label}</div><div style={{color:T.text3}}>{fmt(s.bal)} pts{s.direct?"":" → "+redemption.loyaltyName}</div></div>)}<div style={{background:needsPool?T.purple+"18":T.greenLight,border:`1px solid ${needsPool?T.purple+"44":T.green+"44"}`,borderRadius:8,padding:"6px 10px",fontSize:12,fontWeight:800,color:needsPool?T.purple:T.green,display:"flex",alignItems:"center"}}>{fmt(pool.total)} / {fmt(redemption.cost)} needed</div></div></Card>}
       {LOYALTY_PARTNERS[redemption.loyaltyKey]&&<Card style={{marginBottom:14,background:T.blueLight,border:`1px solid ${T.blue}33`}}><div style={{fontSize:12,fontWeight:700,color:T.blue,marginBottom:4}}>🔀 Bonus: {LOYALTY_PARTNERS[redemption.loyaltyKey].name} can also book</div><div style={{fontSize:12,color:T.text2,marginBottom:6}}><strong>{LOYALTY_PARTNERS[redemption.loyaltyKey].books.join(", ")}</strong></div><a href={LOYALTY_PARTNERS[redemption.loyaltyKey].site} target="_blank" rel="noopener noreferrer" style={{fontSize:12,color:T.blue,fontWeight:700,textDecoration:"none"}}>View all partners →</a></Card>}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}><div style={{fontSize:11,fontWeight:800,color:T.text3,textTransform:"uppercase",letterSpacing:"0.09em"}}>Steps to Book</div><div style={{fontSize:12,color:done===steps.length?T.green:T.text3}}>{done}/{steps.length} complete{done===steps.length?" 🎉":""}</div></div>
@@ -1995,14 +2976,18 @@ export default function App(){
   const pooled=buildPooled(wallet);
 
   function computeResults(){
-    const dest=(search.destination||"").trim().toLowerCase();
-    const minVal=parseFloat(filters.minValue)||1.5;
+    const rawDest=(search.destination||"").trim();
+    const dest=resolveDestination(rawDest).toLowerCase();
+    const flightScope=search.flightScope||"international";
     const tripType=search.tripType||"both";
+    const minVal=parseFloat(filters.minValue)||(flightScope==="domestic"?0:1.5);
     if(mode==="flights"){
       let m=FLIGHT_DATA.filter(s=>{
         if(s.destination.toLowerCase()!==dest)return false;
         if(s.cabin!==search.cabin)return false;
         if(tripType!=="both"&&s.tripType!==tripType)return false;
+        if(flightScope==="domestic"&&!s.domestic)return false;
+        if(flightScope==="international"&&s.domestic)return false;
         if(minVal>0&&s.value<minVal)return false;
         if(filters.maxPoints&&s.cost>parseFloat(filters.maxPoints))return false;
         if(filters.maxTaxes&&s.taxes>parseFloat(filters.maxTaxes))return false;
