@@ -13,20 +13,20 @@ const T = {
 // ─── FEATURED REDEMPTION OF THE WEEK ──────────────────────────────────────────
 // Update this object weekly for fresh content
 const FEATURED = {
-  week:"May 2025",
-  headline:"ANA First Class to Tokyo",
-  subline:"One way · Book via Virgin Atlantic",
-  points:55000,
-  loyaltyName:"Virgin Atlantic Flying Club",
-  cabin:"first",
-  destination:"Tokyo",
-  cashValue:4000,
-  taxes:110,
-  value:7.1,
-  cards:["Amex MR","Chase UR","Capital One","Bilt"],
-  why:"Virgin Atlantic prices ANA First Class at just 55,000 miles one-way — a seat that costs $4,000+ in cash. Four major bank programs transfer directly to Virgin Atlantic, making this one of the most accessible luxury redemptions in the hobby. Award space opens frequently on ANA metal.",
-  howToFind:"Search nonstop on Seats.aero using the Virgin Atlantic program filter. Best availability 2-4 months out on weekdays.",
-  seatsUrl:"https://seats.aero/search?origin=JFK&destination=NRT",
+  week: "August 2026",
+  headline: "Iberia Business Class to Madrid",
+  subline: "One way · Off-peak dates · Book via Iberia Plus",
+  points: 41000,
+  loyaltyName: "Iberia Plus (Avios)",
+  cabin: "business",
+  destination: "Madrid",
+  cashValue: 3500,
+  taxes: 120,
+  value: 8.2,
+  cards: ["Amex MR", "Chase UR", "Bilt", "Wells Fargo"],
+  why: "Iberia prices transatlantic business class by distance — JFK, BOS, ORD, and IAD to Madrid for just 41,000 Avios one-way off-peak. The new A350 suites have sliding privacy doors and fully lie-flat beds. Cash equivalent is $3,500+. This is one of the cheapest ways to fly business class across the Atlantic with any program.",
+  howToFind: "Search iberia.com directly for off-peak dates. Best availability Jan–April 2027. Look for the A350 aircraft for the new suite with sliding door. Transfer Avios from Chase (instant), Amex, Bilt, or Wells Fargo.",
+  seatsUrl: "https://www.iberia.com/us/avios/flights/",
 };
 
 // ─── TRANSFER BONUS ALERTS ────────────────────────────────────────────────────
