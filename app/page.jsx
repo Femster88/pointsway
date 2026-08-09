@@ -13,20 +13,20 @@ const T = {
 // ─── FEATURED REDEMPTION OF THE WEEK ──────────────────────────────────────────
 // Update this object weekly for fresh content
 const FEATURED = {
-  week: "August 2026",
-  headline: "Iberia Business Class to Madrid",
-  subline: "One way · Off-peak dates · Book via Iberia Plus",
-  points: 41000,
-  loyaltyName: "Iberia Plus (Avios)",
-  cabin: "business",
-  destination: "Madrid",
-  cashValue: 3500,
-  taxes: 120,
-  value: 8.2,
-  cards: ["Amex MR", "Chase UR", "Bilt", "Wells Fargo"],
-  why: "Iberia prices transatlantic business class by distance — JFK, BOS, ORD, and IAD to Madrid for just 41,000 Avios one-way off-peak. The new A350 suites have sliding privacy doors and fully lie-flat beds. Cash equivalent is $3,500+. This is one of the cheapest ways to fly business class across the Atlantic with any program.",
-  howToFind: "Search iberia.com directly for off-peak dates. Best availability Jan–April 2027. Look for the A350 aircraft for the new suite with sliding door. Transfer Avios from Chase (instant), Amex, Bilt, or Wells Fargo.",
-  seatsUrl: "https://www.iberia.com/us/avios/flights/",
+  week:"May 2025",
+  headline:"ANA First Class to Tokyo",
+  subline:"One way · Book via Virgin Atlantic",
+  points:55000,
+  loyaltyName:"Virgin Atlantic Flying Club",
+  cabin:"first",
+  destination:"Tokyo",
+  cashValue:4000,
+  taxes:110,
+  value:7.1,
+  cards:["Amex MR","Chase UR","Capital One","Bilt"],
+  why:"Virgin Atlantic prices ANA First Class at just 55,000 miles one-way — a seat that costs $4,000+ in cash. Four major bank programs transfer directly to Virgin Atlantic, making this one of the most accessible luxury redemptions in the hobby. Award space opens frequently on ANA metal.",
+  howToFind:"Search nonstop on Seats.aero using the Virgin Atlantic program filter. Best availability 2-4 months out on weekdays.",
+  seatsUrl:"https://seats.aero/search?origin=JFK&destination=NRT",
 };
 
 // ─── TRANSFER BONUS ALERTS ────────────────────────────────────────────────────
@@ -2656,6 +2656,115 @@ function GuideStep({redemption,wallet,search,mode,onRestart}){
   );
 }
 
+// ─── FOUNDER STORY ───────────────────────────────────────────────
+function FounderStory() {
+  var [expanded, setExpanded] = useState(false);
+  return (
+    <div style={{width:"100%",marginBottom:20}}>
+      <div style={{borderRadius:16,overflow:"hidden",border:"1px solid "+T.goldBorder,boxShadow:"0 2px 16px rgba(184,134,11,0.08)"}}>
+
+        {/* Header */}
+        <div style={{background:"linear-gradient(135deg,#1a202c,#2d3748)",padding:"18px 20px"}}>
+          <div style={{fontSize:10,color:"#a0aec0",textTransform:"uppercase",letterSpacing:"0.1em",marginBottom:6}}>
+            Why PointsWay exists
+          </div>
+          <div style={{fontSize:17,fontWeight:800,color:"#fff",lineHeight:1.4,marginBottom:4}}>
+            For the family of 6 heading to Disney. And the couple dreaming of Europe in First Class.
+          </div>
+          <div style={{fontSize:12,color:"#a0aec0"}}>
+            Points and miles are for everyone — not just frequent flyers.
+          </div>
+        </div>
+
+        {/* Story */}
+        <div style={{background:T.surface,padding:"18px 20px"}}>
+          {/* Real example callout */}
+          <div style={{marginBottom:16,padding:"14px 16px",background:T.goldLight,border:"1px solid "+T.goldBorder,borderRadius:12}}>
+            <div style={{fontSize:11,fontWeight:700,color:T.gold,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6}}>
+              A real redemption
+            </div>
+            <div style={{fontSize:15,fontWeight:800,color:T.text,marginBottom:6}}>
+              Family of 6 to Disney World — flights and hotel
+            </div>
+            <div style={{display:"flex",gap:20,flexWrap:"wrap",marginBottom:8}}>
+              <div>
+                <div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>Cash cost</div>
+                <div style={{fontSize:18,fontWeight:800,color:T.red,textDecoration:"line-through"}}>$4,200+</div>
+              </div>
+              <div>
+                <div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>We paid</div>
+                <div style={{fontSize:18,fontWeight:800,color:T.green}}>$188</div>
+              </div>
+              <div>
+                <div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>How</div>
+                <div style={{fontSize:14,fontWeight:700,color:T.text}}>Points + miles</div>
+              </div>
+            </div>
+            <div style={{fontSize:12,color:T.text2,lineHeight:1.5}}>
+              $188 covered taxes only. Flights and hotel were fully paid with points — money that would have come straight out of our family budget.
+            </div>
+          </div>
+
+          {/* Next goal */}
+          <div style={{marginBottom:16,padding:"12px 14px",background:T.purpleLight,border:"1px solid "+T.purple+"44",borderRadius:12,display:"flex",gap:12,alignItems:"flex-start"}}>
+            <div style={{fontSize:24,flexShrink:0}}>✈️</div>
+            <div>
+              <div style={{fontSize:13,fontWeight:700,color:T.purple,marginBottom:3}}>Next goal: Europe in First Class</div>
+              <div style={{fontSize:12,color:T.text2,lineHeight:1.5}}>
+                Wife and I. Kids with the grandparents. ANA First Class to Japan or Iberia Business to Madrid — still deciding. Either way, points are making it happen.
+              </div>
+            </div>
+          </div>
+
+          {/* Expandable section */}
+          <button onClick={function() { setExpanded(!expanded); }}
+            style={{width:"100%",padding:"10px 0",background:"none",border:"none",borderTop:"1px solid "+T.border,cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center",fontFamily:"inherit"}}>
+            <span style={{fontSize:13,fontWeight:700,color:T.text}}>The rules we live by</span>
+            <span style={{fontSize:12,color:T.text3}}>{expanded?"▲ less":"▼ read more"}</span>
+          </button>
+
+          {expanded && (
+            <div style={{paddingTop:14}}>
+              <div style={{display:"flex",flexDirection:"column",gap:10,marginBottom:16}}>
+                {[
+                  {icon:"✅", rule:"Never go into debt chasing points", desc:"If you can't pay the statement off in full this month, the points aren't worth it. Full stop."},
+                  {icon:"✅", rule:"Don't overspend for a sign-up bonus", desc:"A 60,000-point bonus isn't worth spending $3,000 you wouldn't have spent anyway. Spend what you were already going to spend."},
+                  {icon:"✅", rule:"Pay your statement off monthly", desc:"Interest charges will wipe out the value of any points you earn. Every time, without exception."},
+                  {icon:"✅", rule:"Use cards that fit your lifestyle", desc:"4x on dining only matters if you actually eat out. Pick cards that reward what you actually spend money on."},
+                  {icon:"✅", rule:"Don't change your lifestyle for the card", desc:"The points follow your life — not the other way around. This is a tool, not an obsession."},
+                ].map(function(item) {
+                  return (
+                    <div key={item.rule} style={{display:"flex",gap:10,alignItems:"flex-start",padding:"10px 12px",background:T.greenLight,border:"1px solid "+T.green+"33",borderRadius:10}}>
+                      <span style={{fontSize:16,flexShrink:0}}>{item.icon}</span>
+                      <div>
+                        <div style={{fontSize:13,fontWeight:700,color:T.green,marginBottom:2}}>{item.rule}</div>
+                        <div style={{fontSize:12,color:T.text2,lineHeight:1.5}}>{item.desc}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Rally cry */}
+              <div style={{padding:"16px",background:"linear-gradient(135deg,#1a202c,#2d3748)",borderRadius:12,textAlign:"center"}}>
+                <div style={{fontSize:14,color:"#a0aec0",marginBottom:8,lineHeight:1.6}}>
+                  This is a hobby for some. A passion for others. But we all agree on one thing —
+                </div>
+                <div style={{fontSize:18,fontWeight:800,color:T.gold,lineHeight:1.4}}>
+                  We should not let the big banks win this.
+                </div>
+                <div style={{fontSize:12,color:"#718096",marginTop:8}}>
+                  You earned those points. Make them work for you.
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── EMAIL CAPTURE ───────────────────────────────────────────────
 var BUTTONDOWN_URL = "https://buttondown.com/api/emails/embed-subscribe/babafemi";
 
@@ -3032,6 +3141,7 @@ export default function App(){
           {sharedDeal && (
             <SharedDealCard deal={sharedDeal} onEnter={()=>setScreen("app")}/>
           )}
+          <FounderStory/>
           <QuizStep onDone={()=>setScreen("app")}/>
           <EmailCapture/>
         </div>
