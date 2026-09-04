@@ -2306,6 +2306,7 @@ function WalletStep({wallet,setWallet,onNext}){
                 <div><div style={{fontSize:10,color:T.text3,textTransform:"uppercase"}}>You Save</div><div style={{fontSize:16,fontWeight:800,color:T.green}}>{fmtD(topRec.cashPrice?topRec.cashPrice-(topRec.taxes||0):0)}</div></div>
               </div>
               <div style={{fontSize:12,color:T.text2}}>That is <strong style={{color:T.green}}>{topRec.value}¢ per point</strong> — {topRec.value>=5?"exceptional":"excellent"} value vs 1¢ if you paid cash.</div>
+              <div style={{fontSize:11,color:T.text3,marginTop:6,fontStyle:"italic"}}>Points shown are estimates. Verify exact pricing on the program's website before transferring.</div>
             </div>
           )}
         </>
@@ -2419,6 +2420,7 @@ function SearchStep({search,setSearch,mode,setMode,filters,setFilters,onNext,onB
               </div>
             </Card>
           )}
+          <div style={{fontSize:11,color:T.text3,textAlign:"center",marginBottom:8,lineHeight:1.5}}>Results show estimated award costs based on published charts. Verify exact pricing before transferring points.</div>
           <div style={{display:"flex",gap:10}}>
             <button onClick={onBack} style={{flex:0,padding:"13px 16px",borderRadius:12,border:`1px solid ${T.border}`,background:T.surface,color:T.text2,cursor:"pointer",fontSize:14,fontFamily:"inherit"}}>← Back</button>
             <button onClick={onNext} disabled={!canGo} style={{flex:1,padding:"13px",borderRadius:12,border:"none",background:canGo?"linear-gradient(135deg,#1a56db,#2563eb)":"#e2e8f0",color:canGo?"#fff":"#a0aec0",fontSize:15,fontWeight:800,cursor:canGo?"pointer":"not-allowed",fontFamily:"inherit"}}>Find Best Redemptions →</button>
@@ -2475,6 +2477,7 @@ function ResultsStep({results,wallet,search,mode,onSelect,onBack}){
             <div style={{textAlign:"right",flexShrink:0}}>
               <div style={{fontSize:22,fontWeight:800,color:T.gold}}>{fmt(r.cost)}</div>
               <div style={{fontSize:11,color:T.text3}}>{mode==="hotels"?"pts/night":"pts"}</div>
+              <div style={{fontSize:9,color:T.text3,marginTop:1,fontStyle:"italic"}}>est. — verify on site</div>
               {mode==="flights"&&<div style={{fontSize:11,color:T.text3}}>+~${r.taxes} tax</div>}
               {mode==="hotels"&&<div style={{fontSize:11,color:T.text3}}>cash ~${r.cashValue}/nt</div>}
               <div style={{marginTop:4,background:T.greenLight,color:T.green,borderRadius:6,padding:"2px 7px",fontSize:12,fontWeight:700}}>{r.value}¢/pt</div>
@@ -2557,6 +2560,13 @@ function ResultsStep({results,wallet,search,mode,onSelect,onBack}){
     <div>
       <div style={{marginBottom:16}}><h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Best Redemptions</h2><p style={{color:T.text2,marginTop:5,fontSize:14}}>{mode==="flights"?((search.flightScope||"international")==="domestic"?`🇺🇸 Domestic to ${search.destination} · ${search.cabin}`:(`${search.origin} → ${search.destination} · ${search.cabin}${search.tripType==="oneway"?" · One Way":search.tripType==="roundtrip"?" · Round Trip":""}`)): `Hotels in ${search.destination}`}</p></div>
       <LiveBanner mode={mode} origin={search.origin||""} dest={search.destination||""} isDomestic={search.flightScope==="domestic"}/>
+      {/* Data disclaimer — always visible */}
+      <div style={{marginBottom:12,padding:"10px 14px",background:T.surface2,border:"1px solid "+T.border,borderRadius:10,display:"flex",gap:10,alignItems:"flex-start"}}>
+        <span style={{fontSize:16,flexShrink:0}}>ℹ️</span>
+        <div style={{fontSize:12,color:T.text3,lineHeight:1.5}}>
+          <strong style={{color:T.text2}}>Points shown are estimates</strong> based on published award charts and typical redemption ranges. Actual costs vary by route, date, cabin, and availability. Always verify the exact price on the program's website or <a href="https://seats.aero" target="_blank" rel="noopener noreferrer" style={{color:T.blue,fontWeight:700,textDecoration:"none"}}>Seats.aero</a> before transferring any points.
+        </div>
+      </div>
       {results.length>0&&<div style={{marginBottom:14,padding:"12px 14px",background:T.amberLight,border:`1px solid ${T.amber}33`,borderRadius:10,fontSize:13,color:T.text2,lineHeight:1.5}}>💡 <strong>New to this?</strong> Tap any result and click "How does this redemption work?" for a plain-English explanation.</div>}
       {mode==="flights"&&maneuvers.length>0&&(
         <div style={{marginBottom:14}}>
