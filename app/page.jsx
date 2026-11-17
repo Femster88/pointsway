@@ -2222,17 +2222,17 @@ function QuizStep({onDone}){
     return "Start with the wallet screen, enter your balances, and we will find your best redemption.";
   }
   return(
-    <div>
+    <div id="quiz" style={{scrollMarginTop:16}}>
       <div style={{textAlign:"center",padding:"20px 0 24px"}}>
         <div style={{fontSize:40,marginBottom:12}}>✈️</div>
-        <h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Welcome to PointsWay</h2>
+        <h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Build your plan</h2>
         <p style={{color:T.text2,marginTop:8,fontSize:14,lineHeight:1.6}}>Answer 3 quick questions and we will show you exactly where to start. Takes 30 seconds.</p>
       </div>
       <Card style={{marginBottom:14}}><div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:12}}>1. Do you have any credit cards?</div><Opt val="yes" current={q1} set={setQ1}>Yes, I have at least one</Opt><Opt val="notSure" current={q1} set={setQ1}>Not sure which ones earn points</Opt><Opt val="no" current={q1} set={setQ1}>No credit cards yet</Opt></Card>
       <Card style={{marginBottom:14}}><div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:12}}>2. Have you ever earned airline or hotel points?</div><Opt val="yes" current={q2} set={setQ2}>Yes, I have some points somewhere</Opt><Opt val="no" current={q2} set={setQ2}>Not sure, probably not</Opt></Card>
       <Card style={{marginBottom:14}}><div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:12}}>3. What is your travel goal?</div><Opt val="flight" current={q3} set={setQ3}>✈️ Free domestic flight</Opt><Opt val="international" current={q3} set={setQ3}>🌍 Free international trip</Opt><Opt val="business" current={q3} set={setQ3}>🛋️ Fly Business or First Class for almost free</Opt><Opt val="hotel" current={q3} set={setQ3}>🏨 Free hotel nights at nice properties</Opt></Card>
       {allDone&&<div style={{marginBottom:16,padding:"16px",background:T.greenLight,border:`1px solid ${T.green}44`,borderRadius:12}}><div style={{fontSize:12,fontWeight:700,color:T.green,marginBottom:6}}>💡 Your Recommended Starting Point</div><div style={{fontSize:14,color:T.text,lineHeight:1.6}}>{getRec()}</div></div>}
-      <button onClick={onDone} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#1a56db,#2563eb)",color:"#fff",fontSize:15,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>{allDone?"Let's Find Your Best Redemption →":"Skip to the App →"}</button>
+      <button onClick={onDone} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#1a56db,#2563eb)",color:"#fff",fontSize:15,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>{allDone?"Let's Find Your Best Redemption →":"Skip the quiz →"}</button>
     </div>
   );
 }
@@ -2633,9 +2633,31 @@ function GuideStep({redemption,wallet,search,mode,onRestart}){
   );
 }
 
+// ─── HERO ─────────────────────────────────────────────────────────────────────
+function Hero() {
+  function goToQuiz() {
+    var el = document.getElementById("quiz");
+    if (el) el.scrollIntoView({behavior:"smooth"});
+  }
+  return (
+    <div style={{textAlign:"center",padding:"8px 4px 24px"}}>
+      <h1 style={{fontSize:28,fontWeight:800,color:T.text,lineHeight:1.25,margin:"0 0 10px"}}>
+        Tell us what cards you have. We'll show you exactly what to book.
+      </h1>
+      <p style={{fontSize:15,color:T.text2,lineHeight:1.6,margin:"0 0 18px"}}>
+        PointsWay turns the credit card points you already have into a simple travel plan. Built for everyday travelers and families, not just frequent flyers.
+      </p>
+      <button onClick={goToQuiz} style={{width:"100%",maxWidth:360,padding:"14px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#1a56db,#2563eb)",color:"#fff",fontSize:16,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>
+        Build my plan →
+      </button>
+      <div style={{fontSize:12,color:T.text3,marginTop:8}}>Free · No signup · Takes 30 seconds</div>
+    </div>
+  );
+}
+
 // ─── FOUNDER STORY ───────────────────────────────────────────────
 function FounderStory() {
-  var [expanded, setExpanded] = useState(false);
+  var [expanded, setExpanded] = useState(true);
   return (
     <div style={{width:"100%",marginBottom:20}}>
       <div style={{borderRadius:16,overflow:"hidden",border:"1px solid "+T.goldBorder,boxShadow:"0 2px 16px rgba(184,134,11,0.08)"}}>
@@ -3110,7 +3132,7 @@ export default function App(){
       <div style={{minHeight:"100vh",background:T.bg,fontFamily:"'DM Sans','Segoe UI',sans-serif",display:"flex",flexDirection:"column",alignItems:"center",padding:"0 16px 40px"}}>
         <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap');*{box-sizing:border-box;}input::placeholder{color:#a0aec0;}a:hover{opacity:0.85;}button:active{transform:scale(0.98);}`}</style>
         <div style={{width:"100%",maxWidth:540,paddingTop:22,paddingBottom:16,borderBottom:`1px solid ${T.border}`,marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <div><div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:T.gold}}>✦ PointsWay</div><div style={{fontSize:11,color:T.text3,letterSpacing:"0.12em",textTransform:"uppercase",marginTop:2}}>Points Travel Optimizer</div></div>
+          <div><div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:T.gold}}>✦ PointsWay</div><div style={{fontSize:11,color:T.text3,letterSpacing:"0.12em",textTransform:"uppercase",marginTop:2}}>Your points, planned</div></div>
           <button onClick={()=>setScreen("app")} style={{fontSize:12,color:T.blue,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",fontWeight:700}}>Skip to app →</button>
           <div style={{fontSize:10,color:T.text3,marginTop:4}}>🌍 Free · No signup</div>
         </div>
@@ -3118,6 +3140,7 @@ export default function App(){
           {sharedDeal && (
             <SharedDealCard deal={sharedDeal} onEnter={()=>setScreen("app")}/>
           )}
+          <Hero/>
           <FounderStory/>
           <QuizStep onDone={()=>setScreen("app")}/>
           <EmailCapture/>
@@ -3130,7 +3153,7 @@ export default function App(){
     <div style={{minHeight:"100vh",background:T.bg,fontFamily:"'DM Sans','Segoe UI',sans-serif",display:"flex",flexDirection:"column",alignItems:"center",padding:"0 16px 40px"}}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap');*{box-sizing:border-box;}input::placeholder{color:#a0aec0;}a:hover{opacity:0.85;}button:active{transform:scale(0.98);}`}</style>
       <div style={{width:"100%",maxWidth:540,paddingTop:22,paddingBottom:16,borderBottom:`1px solid ${T.border}`,marginBottom:20,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <div><div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:T.gold}}>✦ PointsWay</div><div style={{fontSize:11,color:T.text3,letterSpacing:"0.12em",textTransform:"uppercase",marginTop:2}}>Points Travel Optimizer</div></div>
+        <div><div style={{fontFamily:"'Playfair Display',serif",fontSize:22,fontWeight:700,color:T.gold}}>✦ PointsWay</div><div style={{fontSize:11,color:T.text3,letterSpacing:"0.12em",textTransform:"uppercase",marginTop:2}}>Your points, planned</div></div>
         <div style={{display:"flex",gap:5,flexWrap:"wrap",justifyContent:"flex-end"}}>
           <a href="https://seats.aero" target="_blank" rel="noopener noreferrer" style={{background:T.blueLight,border:`1px solid ${T.blue}44`,borderRadius:16,padding:"4px 9px",fontSize:10,color:T.blue,fontWeight:700,textDecoration:"none"}}>✈ Seats.aero</a>
           <a href="https://rooms.aero" target="_blank" rel="noopener noreferrer" style={{background:T.tealLight,border:`1px solid ${T.teal}44`,borderRadius:16,padding:"4px 9px",fontSize:10,color:T.teal,fontWeight:700,textDecoration:"none"}}>🏨 Rooms.aero</a>
