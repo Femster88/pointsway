@@ -2208,31 +2208,178 @@ function ToolsHub() {
 }
 
 
-// ─── QUIZ ────────────────────────────────────────────────────────────────────
-function QuizStep({onDone}){
-  const [q1,setQ1]=useState(null);const [q2,setQ2]=useState(null);const [q3,setQ3]=useState(null);
-  const allDone=q1&&q2&&q3;
-  function Opt({val,current,set,children}){const sel=current===val;return <button onClick={()=>set(val)} style={{padding:"10px 14px",borderRadius:10,border:`1px solid ${sel?T.blue:T.border}`,background:sel?T.blueLight:T.surface2,color:sel?T.blue:T.text,cursor:"pointer",fontFamily:"inherit",fontSize:13,fontWeight:sel?700:500,textAlign:"left",width:"100%",marginBottom:8}}>{sel?"✓ ":""}{children}</button>;}
-  function getRec(){
-    if(q1==="no")return "Start with one card that earns flexible points, like the Chase Sapphire Preferred ($95 a year) or the no-fee Capital One Savor paired later with a Venture X. Only open a card if you can pay it off in full every month.";
-    if(q2==="no")return "Great news — you likely already have points sitting unused! Check your credit card's rewards portal and your airline and hotel accounts.";
-    if(q3==="hotel")return "Your best move: World of Hyatt. Bilt points transfer 1:1 until January 2027, and Chase Sapphire Reserve points transfer 1:1 (Sapphire Preferred is now 4:3). Hyatt prices vary by date now, so check the night you want before transferring.";
-    if(q3==="business")return "Your best move: transfer Amex points to Virgin Atlantic to book ANA Business Class to Asia. 95,000 points gets a seat that costs $5,000 in cash.";
-    if(q3==="flight")return "Your best move: use Southwest Rapid Rewards or United miles for domestic flights. No blackout dates and straightforward redemptions.";
-    return "Start with the wallet screen, enter your balances, and we will find your best redemption.";
+// ─── PERSONAL PLAN QUIZ ──────────────────────────────────────────────────────
+// Turns 4 quick answers into a KEEP / TRANSFER / BOOK / DON'T USE plan.
+// Card facts here mirror EARNING_CARDS and BANK_TO_LOYALTY; update them together.
+const QUIZ_CARDS=[
+  {key:"csr",     label:"Chase Sapphire Reserve",  bank:"chase",       transfers:true},
+  {key:"csp",     label:"Chase Sapphire Preferred",bank:"chase",       transfers:true},
+  {key:"freedom", label:"Chase Freedom (any)",     bank:"chase",       transfers:false},
+  {key:"amexplat",label:"Amex Platinum",           bank:"amex",        transfers:true},
+  {key:"amexgold",label:"Amex Gold",               bank:"amex",        transfers:true},
+  {key:"ventx",   label:"Capital One Venture X",   bank:"capital_one", transfers:true},
+  {key:"venture", label:"Capital One Venture",     bank:"capital_one", transfers:true},
+  {key:"savor",   label:"Capital One Savor",       bank:"capital_one", transfers:false},
+  {key:"citi",    label:"Citi Strata Premier / Elite",bank:"citi",     transfers:true},
+  {key:"bilt",    label:"Bilt Mastercard",         bank:"bilt",        transfers:true},
+  {key:"airline", label:"An airline card (Southwest, United, Delta…)",bank:null,transfers:false},
+  {key:"hotel",   label:"A hotel card (Hyatt, Marriott, Hilton…)",    bank:null,transfers:false},
+];
+const BANK_NAMES={chase:"Chase Ultimate Rewards",amex:"Amex Membership Rewards",capital_one:"Capital One miles",citi:"Citi ThankYou points",bilt:"Bilt points"};
+const POINT_BUCKETS=[
+  {key:"lt25", label:"Under 25,000",       mid:15000},
+  {key:"25to75",label:"25,000 – 75,000",   mid:50000},
+  {key:"75to150",label:"75,000 – 150,000", mid:110000},
+  {key:"150plus",label:"150,000 or more",  mid:200000},
+  {key:"unknown",label:"Not sure",         mid:null},
+];
+const PARTY_SIZES=[{key:1,label:"Just me"},{key:2,label:"2 people"},{key:4,label:"3–4 people"},{key:6,label:"5 or more"}];
+// Rough round-trip points per traveler (hotel: per room, 4 nights). Illustrative ranges, not quotes.
+const GOAL_COST={
+  flight:       {label:"a domestic round trip",              each:25000,  perPerson:true},
+  international:{label:"an international economy round trip",each:60000,  perPerson:true},
+  business:     {label:"a business class round trip",         each:140000, perPerson:true},
+  hotel:        {label:"4 nights at a nice hotel",            each:100000, perPerson:false},
+};
+// Best transfer partner per goal, in order of preference: [loyaltyKey, why]
+const GOAL_PARTNERS={
+  flight:[["southwest","Southwest: no blackout dates, and points prices track cash fares, so sales lower the points price too."],["united","United: wide domestic network. Look for the Saver label for the lowest points prices."],["american","American: the only way to get there is Citi or Bilt points."],["jetblue","JetBlue: points prices track cash fares, good on the East Coast."]],
+  international:[["flyingblue","Flying Blue (Air France/KLM): monthly Promo Rewards to Europe, and every major bank transfers to it."],["virginatl","Virgin Atlantic: cheap economy to London and good Delta partner prices."],["united","United: big Star Alliance network for Europe, Asia and South America."]],
+  business:[["virginatl","Virgin Atlantic: ANA business and first class to Japan at some of the lowest prices around."],["aeroplan","Air Canada Aeroplan: business class on Star Alliance partners with no fuel surcharges."],["turkish","Turkish Miles&Smiles: low prices for United business class flights."],["american","American AAdvantage: Qatar Qsuites and other oneworld business class."]],
+  hotel:[["hyatt","World of Hyatt: still the best hotel value, but prices now vary by date."],["ihg","IHG: transfers from Chase, and the 4th night is free with an IHG card."],["wyndham","Wyndham: flat-rate nights and Vacasa rentals that work well for families."],["choice","Choice: good value for simple stays, including some Europe and Japan hotels."]],
+};
+const LOYALTY_LABELS={southwest:"Southwest",united:"United",american:"American",jetblue:"JetBlue",flyingblue:"Flying Blue",virginatl:"Virgin Atlantic",aeroplan:"Aeroplan",turkish:"Turkish",hyatt:"Hyatt",ihg:"IHG",wyndham:"Wyndham",choice:"Choice"};
+
+function buildPlan(answers){
+  var cards=answers.cards, party=answers.party, goal=answers.goal;
+  var bucket=POINT_BUCKETS.find(function(b){return b.key===answers.points;});
+  var has=function(k){return cards.indexOf(k)>=0;};
+  var noCards=cards.length===0;
+  // Which bank currencies can actually be transferred
+  var banks={};
+  QUIZ_CARDS.forEach(function(c){if(has(c.key)&&c.bank){banks[c.bank]=banks[c.bank]||c.transfers;}});
+  var transferable=Object.keys(banks).filter(function(b){return banks[b];});
+  var stuck=Object.keys(banks).filter(function(b){return !banks[b];});
+  var plan={keep:[],transfer:[],book:[],dont:[],needed:null,gap:null};
+
+  // Points needed for the trip
+  var g=GOAL_COST[goal];
+  var rooms=Math.ceil(party/4);
+  var needed=g.perPerson?g.each*party:g.each*rooms;
+  plan.needed="About "+needed.toLocaleString()+" points for "+g.label+(g.perPerson?" for "+(party===1?"1 traveler":party===6?"a group of about 6":party===4?"3–4 travelers (estimated for 4)":party+" travelers"):(rooms>1?" ("+rooms+" rooms)":""))+". This is a rough guide; real prices vary by route and date.";
+  if(bucket&&bucket.mid){
+    if(bucket.mid>=needed)plan.gap="You likely have enough points for this trip already.";
+    else plan.gap="You're likely about "+(needed-bucket.mid).toLocaleString()+" points short. One new card's welcome bonus, or a cheaper version of the trip, usually closes that gap.";
   }
+
+  // KEEP
+  if(noCards){
+    plan.keep.push("Nothing to keep yet. Start with one card that earns flexible points, like the Chase Sapphire Preferred ($95) or the no-fee Capital One Savor paired later with a Venture X.");
+    plan.keep.push("Only open a card if you can pay it off in full every month.");
+  } else {
+    transferable.forEach(function(b){plan.keep.push("Leave your "+BANK_NAMES[b]+" where they are until you've found seats or a room. Bank points can go to many programs; airline and hotel points can't come back.");});
+    stuck.forEach(function(b){
+      if(b==="chase")plan.keep.push("Your Chase Freedom points can only be used at about 1¢ each on their own. Move them to a Sapphire card (yours or a partner's in your household) to unlock transfers.");
+      if(b==="capital_one")plan.keep.push("Your Capital One Savor earns cash back. Add a Venture or Venture X and it converts to transferable miles (about 100 miles per $1).");
+    });
+    if(has("airline")||has("hotel"))plan.keep.push("Keep using your airline or hotel card for its own perks (free bags, free nights). Those points are best spent with that brand.");
+  }
+
+  // TRANSFER
+  var options=GOAL_PARTNERS[goal]||[];
+  var added=0;
+  options.forEach(function(opt){
+    if(added>=2)return;
+    var key=opt[0], why=opt[1];
+    var from=transferable.filter(function(b){return (BANK_TO_LOYALTY[b]||[]).indexOf(key)>=0;});
+    if(key==="hyatt"&&has("csp")&&!has("csr")&&!has("bilt")){
+      plan.transfer.push(why+" Your Sapphire Preferred transfers to Hyatt at 4:3 now, so check that the math still works.");added++;return;
+    }
+    if(from.length===0)return;
+    var names=from.map(function(b){return BANK_NAMES[b];}).join(" or ");
+    var note="";
+    if(key==="hyatt"&&from.indexOf("bilt")>=0)note=" Bilt transfers 1:1 until January 2027, then 4:3.";
+    if(key==="hyatt"&&from.indexOf("chase")>=0&&has("csr"))note+=" Your Sapphire Reserve keeps the 1:1 rate.";
+    var desc=why.split(": ").slice(1).join(": ");
+    plan.transfer.push(LOYALTY_LABELS[key]+" from "+names+": "+desc.charAt(0).toUpperCase()+desc.slice(1)+note);
+    added++;
+  });
+  if(plan.transfer.length===0){
+    plan.transfer.push(noCards?"Once you earn flexible points, you'll move them here only after you've found an award seat or room.":"None of your current cards transfer to the best programs for this goal. Use your airline or hotel card's own points, or add a card that earns transferable points.");
+  } else {
+    plan.transfer.push("Only transfer after you've found the seat or room. Transfers are usually instant and can't be undone.");
+  }
+
+  // BOOK
+  if(goal==="hotel")plan.book.push("Search award nights on Rooms.aero or the hotel's own site for your exact dates, then book on the hotel's site.");
+  else plan.book.push("Search award seats on Seats.aero (or Point.me) for your dates before moving any points, then book on the airline's own site.");
+  if(party>=5&&goal!=="hotel")plan.book.push("With 5 or more travelers, it's hard to find enough award seats on one flight. Search one-way flights and be flexible on dates, or split the group across two flights.");
+  if(party>=5&&goal==="hotel")plan.book.push("For 5 or more people, look for suites, connecting rooms, or vacation rentals (Wyndham's Vacasa homes) rather than one standard room.");
+  if(goal==="business"&&party>=3)plan.book.push("Business class seats for 3 or more on one flight are rare. Consider business for the long overnight flight and economy for the rest.");
+
+  // DON'T USE
+  plan.dont.push("Don't redeem for gift cards, Amazon, or statement credits. They usually get 1¢ per point or less.");
+  if(goal==="hotel"&&has("csp")&&!has("csr"))plan.dont.push("Don't transfer Sapphire Preferred points to Hyatt without checking the math. The rate is now 4:3, so you lose a quarter of your points.");
+  if(has("amexplat")||has("amexgold"))plan.dont.push("Don't use Amex points to pay for flights at 1¢ each when the same points can be worth 1.5–2¢ or more as airline miles.");
+  plan.dont.push("Don't move points 'just in case.' If the seat disappears, those points are stuck in that program.");
+  if(noCards)plan.dont.push("Don't open several cards at once or spend more than you normally would to hit a bonus.");
+  return plan;
+}
+
+function QuizStep({onDone}){
+  const [cards,setCards]=useState([]);
+  const [noCards,setNoCards]=useState(false);
+  const [points,setPoints]=useState(null);
+  const [party,setParty]=useState(null);
+  const [goal,setGoal]=useState(null);
+  const [showPlan,setShowPlan]=useState(false);
+  const allDone=(cards.length>0||noCards)&&points&&party&&goal;
+  function toggleCard(k){setNoCards(false);setShowPlan(false);setCards(function(c){return c.indexOf(k)>=0?c.filter(function(x){return x!==k;}):c.concat([k]);});}
+  function Opt({val,current,set,children}){const sel=current===val;return <button onClick={()=>{set(val);setShowPlan(false);}} style={{padding:"10px 14px",borderRadius:10,border:`1px solid ${sel?T.blue:T.border}`,background:sel?T.blueLight:T.surface2,color:sel?T.blue:T.text,cursor:"pointer",fontFamily:"inherit",fontSize:13,fontWeight:sel?700:500,textAlign:"left",width:"100%",marginBottom:8}}>{sel?"✓ ":""}{children}</button>;}
+  function Chip({sel,onClick,children}){return <button onClick={onClick} style={{padding:"8px 12px",borderRadius:20,border:`1px solid ${sel?T.blue:T.border}`,background:sel?T.blueLight:T.surface2,color:sel?T.blue:T.text,cursor:"pointer",fontFamily:"inherit",fontSize:12,fontWeight:sel?700:500}}>{sel?"✓ ":""}{children}</button>;}
+  const plan=allDone&&showPlan?buildPlan({cards:noCards?[]:cards,points,party,goal}):null;
+  const SECTIONS=[
+    {key:"keep",    title:"KEEP",      color:T.green,  bg:T.greenLight, icon:"🏦"},
+    {key:"transfer",title:"TRANSFER",  color:T.blue,   bg:T.blueLight,  icon:"🔁"},
+    {key:"book",    title:"BOOK",      color:T.purple, bg:T.purpleLight,icon:"✈️"},
+    {key:"dont",    title:"DON'T USE", color:T.red,    bg:T.redLight,   icon:"🚫"},
+  ];
   return(
     <div id="quiz" style={{scrollMarginTop:16}}>
       <div style={{textAlign:"center",padding:"20px 0 24px"}}>
         <div style={{fontSize:40,marginBottom:12}}>✈️</div>
         <h2 style={{fontSize:24,fontWeight:800,color:T.text,margin:0}}>Build your plan</h2>
-        <p style={{color:T.text2,marginTop:8,fontSize:14,lineHeight:1.6}}>Answer 3 quick questions and we will show you exactly where to start. Takes 30 seconds.</p>
+        <p style={{color:T.text2,marginTop:8,fontSize:14,lineHeight:1.6}}>Answer 4 quick questions and we'll tell you what to keep, what to transfer, what to book, and what to avoid. Takes about a minute.</p>
       </div>
-      <Card style={{marginBottom:14}}><div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:12}}>1. Do you have any credit cards?</div><Opt val="yes" current={q1} set={setQ1}>Yes, I have at least one</Opt><Opt val="notSure" current={q1} set={setQ1}>Not sure which ones earn points</Opt><Opt val="no" current={q1} set={setQ1}>No credit cards yet</Opt></Card>
-      <Card style={{marginBottom:14}}><div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:12}}>2. Have you ever earned airline or hotel points?</div><Opt val="yes" current={q2} set={setQ2}>Yes, I have some points somewhere</Opt><Opt val="no" current={q2} set={setQ2}>Not sure, probably not</Opt></Card>
-      <Card style={{marginBottom:14}}><div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:12}}>3. What is your travel goal?</div><Opt val="flight" current={q3} set={setQ3}>✈️ Free domestic flight</Opt><Opt val="international" current={q3} set={setQ3}>🌍 Free international trip</Opt><Opt val="business" current={q3} set={setQ3}>🛋️ Fly Business or First Class for almost free</Opt><Opt val="hotel" current={q3} set={setQ3}>🏨 Free hotel nights at nice properties</Opt></Card>
-      {allDone&&<div style={{marginBottom:16,padding:"16px",background:T.greenLight,border:`1px solid ${T.green}44`,borderRadius:12}}><div style={{fontSize:12,fontWeight:700,color:T.green,marginBottom:6}}>💡 Your Recommended Starting Point</div><div style={{fontSize:14,color:T.text,lineHeight:1.6}}>{getRec()}</div></div>}
-      <button onClick={onDone} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#1a56db,#2563eb)",color:"#fff",fontSize:15,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>{allDone?"Let's Find Your Best Redemption →":"Skip the quiz →"}</button>
+      <Card style={{marginBottom:14}}>
+        <div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:4}}>1. Which cards do you have?</div>
+        <div style={{fontSize:12,color:T.text3,marginBottom:12}}>Pick all that apply.</div>
+        <div style={{display:"flex",flexWrap:"wrap",gap:8}}>
+          {QUIZ_CARDS.map(function(c){return <Chip key={c.key} sel={cards.indexOf(c.key)>=0} onClick={function(){toggleCard(c.key);}}>{c.label}</Chip>;})}
+          <Chip sel={noCards} onClick={function(){setNoCards(!noCards);setCards([]);setShowPlan(false);}}>No travel cards yet</Chip>
+        </div>
+      </Card>
+      <Card style={{marginBottom:14}}><div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:12}}>2. Roughly how many points do you have in total?</div>{POINT_BUCKETS.map(function(b){return <Opt key={b.key} val={b.key} current={points} set={setPoints}>{b.label}</Opt>;})}</Card>
+      <Card style={{marginBottom:14}}><div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:12}}>3. Who's traveling?</div>{PARTY_SIZES.map(function(p){return <Opt key={p.key} val={p.key} current={party} set={setParty}>{p.label}</Opt>;})}</Card>
+      <Card style={{marginBottom:14}}><div style={{fontSize:14,fontWeight:700,color:T.text,marginBottom:12}}>4. What is your travel goal?</div><Opt val="flight" current={goal} set={setGoal}>✈️ Free domestic flight</Opt><Opt val="international" current={goal} set={setGoal}>🌍 Free international trip</Opt><Opt val="business" current={goal} set={setGoal}>🛋️ Fly Business or First Class for almost free</Opt><Opt val="hotel" current={goal} set={setGoal}>🏨 Free hotel nights at nice properties</Opt></Card>
+      {allDone&&!showPlan&&<button onClick={()=>setShowPlan(true)} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#0e7c4a,#059669)",color:"#fff",fontSize:15,fontWeight:800,cursor:"pointer",fontFamily:"inherit",marginBottom:12}}>Show my plan →</button>}
+      {plan&&(
+        <div style={{marginBottom:16}}>
+          <div style={{fontSize:18,fontWeight:800,color:T.text,marginBottom:8}}>Your points plan</div>
+          <div style={{padding:"12px 14px",background:T.goldLight,border:`1px solid ${T.goldBorder}`,borderRadius:12,marginBottom:12,fontSize:13,color:T.text,lineHeight:1.6}}>
+            <div>{plan.needed}</div>
+            {plan.gap&&<div style={{marginTop:6,fontWeight:700}}>{plan.gap}</div>}
+          </div>
+          {SECTIONS.map(function(s){return(
+            <div key={s.key} style={{marginBottom:10,padding:"12px 14px",background:s.bg,border:`1px solid ${s.color}44`,borderRadius:12}}>
+              <div style={{fontSize:12,fontWeight:800,color:s.color,letterSpacing:"0.08em",marginBottom:6}}>{s.icon} {s.title}</div>
+              {plan[s.key].map(function(item,i){return <div key={i} style={{fontSize:13,color:T.text,lineHeight:1.6,marginBottom:4}}>• {item}</div>;})}
+            </div>
+          );})}
+          <div style={{fontSize:11,color:T.text3,lineHeight:1.5}}>This plan is general guidance based on published transfer partners and typical award prices. Always confirm prices and transfer rates on the program's site before moving points.</div>
+        </div>
+      )}
+      <button onClick={onDone} style={{width:"100%",padding:"14px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#1a56db,#2563eb)",color:"#fff",fontSize:15,fontWeight:800,cursor:"pointer",fontFamily:"inherit"}}>{plan?"Find redemptions for this plan →":"Skip the quiz →"}</button>
     </div>
   );
 }
