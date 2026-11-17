@@ -13,7 +13,7 @@ const T = {
 // ─── FEATURED REDEMPTION OF THE WEEK ──────────────────────────────────────────
 // Update this object weekly for fresh content
 const FEATURED = {
-  week:"May 2025",
+  week:"Featured pick",
   headline:"ANA First Class to Tokyo",
   subline:"One way · Book via Virgin Atlantic",
   points:55000,
@@ -45,8 +45,8 @@ const FEATURED = {
 //   confirmed: true if personally verified, false if reported by community
 
 const TRANSFER_BONUS_META = {
-  lastVerified: "May 9, 2025",
-  nextCheckDue: "May 16, 2025",
+  lastVerified: "Nov 17, 2026 (expired bonuses removed)",
+  nextCheckDue: "Check the sources below",
   sources: [
     {name:"The Points Guy",    url:"https://thepointsguy.com/news/credit-card-transfer-bonuses/"},
     {name:"Doctor of Credit",  url:"https://www.doctorofcredit.com/tag/transfer-bonus/"},
@@ -56,39 +56,6 @@ const TRANSFER_BONUS_META = {
 };
 
 const TRANSFER_BONUSES = [
-  {
-    bank:"Amex MR",
-    to:"Virgin Atlantic Flying Club",
-    bonus:"30%",
-    expires:"June 30, 2025",
-    math:"Transfer 70,000 Amex points → receive 91,000 Virgin miles",
-    hot:true,
-    confirmed:true,
-    source:"https://thepointsguy.com",
-    why:"Virgin Atlantic miles are one of the most valuable currencies for booking ANA and Delta flights. A 30% bonus makes this exceptional — effectively paying 0.77x for miles.",
-  },
-  {
-    bank:"Capital One",
-    to:"Turkish Miles&Smiles",
-    bonus:"25%",
-    expires:"May 31, 2025",
-    math:"Transfer 40,000 Cap One miles → receive 50,000 Turkish miles",
-    hot:true,
-    confirmed:true,
-    source:"https://www.doctorofcredit.com",
-    why:"Turkish Miles&Smiles prices US-Europe business class at 45,000 miles round-trip on United. With this bonus you can get there for fewer Cap One miles than normal.",
-  },
-  {
-    bank:"Citi TYP",
-    to:"Flying Blue (Air France/KLM)",
-    bonus:"20%",
-    expires:"June 15, 2025",
-    math:"Transfer 50,000 Citi points → receive 60,000 Flying Blue miles",
-    hot:false,
-    confirmed:true,
-    source:"https://milesperday.com",
-    why:"Flying Blue runs monthly promo awards to Europe. Combined with a transfer bonus, Paris business class can become very affordable.",
-  },
   {
     bank:"Chase UR",
     to:"Air Canada Aeroplan",
@@ -116,20 +83,20 @@ const TRANSFER_BONUSES = [
 // ─── SWEET SPOT LIBRARY ───────────────────────────────────────────────────────
 const SWEET_SPOTS = [
   {rank:1, title:"ANA First Class to Japan",          via:"Virgin Atlantic",      points:"55,000",dir:"one way",  cabin:"first",   region:"Asia",    value:7.1, cashValue:"$4,000+", cards:["Amex","Chase","Cap One","Bilt"],           why:"The best first class product in the world at one of the lowest redemption rates. Virgin Atlantic charges just 55k miles vs ANA's own 110k."},
-  {rank:2, title:"Park Hyatt Maldives",               via:"World of Hyatt",       points:"25,000",dir:"per night",cabin:"hotel",   region:"Pacific", value:6.0, cashValue:"$1,500/nt",cards:["Chase","Bilt"],                             why:"Category 6 Hyatt property at a fixed 25k points per night. Overwater bungalows go for $1,500 cash. Chase and Bilt both transfer to Hyatt at 1:1."},
+  {rank:2, title:"Park Hyatt Maldives",               via:"World of Hyatt",       points:"25,000",dir:"per night",cabin:"hotel",   region:"Pacific", value:6.0, cashValue:"$1,500/nt",cards:["Chase","Bilt"],                             why:"Category 6 Hyatt property from about 25k points per night on the lowest pricing tier. Since May 2026 Hyatt prices vary by date, so peak nights cost more. Overwater bungalows go for $1,500 cash. Bilt (1:1 until Jan 2027) and Chase Sapphire Reserve (1:1) transfer to Hyatt."},
   {rank:3, title:"Singapore Airlines Business Class", via:"Singapore KrisFlyer",  points:"85,000",dir:"round trip",cabin:"business",region:"Asia",    value:5.8, cashValue:"$5,000",  cards:["Amex","Chase","Cap One","Bilt","Citi","Wells","US Bank"],why:"7 bank cards transfer to KrisFlyer. Singapore's Suites product is the gold standard of business/first class travel."},
   {rank:4, title:"Cathay Pacific First Class to HK",  via:"Alaska Mileage Plan",  points:"70,000",dir:"one way",  cabin:"first",   region:"Asia",    value:5.5, cashValue:"$5,000+", cards:["Bilt"],                                    why:"Alaska charges 70k miles one-way for Cathay First — far less than Cathay's own 110k. Only Bilt transfers to Alaska but it's worth it."},
   {rank:5, title:"Sydney Business Class (United)",    via:"Air Canada Aeroplan",  points:"80,000",dir:"one way",  cabin:"business",region:"Pacific", value:5.5, cashValue:"$4,400",  cards:["Amex","Chase","Cap One","Bilt","Wells","US Bank"],    why:"Aeroplan books United metal with no fuel surcharges and fixed partner pricing. Six bank cards feed Aeroplan."},
   {rank:6, title:"ANA Business Class to Tokyo",       via:"Virgin Atlantic",      points:"47,500",dir:"one way",  cabin:"business",region:"Asia",    value:5.2, cashValue:"$2,500",  cards:["Amex","Chase","Cap One","Bilt"],           why:"Same Virgin Atlantic trick at half the price for business class. Nearly the same product quality as first at 47.5k vs 55k miles."},
   {rank:7, title:"Qatar Qsuites to Europe",           via:"American AAdvantage",  points:"70,000",dir:"round trip",cabin:"business",region:"Europe", value:5.0, cashValue:"$4,000",  cards:["Bilt","Citi"],                             why:"Qatar Qsuites is the best business class cabin. American charges a fair rate with no fuel surcharges. Bilt and Citi both transfer to AAdvantage."},
-  {rank:8, title:"Park Hyatt Kyoto",                  via:"World of Hyatt",       points:"35,000",dir:"per night",cabin:"hotel",   region:"Asia",    value:3.1, cashValue:"$1,100/nt",cards:["Chase","Bilt"],                             why:"One of the most sought-after hotel redemptions in the world. Kyoto in cherry blossom season costs 35k Hyatt points vs $1,100+ cash."},
+  {rank:8, title:"Park Hyatt Kyoto",                  via:"World of Hyatt",       points:"35,000",dir:"per night",cabin:"hotel",   region:"Asia",    value:3.1, cashValue:"$1,100/nt",cards:["Chase","Bilt"],                             why:"One of the most sought-after hotel redemptions in the world. Standard nights start around 35k Hyatt points vs $1,100+ cash. Hyatt prices vary by date since May 2026, so cherry blossom season costs more."},
   {rank:9, title:"Flying Blue Promo to Paris",        via:"Flying Blue",          points:"35,000",dir:"one way",  cabin:"business",region:"Europe", value:3.7, cashValue:"$1,250",  cards:["Amex","Chase","Cap One","Bilt","Citi","Wells"],       why:"Flying Blue runs monthly promo awards. Business class to Paris can drop to 35k one-way during promos — normally 55k. Check flyingblue.com monthly."},
   {rank:10,title:"London Business Class (Virgin)",    via:"Virgin Atlantic",      points:"30,000",dir:"one way",  cabin:"business",region:"Europe", value:4.1, cashValue:"$1,500",  cards:["Amex","Chase","Cap One","Bilt"],           why:"Virgin's own flights from the US to London at 30k miles one-way in Upper Class. Amex, Chase, Cap One, and Bilt all transfer direct."},
   {rank:11,title:"Lufthansa Business to Europe",      via:"Air Canada Aeroplan",  points:"60,000",dir:"one way",  cabin:"business",region:"Europe", value:4.2, cashValue:"$2,500",  cards:["Amex","Chase","Cap One","Bilt","Wells","US Bank"],    why:"Aeroplan books Lufthansa with no fuel surcharges — a major advantage over booking direct through Miles & More. Great product, reliable availability."},
   {rank:12,title:"Turkish Sweet Spot (US to Europe)", via:"Turkish Miles&Smiles", points:"45,000",dir:"round trip",cabin:"business",region:"Europe", value:4.3, cashValue:"$2,000",  cards:["Amex","Cap One","Bilt","Citi"],            why:"Turkish charges just 45k miles round-trip for business class to Europe on United metal. One of the best-kept secrets in the hobby."},
-  {rank:13,title:"Hyatt Zilara Cancun",               via:"World of Hyatt",       points:"25,000",dir:"per night",cabin:"hotel",   region:"Americas",value:2.4, cashValue:"$600/nt", cards:["Chase","Bilt"],                             why:"All-inclusive resort in Cancun for 25k Hyatt points per night. Adults-only, beachfront. Cash rate runs $600+ per night."},
+  {rank:13,title:"Hyatt Zilara Cancun",               via:"World of Hyatt",       points:"25,000",dir:"per night",cabin:"hotel",   region:"Americas",value:2.4, cashValue:"$600/nt", cards:["Chase","Bilt"],                             why:"All-inclusive resort in Cancun from about 25k Hyatt points per night (prices vary by date since May 2026). Adults-only, beachfront. Cash rate runs $600+ per night."},
   {rank:14,title:"Emirates Business to Dubai",        via:"Emirates Skywards",    points:"36,000",dir:"one way",  cabin:"business",region:"ME/Africa",value:4.0,cashValue:"$1,450", cards:["Amex","Cap One","Bilt","Citi"],            why:"Book Emirates' own metal on Emirates Skywards. The ice system and amenities in Business are world-class. Four bank cards transfer direct."},
-  {rank:15,title:"Maldives Business Class (Etihad)",  via:"Etihad Guest",         points:"58,000",dir:"one way",  cabin:"business",region:"Pacific", value:5.1, cashValue:"$3,000",  cards:["Amex","Cap One","Bilt","Citi"],            why:"Etihad's business class is excellent and 58k miles one-way to the Maldives is a genuine sweet spot. Combine with a Park Hyatt Maldives hotel stay."},
+  {rank:15,title:"Maldives Business Class (Etihad)",  via:"Etihad Guest",         points:"58,000",dir:"one way",  cabin:"business",region:"Pacific", value:5.1, cashValue:"$3,000",  cards:["Cap One","Bilt","Citi"],                   why:"Etihad's business class is excellent and 58k miles one-way to the Maldives is a genuine sweet spot. Combine with a Park Hyatt Maldives hotel stay."},
 ];
 
 // ─── EXPIRATION GUIDE ─────────────────────────────────────────────────────────
@@ -164,7 +131,7 @@ const DREAM_TRIPS = [
   {key:"tokyo_first", label:"Tokyo — First Class (one way)",        points:55000,  program:"Virgin Atlantic",  cards:["Amex","Chase","Cap One","Bilt"]},
   {key:"london_biz",  label:"London — Business Class (one way)",    points:30000,  program:"Virgin Atlantic",  cards:["Amex","Chase","Cap One","Bilt"]},
   {key:"paris_biz",   label:"Paris — Business Class (one way)",     points:28000,  program:"Flying Blue",      cards:["Amex","Chase","Cap One","Bilt","Citi","Wells"]},
-  {key:"maldives_biz",label:"Maldives — Business Class (one way)",  points:58000,  program:"Etihad Guest",     cards:["Amex","Cap One","Bilt","Citi"]},
+  {key:"maldives_biz",label:"Maldives — Business Class (one way)",  points:58000,  program:"Etihad Guest",     cards:["Cap One","Bilt","Citi"]},
   {key:"maldives_htl",label:"Park Hyatt Maldives (per night)",      points:25000,  program:"World of Hyatt",   cards:["Chase","Bilt"]},
   {key:"kyoto_htl",   label:"Park Hyatt Kyoto (per night)",         points:35000,  program:"World of Hyatt",   cards:["Chase","Bilt"]},
   {key:"singapore_biz",label:"Singapore — Business Class (RT)",     points:85000,  program:"Singapore KrisFlyer",cards:["Amex","Chase","Cap One","Bilt","Citi","Wells","US Bank"]},
@@ -220,15 +187,15 @@ const AWARD_TOOLS={
 
 const EARNING_CARDS=[
   {goal:"I want flexible points I can use anywhere",cards:[
-    {name:"Chase Sapphire Preferred",bonus:"60,000 pts",spend:"$4,000 in 3 months",why:"Transfers to Hyatt, United, British Airways, Air France and more. Best starter card."},
+    {name:"Chase Sapphire Preferred",bonus:"75,000 pts",spend:"$5,000 in 3 months",why:"$95 a year. Transfers to United, Southwest, British Airways, Air France and more. Best starter card. Note: Hyatt transfers are now 4:3 on this card, not 1:1."},
     {name:"Amex Gold Card",bonus:"60,000 pts",spend:"$6,000 in 6 months",why:"4x on dining and groceries. Transfers to Delta, Virgin Atlantic, Singapore Airlines and more."},
   ]},
   {goal:"I want free hotel nights",cards:[
-    {name:"Chase Sapphire Preferred",bonus:"60,000 pts",spend:"$4,000 in 3 months",why:"Transfer to Hyatt at 1:1. 60,000 pts = 2 nights at Park Hyatt Tokyo worth $1,800."},
-    {name:"Bilt Mastercard",bonus:"No welcome bonus",spend:"Use for rent payments",why:"Earn points on rent with no fee. Transfers to Hyatt, Hilton, Marriott, IHG, Accor and more."},
+    {name:"Chase Sapphire Reserve",bonus:"100,000 pts",spend:"$6,000 in 3 months",why:"$795 a year, offset by credits if you use them. The only Chase card that still transfers to Hyatt at 1:1 (the Sapphire Preferred is now 4:3)."},
+    {name:"Bilt Mastercard",bonus:"No welcome bonus",spend:"Use for rent payments",why:"Earn points on rent with no fee. Hyatt transfers are 1:1 until January 2027, then 4:3. Also transfers to Hilton, Marriott, IHG, Accor and more."},
   ]},
   {goal:"I want Business or First Class flights",cards:[
-    {name:"Amex Platinum",bonus:"80,000 pts",spend:"$8,000 in 6 months",why:"Transfers to Virgin Atlantic, ANA, Singapore Airlines — all great for premium cabins."},
+    {name:"Amex Platinum",bonus:"Varies by applicant",spend:"$8,000 in 6 months",why:"$895 a year, with many monthly and quarterly credits to track. Transfers to Virgin Atlantic, ANA, Singapore Airlines — all great for premium cabins. Best for organized, frequent travelers."},
     {name:"Citi Strata Premier",bonus:"70,000 pts",spend:"$4,000 in 3 months",why:"Transfers to Flying Blue, Turkish, Singapore Airlines. Great for international business class."},
   ]},
   {goal:"I want airline miles for domestic flights",cards:[
@@ -2247,9 +2214,9 @@ function QuizStep({onDone}){
   const allDone=q1&&q2&&q3;
   function Opt({val,current,set,children}){const sel=current===val;return <button onClick={()=>set(val)} style={{padding:"10px 14px",borderRadius:10,border:`1px solid ${sel?T.blue:T.border}`,background:sel?T.blueLight:T.surface2,color:sel?T.blue:T.text,cursor:"pointer",fontFamily:"inherit",fontSize:13,fontWeight:sel?700:500,textAlign:"left",width:"100%",marginBottom:8}}>{sel?"✓ ":""}{children}</button>;}
   function getRec(){
-    if(q1==="no")return "Start by signing up for a free Chase Sapphire Preferred or Amex Gold card — these earn the most flexible points.";
+    if(q1==="no")return "Start with one card that earns flexible points, like the Chase Sapphire Preferred ($95 a year) or the no-fee Capital One Savor paired later with a Venture X. Only open a card if you can pay it off in full every month.";
     if(q2==="no")return "Great news — you likely already have points sitting unused! Check your credit card's rewards portal and your airline and hotel accounts.";
-    if(q3==="hotel")return "Your best move: transfer Chase or Bilt points to World of Hyatt. Even 25,000 points can get you a free night worth $600 or more.";
+    if(q3==="hotel")return "Your best move: World of Hyatt. Bilt points transfer 1:1 until January 2027, and Chase Sapphire Reserve points transfer 1:1 (Sapphire Preferred is now 4:3). Hyatt prices vary by date now, so check the night you want before transferring.";
     if(q3==="business")return "Your best move: transfer Amex points to Virgin Atlantic to book ANA Business Class to Asia. 95,000 points gets a seat that costs $5,000 in cash.";
     if(q3==="flight")return "Your best move: use Southwest Rapid Rewards or United miles for domestic flights. No blackout dates and straightforward redemptions.";
     return "Start with the wallet screen, enter your balances, and we will find your best redemption.";
@@ -2477,7 +2444,7 @@ function ResultsStep({results,wallet,search,mode,onSelect,onBack}){
             <div style={{textAlign:"right",flexShrink:0}}>
               <div style={{fontSize:22,fontWeight:800,color:T.gold}}>{fmt(r.cost)}</div>
               <div style={{fontSize:11,color:T.text3}}>{mode==="hotels"?"pts/night":"pts"}</div>
-              <div style={{fontSize:9,color:T.text3,marginTop:1,fontStyle:"italic"}}>est. — verify on site</div>
+              <div style={{fontSize:9,color:T.text3,marginTop:1,fontStyle:"italic"}}>{r.loyaltyKey==="hyatt"?"from — varies by date":"est. — verify on site"}</div>
               {mode==="flights"&&<div style={{fontSize:11,color:T.text3}}>+~${r.taxes} tax</div>}
               {mode==="hotels"&&<div style={{fontSize:11,color:T.text3}}>cash ~${r.cashValue}/nt</div>}
               <div style={{marginTop:4,background:T.greenLight,color:T.green,borderRadius:6,padding:"2px 7px",fontSize:12,fontWeight:700}}>{r.value}¢/pt</div>
@@ -3451,7 +3418,7 @@ function TransferBonusPanel() {
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
           <div>
             <div style={{fontSize:16,fontWeight:800,marginBottom:3}}>🔥 Transfer Bonus Tracker</div>
-            <div style={{fontSize:12,opacity:0.85}}>Manually verified · updated weekly</div>
+            <div style={{fontSize:12,opacity:0.85}}>Bonuses change often. Confirm on the sources below before transferring.</div>
           </div>
           <div style={{textAlign:"right"}}>
             <div style={{fontSize:22,fontWeight:800}}>{activeCount}</div>
@@ -3587,4 +3554,3 @@ function ExpirationGuide(){
     </div>
   );
 }
-
